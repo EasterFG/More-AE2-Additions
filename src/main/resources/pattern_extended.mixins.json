@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.easterfg.pte.mixin.ae2",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "pattern_extended.refmap.json",
+  "mixins": [
+    "PatternEncodingTermMenuMixin",
+    "ProcessingEncodingPanelMixin",
+    "StyleManagerMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
