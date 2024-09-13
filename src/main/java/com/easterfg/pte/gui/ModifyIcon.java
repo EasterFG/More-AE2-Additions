@@ -18,8 +18,7 @@ public enum ModifyIcon {
     public final int y;
     public final int width;
     public final int height;
-    public static final ResourceLocation TEXTURE = PatternTerminalExtendedMod
-            .id("textures/guis/states.png");
+    public static final ResourceLocation TEXTURE = PatternTerminalExtendedMod.id("textures/guis/states.png");
     public static final int TEXTURE_WIDTH = 48;
     public static final int TEXTURE_HEIGHT = 48;
 

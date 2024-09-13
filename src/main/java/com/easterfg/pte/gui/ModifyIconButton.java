@@ -1,23 +1,33 @@
 package com.easterfg.pte.gui;
 
 import appeng.client.gui.style.Blitter;
+import appeng.client.gui.widgets.ITooltip;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author EasterFG on 2024/9/13
  */
-public class ModifyIconButton extends Button {
+public class ModifyIconButton extends Button implements ITooltip {
 
     private final ModifyIcon icon;
 
-    public ModifyIconButton(OnPress onPress, ModifyIcon icon) {
+    private final Component displayName;
+    private final Component displayValue;
+
+    public ModifyIconButton(OnPress onPress, ModifyIcon icon, Component displayName, Component displayValue) {
         super(0, 0, 8, 8, Component.empty(), onPress, DEFAULT_NARRATION);
         this.icon = icon;
+        this.displayName = displayName;
+        this.displayValue = displayValue;
     }
 
     public void setVisibility(boolean vis) {
@@ -60,32 +70,17 @@ public class ModifyIconButton extends Button {
     }
 
     @Override
-    public int getWidth() {
-        return this.width;
+    public Rect2i getTooltipArea() {
+        return new Rect2i(this.getX(), this.getY(), 8, 8);
     }
 
     @Override
-    public void setWidth(int width) {
-        this.width = width;
+    public boolean isTooltipAreaVisible() {
+        return this.visible;
     }
 
     @Override
-    public void setHeight(int value) {
-        this.height = value;
+    public List<Component> getTooltipMessage() {
+        return Collections.singletonList(Component.empty().append(this.displayName).append("\n").append(this.displayValue));
     }
-
-    @Override
-    public void setAlpha(float alpha) {
-        this.alpha = alpha;
-    }
-
-//    @Override
-//    public Rect2i getTooltipArea() {
-//        return new Rect2i(this.getX(), this.getY(), 8, 8);
-//    }
-//
-//    @Override
-//    public boolean isTooltipAreaVisible() {
-//        return this.visible;
-//    }
 }
