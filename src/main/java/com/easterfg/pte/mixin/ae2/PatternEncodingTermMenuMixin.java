@@ -83,7 +83,7 @@ public abstract class PatternEncodingTermMenuMixin extends MEStorageMenu impleme
                             return null;
                         } else {
                             result[slot] =
-                                    new GenericStack(stack.what(), data.getAmount() * stack.amount());
+                                    new GenericStack(stack.what(), stack.amount() * data.getAmount());
                         }
                     }
                     case DIVISION -> {
@@ -92,7 +92,7 @@ public abstract class PatternEncodingTermMenuMixin extends MEStorageMenu impleme
                         } else {
                             // 除尽
                             result[slot] =
-                                    new GenericStack(stack.what(), data.getAmount() / stack.amount());
+                                    new GenericStack(stack.what(), stack.amount() / data.getAmount());
                         }
                     }
                 }
