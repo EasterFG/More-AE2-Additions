@@ -96,7 +96,10 @@
               "type": "string"
             }
           },
-          "required": ["action", "value"]
+          "required": [
+            "action",
+            "value"
+          ]
         },
         "hoverEvent": {
           "type": "object",
@@ -134,7 +137,9 @@
                       "description": "NBT of the item, serialized as string. See https://minecraft.wiki/w/Player.dat_format#Item_structure"
                     }
                   },
-                  "required": ["id"]
+                  "required": [
+                    "id"
+                  ]
                 }
               }
             },
@@ -173,7 +178,9 @@
               "type": "string"
             }
           },
-          "required": ["text"]
+          "required": [
+            "text"
+          ]
         },
         {
           "properties": {
@@ -188,7 +195,9 @@
               }
             }
           },
-          "required": ["translate"]
+          "required": [
+            "translate"
+          ]
         },
         {
           "properties": {
@@ -197,7 +206,9 @@
               "description": "A keybind identifier"
             }
           },
-          "required": ["keybind"]
+          "required": [
+            "keybind"
+          ]
         }
       ]
     },
@@ -263,7 +274,9 @@
           "$ref": "#/definitions/rect"
         }
       },
-      "required": ["texture"]
+      "required": [
+        "texture"
+      ]
     },
     "generatedBackground": {
       "type": "object",
@@ -275,7 +288,10 @@
           "type": "integer"
         }
       },
-      "required": ["width", "height"]
+      "required": [
+        "width",
+        "height"
+      ]
     }
   },
   "properties": {
@@ -414,7 +430,11 @@
           "align": {
             "type": "string",
             "default": "LEFT",
-            "enum": ["LEFT", "CENTER", "RIGHT"]
+            "enum": [
+              "LEFT",
+              "CENTER",
+              "RIGHT"
+            ]
           },
           "maxWidth": {
             "type": "number",
@@ -446,7 +466,11 @@
                 "type": "integer"
               }
             },
-            "required": ["tooltip", "width", "height"]
+            "required": [
+              "tooltip",
+              "width",
+              "height"
+            ]
           },
           {
             "$ref": "#/definitions/position"
@@ -513,7 +537,10 @@
           "description": "The type of stack size rendering to use.",
           "type": "string",
           "default": "ITEMS",
-          "enum": ["ITEMS", "FLUIDS"]
+          "enum": [
+            "ITEMS",
+            "FLUIDS"
+          ]
         },
         "showTooltipsWithItemInHand": {
           "type": "boolean",

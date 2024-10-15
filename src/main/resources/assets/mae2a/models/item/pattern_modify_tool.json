@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "mae2a:item/pattern_modify_tool"
+  }
+}

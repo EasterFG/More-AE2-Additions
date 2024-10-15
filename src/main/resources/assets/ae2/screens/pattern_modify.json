@@ -1,0 +1,77 @@
+{
+  "$schema": "schema.json",
+  "includes": [
+    "common/common.json"
+  ],
+  "generatedBackground": {
+    "width": 150,
+    "height": 140
+  },
+  "text": {
+    "dialog_title": {
+      "text": {
+        "translate": "gui.mae2a.pattern_tool_setting"
+      },
+      "position": {
+        "left": 8,
+        "top": 6
+      }
+    },
+    "item_input_tip": {
+      "text": {
+        "translate": "gui.mae2a.pattern_max_item_limit"
+      },
+      "position": {
+        "left": 8,
+        "top": 40
+      }
+    },
+    "fluid_input_tip": {
+      "text": {
+        "translate": "gui.mae2a.pattern_max_fluid_limit"
+      },
+      "position": {
+        "left": 8,
+        "top": 67
+      }
+    },
+    "fluid_unit": {
+      "text": {
+        "text": "B"
+      },
+      "position": {
+        "left": 130,
+        "top": 80
+      }
+    }
+  },
+  "widgets": {
+    "action_switch_multiply": {
+      "left": 8,
+      "top": 17,
+      "width": 55
+    },
+    "action_switch_divide": {
+      "left": 71,
+      "top": 17,
+      "width": 55
+    },
+    "max_item_input": {
+      "left": 8,
+      "top": 51,
+      "height": 12,
+      "width": 120
+    },
+    "max_fluid_input": {
+      "left": 8,
+      "top": 78,
+      "height": 12,
+      "width": 120
+    },
+    "save_by_products": {
+      "left": 8,
+      "top": 93,
+      "width": 100
+    }
+  }
+}
