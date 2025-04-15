@@ -1,7 +1,7 @@
 package com.easterfg.mae2a.client.register;
 
 import appeng.api.storage.StorageCells;
-import appeng.api.storage.cells.StorageCell;
+
 import com.easterfg.mae2a.common.cells.InfiniteDyesCellHandler;
 
 /**

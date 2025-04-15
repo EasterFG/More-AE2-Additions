@@ -1,18 +1,27 @@
 package com.easterfg.mae2a;
 
-import com.easterfg.mae2a.client.register.CellRegister;
-import com.easterfg.mae2a.client.register.GuiRegister;
-import com.easterfg.mae2a.client.register.NetworkRegister;
-import com.easterfg.mae2a.common.ModCreativeModTabs;
-import com.easterfg.mae2a.common.ModItems;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.server.ServerLifecycleHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
+import net.minecraftforge.server.ServerLifecycleHooks;
+
+import com.easterfg.mae2a.api.MainCreativeMod;
+import com.easterfg.mae2a.client.MoreAE2AdditionsClient;
+import com.easterfg.mae2a.client.register.*;
+import com.easterfg.mae2a.integration.wt.WTCommonLoad;
+import com.easterfg.mae2a.util.Platform;
 
 /**
  * @author EasterFG on 2024/9/17
@@ -27,9 +36,24 @@ public class MoreAE2Additions {
     public MoreAE2Additions() {
         INSTANCE = this;
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        ModCreativeModTabs.register(modEventBus);
-        ModItems.register(modEventBus);
-        GuiRegister.register();
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> modEventBus.register(MoreAE2AdditionsClient.INSTANCE));
+        modEventBus.addListener((RegisterEvent event) -> {
+            if (event.getRegistryKey().equals(Registries.CREATIVE_MODE_TAB)) {
+                MainCreativeMod.init(event.getVanillaRegistry());
+            }
+
+            if (!event.getRegistryKey().equals(Registries.BLOCK)) {
+                return;
+            }
+
+            ModRegisterHandler.initBlock(ForgeRegistries.BLOCKS);
+            ModRegisterHandler.initItem(ForgeRegistries.ITEMS);
+            ModRegisterHandler.initBlockEntity(ForgeRegistries.BLOCK_ENTITY_TYPES);
+            MenuTypeRegister.init(ForgeRegistries.MENU_TYPES);
+        });
+        ModRegisterHandler.init();
+        modEventBus.addListener(this::clientSetup);
+        modEventBus.addListener(this::commonSetup);
         NetworkRegister.register();
         CellRegister.register();
     }
@@ -40,5 +64,24 @@ public class MoreAE2Additions {
 
     public MinecraftServer getServer() {
         return ServerLifecycleHooks.getCurrentServer();
+    }
+
+    public void clientSetup(FMLClientSetupEvent event) {
+        MoreAE2AdditionsClient.INSTANCE.init();
+    }
+
+    private void commonSetup(FMLCommonSetupEvent event) {
+        event.enqueueWork(this::postRegistrationInitialization).whenComplete((res, err) -> {
+            if (err != null) {
+                LOGGER.warn(err);
+            }
+        });
+    }
+
+    private void postRegistrationInitialization() {
+        UpgradesInit.init();
+        if (Platform.isModLoaded("ae2wtlib")) {
+            WTCommonLoad.init();
+        }
     }
 }
