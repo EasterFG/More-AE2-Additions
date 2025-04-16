@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "ae2:fluix_crystal"
+    },
+    "B": {
+      "item": "ae2:blank_pattern"
+    },
+    "C": {
+      "item": "minecraft:diamond"
+    },
+    "D": {
+      "item": "ae2:logic_processor"
+    }
+  },
+  "pattern": [
+    "AAA",
+    "ABA",
+    "CDC"
+  ],
+  "result": {
+    "item": "mae2a:pattern_modify_tool"
+  },
+  "show_notification": true
+}

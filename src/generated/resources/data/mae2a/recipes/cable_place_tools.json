@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "ae2:fluix_glass_cable"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "L": {
+      "item": "ae2:logic_processor"
+    },
+    "R": {
+      "item": "ae2:engineering_processor"
+    },
+    "U": {
+      "item": "ae2:calculation_processor"
+    }
+  },
+  "pattern": [
+    "ADA",
+    "LUR",
+    "III"
+  ],
+  "result": {
+    "item": "mae2a:cable_place_tools"
+  },
+  "show_notification": true
+}
