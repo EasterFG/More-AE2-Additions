@@ -82,7 +82,7 @@ public class ItemCablePlaceTool extends Item implements IMenuItem, IAEItemPowerS
         } else {
             handlerClick(player, level, stack);
         }
-        return super.onItemUseFirst(stack, context);
+        return InteractionResult.SUCCESS;
     }
 
     @Override

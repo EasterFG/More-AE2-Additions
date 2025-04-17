@@ -26,6 +26,7 @@ public class ItemModelProvider extends net.minecraftforge.client.model.generator
         flatSingleLayer(ModItems.PATTERN_REFILL_CARD, "item/pattern_refill_card");
 
         flatSingleLayer(ModItems.CABLE_PLACE_TOOL, "item/cable_place_tools");
+        flatSingleLayer(ModItems.PATTERN_PROVIDER_UPGRADE, "item/pattern_provider_upgrade");
     }
 
     private ItemModelBuilder flatSingleLayer(ItemDefinition<?> item, String texture) {

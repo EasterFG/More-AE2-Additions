@@ -84,5 +84,13 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_diamond", RecipeProvider.has(Items.DIAMOND))
                 .save(writer);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.PATTERN_PROVIDER_UPGRADE)
+                .pattern("ABA")
+                .pattern(" C ")
+                .define('A', AEItems.CAPACITY_CARD)
+                .define('B', AEItems.ENGINEERING_PROCESSOR)
+                .define('C', Items.PAPER)
+                .unlockedBy("has_pattern_provider", RecipeProvider.has(AEBlocks.PATTERN_PROVIDER))
+                .save(writer);
     }
 }

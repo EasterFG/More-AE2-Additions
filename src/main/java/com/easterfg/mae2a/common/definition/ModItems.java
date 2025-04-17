@@ -14,10 +14,7 @@ import appeng.api.upgrades.Upgrades;
 
 import com.easterfg.mae2a.api.MainCreativeMod;
 import com.easterfg.mae2a.api.definition.ItemDefinition;
-import com.easterfg.mae2a.common.items.InfiniteDyesCellItem;
-import com.easterfg.mae2a.common.items.ItemCablePlaceTool;
-import com.easterfg.mae2a.common.items.PackageItem;
-import com.easterfg.mae2a.common.items.PatternModifyToolItem;
+import com.easterfg.mae2a.common.items.*;
 
 /**
  * @author EasterFG on 2024/9/25
@@ -38,6 +35,10 @@ public class ModItems {
             id("pattern_refill_card"), Upgrades::createUpgradeCardItem);
     public static final ItemDefinition<Item> CABLE_PLACE_TOOL = item("Cable Place Tools", "线缆放置工具",
             id("cable_place_tools"), p -> new ItemCablePlaceTool(p.stacksTo(1)));
+
+    public static final ItemDefinition<Item> PATTERN_PROVIDER_UPGRADE = item("Pattern Provider Plus Upgrade ",
+            "样板供应器Plus升级工具",
+            id("pattern_provider_upgrade"), p -> new ItemPatternProviderUpgrade(p.stacksTo(64)));
 
     static <T extends Item> ItemDefinition<T> item(String eng, String zh, ResourceLocation id,
             Function<Item.Properties, T> factory) {
