@@ -40,14 +40,6 @@ public final class NBTHelper {
         return BlockPos.of(tag.getLong(name));
     }
 
-    public static boolean hasTag(ItemStack stack, String name) {
-        var tag = stack.getTag();
-        if (tag == null) {
-            return false;
-        }
-        return tag.contains(name);
-    }
-
     @NotNull
     public static Map<String, BlockPos> getBlocks(ItemStack stack, String... names) {
         var tag = stack.getTag();
@@ -66,13 +58,6 @@ public final class NBTHelper {
     public static void saveBlockPos(@NotNull ItemStack stack, @NotNull BlockPos pos, String name) {
         var tag = stack.getOrCreateTag();
         tag.putLong(name, pos.asLong());
-    }
-
-    public static void clear(ItemStack stack, String name) {
-        var tag = stack.getTag();
-        if (tag != null) {
-            tag.remove(name);
-        }
     }
 
     public static CablePlaceToolHost.Settings readSetting(ItemStack stack) {

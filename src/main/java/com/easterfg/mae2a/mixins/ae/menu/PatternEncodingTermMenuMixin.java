@@ -56,7 +56,7 @@ public abstract class PatternEncodingTermMenuMixin extends MEStorageMenu impleme
             MEStorage meStorage = this.getHost().getInventory();
             if (meStorage != null) {
                 int amount = (int) meStorage.extract(AEItemKey.of(AEItems.BLANK_PATTERN),
-                        (64 - blankPattern.getCount()), Actionable.MODULATE, null);
+                        (64 - blankPattern.getCount()), Actionable.MODULATE, getActionSource());
                 if (blankPattern.isEmpty()) {
                     blankPatternSlot.set(new ItemStack(AEItems.BLANK_PATTERN, amount));
                 } else {
