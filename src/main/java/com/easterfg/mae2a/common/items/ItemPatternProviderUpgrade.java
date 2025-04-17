@@ -18,11 +18,12 @@ import appeng.blockentity.AEBaseBlockEntity;
 import appeng.blockentity.crafting.PatternProviderBlockEntity;
 import appeng.blockentity.networking.CableBusBlockEntity;
 import appeng.items.parts.PartItem;
-import appeng.parts.crafting.PatternProviderPart;
+import appeng.parts.AEBasePart;
 
 import com.easterfg.mae2a.common.definition.ModBlockEntities;
 import com.easterfg.mae2a.common.definition.ModBlocks;
 import com.easterfg.mae2a.common.definition.ModParts;
+import com.easterfg.mae2a.common.menu.host.PatternProviderPlusLoginHost;
 
 public class ItemPatternProviderUpgrade extends Item {
     public ItemPatternProviderUpgrade(Properties pProperties) {
@@ -63,7 +64,11 @@ public class ItemPatternProviderUpgrade extends Item {
             var hit = context.getClickLocation();
             Vec3 target = new Vec3(hit.x - clickedPos.getX(), hit.y - clickedPos.getY(), hit.z - clickedPos.getZ());
             var part = cable.getCableBus().selectPartLocal(target).part;
-            if (part instanceof PatternProviderPart pp && pp.getTerminalPatternInventory().size() < 54) {
+            if (part instanceof AEBasePart pp) {
+                if (pp instanceof PatternProviderPlusLoginHost logic
+                        && logic.getTerminalPatternInventory().size() < 54) {
+                    return InteractionResult.PASS;
+                }
                 var side = pp.getSide();
                 var content = new CompoundTag();
 
