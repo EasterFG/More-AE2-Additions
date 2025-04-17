@@ -1,18 +1,25 @@
 package com.easterfg.mae2a.client.screen;
 
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.regex.Pattern;
+
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
+
 import appeng.client.gui.AEBaseScreen;
 import appeng.client.gui.style.ScreenStyle;
 import appeng.client.gui.widgets.AECheckbox;
 import appeng.client.gui.widgets.AETextField;
+import appeng.client.gui.widgets.TabButton;
+
+import com.easterfg.mae2a.MoreAE2Additions;
 import com.easterfg.mae2a.common.menu.PatternModifyMenu;
 import com.easterfg.mae2a.common.settings.PatternModifySetting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Inventory;
-
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.util.List;
-import java.util.regex.Pattern;
+import com.easterfg.mae2a.common.settings.PatternModifySetting.ModifyMode;
 
 /**
  * @author EasterFG on 2024/10/1
@@ -22,69 +29,94 @@ public class PatternModifyScreen extends AEBaseScreen<PatternModifyMenu> {
     private final AETextField itemInput;
     private final AETextField fluidInput;
     private final AECheckbox saveByProducts;
-    private final AECheckbox actionSwitchMultiply;
-    private final AECheckbox actionSwitchDivide;
-    private final PatternModifySetting pms;
+    private final PatternModifySetting setting;
+    private final Map<ModifyMode, TabButton> modeTabButtons = new EnumMap<>(ModifyMode.class);
 
-    // 匹配整数正则
     private static final Pattern INTEGER_REGEX = Pattern.compile("\\d+");
-    // 匹配最多三位浮点数正则
     private static final Pattern FLOAT_REGEX = Pattern.compile("\\d+(\\.\\d{0,3})?");
     private static final DecimalFormat NUMBER_FORMAT = new DecimalFormat("0.###");
 
     public PatternModifyScreen(PatternModifyMenu menu, Inventory playerInventory, Component title, ScreenStyle style) {
         super(menu, playerInventory, title, style);
-        pms = menu.getHost().getPatternModifySetting();
-        itemInput = widgets.addTextField("max_item_input");
+        setting = menu.getHost().getPatternModifySetting();
+
+        itemInput = widgets.addTextField("item_input");
+        fluidInput = widgets.addTextField("fluid_input");
         itemInput.setFilter(str -> str.isEmpty() || INTEGER_REGEX.matcher(str).matches());
         itemInput.setMaxLength(15);
         itemInput.setResponder(s -> this.onUpdate(s, 0));
-        fluidInput = widgets.addTextField("max_fluid_input");
+
         fluidInput.setFilter(str -> str.isEmpty() || FLOAT_REGEX.matcher(str).matches());
         fluidInput.setMaxLength(15);
         fluidInput.setResponder(s -> this.onUpdate(s, 1));
-        saveByProducts = widgets.addCheckbox("save_by_products", Component.translatable("gui.mae2a.retain_by_products"), () -> {
-            pms.setSaveByProducts(!pms.isSaveByProducts());
-            saveChange();
-        });
-        actionSwitchMultiply = widgets.addCheckbox("action_switch_multiply", Component.translatable("gui.mae2a.multiply"), this::switchAction);
-        actionSwitchMultiply.setRadio(true);
-        actionSwitchDivide = widgets.addCheckbox("action_switch_divide", Component.translatable("gui.mae2a.divide"), this::switchAction);
-        actionSwitchDivide.setRadio(true);
-        updateState();
+
+        for (var mode : ModifyMode.values()) {
+            var tab = new TabButton(
+                    mode.icon(),
+                    mode.tooltip(),
+                    press -> setMode(mode));
+            tab.setStyle(TabButton.Style.HORIZONTAL);
+
+            var index = modeTabButtons.size();
+            modeTabButtons.put(mode, tab);
+            this.widgets.add("tab_" + index, tab);
+        }
+
+        saveByProducts = widgets.addCheckbox("save_by_products", Component.translatable("gui.mae2a.retain_by_products"),
+                menu::setSaveByProducts);
+
+        updateState(menu.getMode());
     }
 
-    private void updateState() {
-        boolean isMultiply = pms.getMode() == 0;
-        this.setTextContent("item_input_tip", Component.translatable(
-                String.format("gui.mae2a.pattern_%s_item_limit", isMultiply ? "max" : "min")));
-        this.setTextContent("fluid_input_tip", Component.translatable(
-                String.format("gui.mae2a.pattern_%s_fluid_limit", isMultiply ? "max" : "min")));
-        this.itemInput.setPlaceholder(Component.translatable(
-                String.format("gui.mae2a.pattern_%s_item_limit_placeholder", isMultiply ? "max" : "min")));
-        this.fluidInput.setPlaceholder(Component.translatable(
-                String.format("gui.mae2a.pattern_%s_fluid_limit_placeholder", isMultiply ? "max" : "min")));
-        itemInput.setTooltipMessage(List.of(Component
-                .translatable("gui.mae2a.%s_input_tip"
-                        .formatted(isMultiply ? "max" : "min")
-                )));
-        itemInput.setValue(String.valueOf(isMultiply ? pms.getMaxItemLimit() : pms.getMinItemLimit()));
-        fluidInput.setValue(NUMBER_FORMAT.format((isMultiply ? pms.getMaxFluidLimit() : pms.getMinFluidLimit()) / 1000D));
-        saveByProducts.setSelected(pms.isSaveByProducts());
-        actionSwitchMultiply.setSelected(isMultiply);
-        actionSwitchDivide.setSelected(!isMultiply);
+    @Override
+    protected void updateBeforeRender() {
+        super.updateBeforeRender();
+        for (var mode : ModifyMode.values()) {
+            boolean selected = menu.getMode() == mode;
+            modeTabButtons.get(mode).setSelected(selected);
+        }
     }
 
-    private void saveChange() {
-        menu.saveChange(pms);
+    private void setMode(ModifyMode mode) {
+        menu.setMode(mode);
+        updateState(mode);
     }
 
-    private void switchAction() {
-        boolean flag = pms.getMode() == 0;
-        pms.setMode(pms.getMode() == 0 ? 1 : 0);
-        this.actionSwitchMultiply.setSelected(flag);
-        this.actionSwitchDivide.setSelected(!flag);
-        updateState();
+    private void updateState(ModifyMode mode) {
+        String itemPlaceholderKey, fluidPlaceholderKey, tooltipKey, itemValue, fluidValue;
+
+        switch (mode) {
+            case MULTIPLY -> {
+                itemPlaceholderKey = "gui.mae2a.pattern_max_item_limit";
+                fluidPlaceholderKey = "gui.mae2a.pattern_max_fluid_limit";
+                tooltipKey = "gui.mae2a.max_input_tip";
+                itemValue = String.valueOf(setting.getMaxItemLimit());
+                fluidValue = NUMBER_FORMAT.format(setting.getMaxFluidLimit() / 1000D);
+            }
+
+            case DIVIDE -> {
+                itemPlaceholderKey = "gui.mae2a.pattern_min_item_limit";
+                fluidPlaceholderKey = "gui.mae2a.pattern_min_fluid_limit";
+                tooltipKey = "gui.mae2a.min_input_tip";
+                itemValue = String.valueOf(setting.getMinItemLimit());
+                fluidValue = NUMBER_FORMAT.format(setting.getMinFluidLimit() / 1000D);
+            }
+            default -> {
+                MoreAE2Additions.LOGGER.warn("Unknown ModifyMode: " + mode);
+                return;
+            }
+        }
+
+        updateInputFields(itemInput, itemPlaceholderKey, tooltipKey, itemValue);
+        updateInputFields(fluidInput, fluidPlaceholderKey, tooltipKey, fluidValue);
+
+        saveByProducts.setSelected(setting.isSaveByProducts());
+    }
+
+    private void updateInputFields(AETextField input, String placeholder, String tooltip, String value) {
+        input.setPlaceholder(Component.translatable(placeholder));
+        input.setTooltipMessage(Collections.singletonList(Component.translatable(tooltip)));
+        input.setValue(value);
     }
 
     public void onUpdate(String s, int type) {
@@ -94,20 +126,11 @@ public class PatternModifyScreen extends AEBaseScreen<PatternModifyMenu> {
         try {
             Number number = NUMBER_FORMAT.parse(s);
             if (type == 0) {
-                if (pms.getMode() == 0) {
-                    pms.setMaxItemLimit(number.intValue());
-                } else {
-                    pms.setMinItemLimit(number.intValue());
-                }
+                menu.setItemLimit(number.intValue());
             } else if (type == 1) {
-                if (pms.getMode() == 0) {
-                    pms.setMaxFluidLimit((int) (number.doubleValue() * 1000));
-                } else {
-                    pms.setMinFluidLimit((int) (number.doubleValue() * 1000));
-                }
+                menu.setFluidLimit((int) (number.doubleValue() * 1000));
             }
         } catch (ParseException ignored) {
         }
-        saveChange();
     }
 }

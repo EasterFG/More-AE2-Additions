@@ -1,30 +1,34 @@
 package com.easterfg.mae2a.util;
 
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TextColor;
+import static net.minecraft.ChatFormatting.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.minecraft.ChatFormatting.*;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TextColor;
 
 /**
  * @author EasterFG on 2024/10/12
  */
-public class TooltipHelper {
+public final class TooltipHelper {
+
+    private TooltipHelper() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
 
     private static final List<FormattingCode> CODES = new ArrayList<>();
 
     /**
      * Array of TextFormatting codes that are used to create a rainbow effect
      */
-    private static final ChatFormatting[] ALL_COLORS = new ChatFormatting[]{
+    private static final ChatFormatting[] ALL_COLORS = new ChatFormatting[] {
             RED, GOLD, YELLOW, GREEN, AQUA, DARK_AQUA, DARK_BLUE, BLUE, DARK_PURPLE, LIGHT_PURPLE
     };
 
     public static final FormattingCode RAINBOW = new FormattingCode(160, ALL_COLORS);
 
-    public static final RGB GRADIENT = new RGB(160, new int[]{
+    public static final RGB GRADIENT = new RGB(160, new int[] {
             0x0ebeff, 0x1cb7fb, 0x2aaff6, 0x39a8f2, 0x47a1ed, 0x559ae9, 0x6392e4, 0x718be0, 0x7f84db,
             0x8e7cd7, 0x9c75d2, 0xaa6ece, 0xb866c9, 0xc65fc5, 0xd458c0, 0xe351bc, 0xf149b7, 0xff42b3
     });

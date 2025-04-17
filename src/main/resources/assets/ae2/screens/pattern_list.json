@@ -1,0 +1,34 @@
+{
+  "$schema": "schema.json",
+  "includes": ["common/common.json"],
+  "slots": {
+    "ENCODED_PATTERN": {
+      "left": 8,
+      "top": 29,
+      "grid": "BREAK_AFTER_9COLS"
+    }
+  },
+  "text": {
+    "dialog_title": {
+      "text": {
+        "translate": "gui.mae2a.pattern_list"
+      },
+      "position": {
+        "left": 8,
+        "top": 6
+      }
+    }
+  },
+  "widgets": {
+    "confirm": {
+      "top": 34,
+      "left": 8,
+      "width": 48
+    },
+    "cancel": {
+      "top": 34,
+      "right": 54,
+      "width": 48
+    }
+  }
+}

@@ -1,36 +1,99 @@
 package com.easterfg.mae2a.common.menu.host;
 
-import appeng.api.implementations.menuobjects.ItemMenuHost;
-import com.easterfg.mae2a.common.settings.PatternModifySetting;
+import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+
+import appeng.api.implementations.menuobjects.ItemMenuHost;
+import appeng.helpers.patternprovider.PatternProviderLogic;
+
+import com.easterfg.mae2a.common.items.PatternModifyToolItem;
+import com.easterfg.mae2a.common.settings.PatternModifySetting;
+import com.easterfg.mae2a.util.PatternUtils;
+
+import lombok.Getter;
 
 /**
  * @author EasterFG on 2024/10/1
  */
 public class PatternModifyHost extends ItemMenuHost {
-    private final PatternModifySetting pms;
+    private final PatternModifySetting setting;
 
-    private Player player;
+    @Getter
+    @Nullable
+    private PatternProviderLogic providerLogic;
 
-    public PatternModifyHost(Player player, @Nullable Integer slot, ItemStack itemStack) {
+    @Getter
+    private List<ItemStack> patterns;
+
+    public PatternModifyHost(Player player, @Nullable Integer slot, ItemStack itemStack, BlockPos clickPos) {
         super(player, slot, itemStack);
-        pms = new PatternModifySetting();
+        setting = new PatternModifySetting();
+        Vec3 hitPos = null;
         if (itemStack.hasTag()) {
-            this.pms.readFromNBT(itemStack.getOrCreateTag());
+            CompoundTag tag = itemStack.getOrCreateTag();
+            this.setting.readFromNBT(tag);
+            hitPos = PatternUtils.readVec3(tag.getCompound("hitPos"));
+            tag.remove("pos");
+        }
+
+        if (hitPos != null && clickPos != null) {
+            Level level = player.getCommandSenderWorld();
+            providerLogic = PatternModifyToolItem.findPatternProvide(level, clickPos, hitPos);
+            if (providerLogic != null) {
+                patterns = PatternUtils.getProcessingPatterns(level, providerLogic, setting);
+            }
         }
     }
 
     public PatternModifySetting getPatternModifySetting() {
-        return pms;
+        return setting;
     }
 
-    public void saveChange(PatternModifySetting pms) {
-        CompoundTag tag = getItemStack().getOrCreateTag();
-        pms.writeFromNBT(tag);
+    public void saveSetting() {
+        ItemStack itemStack = getItemStack();
+        if (itemStack.isEmpty()) {
+            return;
+        }
+        setting.writeFromNBT(itemStack.getOrCreateTagElement("setting"));
     }
 
+    public void setMode(PatternModifySetting.ModifyMode mode) {
+        setting.setMode(mode);
+        saveSetting();
+    }
+
+    public PatternModifySetting.ModifyMode getMode() {
+        return setting.getMode();
+    }
+
+    public void setItemLimit(int value) {
+        if (setting.getMode() == PatternModifySetting.ModifyMode.MULTIPLY) {
+            setting.setMaxItemLimit(value);
+        } else {
+            setting.setMinItemLimit(value);
+        }
+        saveSetting();
+    }
+
+    public void setFluidLimit(int value) {
+        if (setting.getMode() == PatternModifySetting.ModifyMode.MULTIPLY) {
+            setting.setMaxFluidLimit(value);
+        } else {
+            setting.setMinFluidLimit(value);
+        }
+        saveSetting();
+    }
+
+    public void switchSave() {
+        setting.setSaveByProducts(!setting.isSaveByProducts());
+        saveSetting();
+    }
 }
-

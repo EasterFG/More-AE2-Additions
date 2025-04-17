@@ -1,11 +1,12 @@
 package com.easterfg.mae2a.common.settings;
 
-import lombok.Data;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
-/**
- * @author EasterFG on 2024/10/2
- */
+import lombok.Data;
+
 @Data
 public class PatternModifySetting {
     private int maxItemLimit = 64;
@@ -13,10 +14,34 @@ public class PatternModifySetting {
     private int minItemLimit = 1;
     private int minFluidLimit = 1000;
     private boolean saveByProducts = false;
-    /**
-     * 0 is Multiply, 1 is Divide
-     */
-    private int mode = 0;
+    private ModifyMode mode = ModifyMode.MULTIPLY;
+
+    public enum ModifyMode {
+        MULTIPLY(Component.translatable("gui.mae2a.multiply"), Items.STONE.getDefaultInstance()),
+        DIVIDE(Component.translatable("gui.mae2a.divide"), Items.SAND.getDefaultInstance());
+
+        final Component tooltip;
+        final ItemStack icon;
+
+        ModifyMode(Component tooltip, ItemStack icon) {
+            this.tooltip = tooltip;
+            this.icon = icon;
+        }
+
+        public Component tooltip() {
+            return tooltip;
+        }
+
+        public ItemStack icon() {
+            return icon;
+        }
+
+        public static ModifyMode valueOf(int o) {
+            if (o < 0 || o > values().length)
+                throw new IllegalArgumentException("Invalid mode");
+            return values()[o];
+        }
+    }
 
     public void readFromNBT(CompoundTag data) {
         if (data.contains("setting", CompoundTag.TAG_COMPOUND)) {
@@ -26,18 +51,16 @@ public class PatternModifySetting {
             minItemLimit = compound.getInt("minItemLimit");
             minFluidLimit = compound.getInt("minFluidLimit");
             saveByProducts = compound.getBoolean("saveByProducts");
-            mode = compound.getInt("mode");
+            mode = ModifyMode.valueOf(compound.getString("mode"));
         }
     }
 
     public void writeFromNBT(CompoundTag data) {
-        var tag = new CompoundTag();
-        tag.putInt("maxItemLimit", maxItemLimit);
-        tag.putInt("maxFluidLimit", maxFluidLimit);
-        tag.putInt("minItemLimit", minItemLimit);
-        tag.putInt("minFluidLimit", minFluidLimit);
-        tag.putBoolean("saveByProducts", saveByProducts);
-        tag.putInt("mode", mode);
-        data.put("setting", tag);
+        data.putInt("maxItemLimit", maxItemLimit);
+        data.putInt("maxFluidLimit", maxFluidLimit);
+        data.putInt("minItemLimit", minItemLimit);
+        data.putInt("minFluidLimit", minFluidLimit);
+        data.putBoolean("saveByProducts", saveByProducts);
+        data.putString("mode", mode.name());
     }
 }
