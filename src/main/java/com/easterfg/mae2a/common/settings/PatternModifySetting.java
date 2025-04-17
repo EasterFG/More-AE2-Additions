@@ -35,12 +35,6 @@ public class PatternModifySetting {
         public ItemStack icon() {
             return icon;
         }
-
-        public static ModifyMode valueOf(int o) {
-            if (o < 0 || o > values().length)
-                throw new IllegalArgumentException("Invalid mode");
-            return values()[o];
-        }
     }
 
     public void readFromNBT(CompoundTag data) {

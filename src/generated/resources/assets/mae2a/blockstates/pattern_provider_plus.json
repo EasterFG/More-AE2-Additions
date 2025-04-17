@@ -1,0 +1,33 @@
+{
+  "variants": {
+    "push_direction=all": {
+      "model": "mae2a:block/pattern_provider_plus"
+    },
+    "push_direction=down": {
+      "model": "mae2a:block/pattern_provider_plus_oriented",
+      "x": 180
+    },
+    "push_direction=east": {
+      "model": "mae2a:block/pattern_provider_plus_oriented",
+      "x": 90,
+      "y": 90
+    },
+    "push_direction=north": {
+      "model": "mae2a:block/pattern_provider_plus_oriented",
+      "x": 90
+    },
+    "push_direction=south": {
+      "model": "mae2a:block/pattern_provider_plus_oriented",
+      "x": 90,
+      "y": 180
+    },
+    "push_direction=up": {
+      "model": "mae2a:block/pattern_provider_plus_oriented"
+    },
+    "push_direction=west": {
+      "model": "mae2a:block/pattern_provider_plus_oriented",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

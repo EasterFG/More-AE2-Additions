@@ -45,7 +45,6 @@ public class PatternListScreen extends AEBaseScreen<PatternListMenu> {
             menu.confirm();
             onClose();
         });
-        // TODO: 流体样板渲染偏移问题待修复
         this.cancel = widgets.addButton("cancel", Component.translatable("gui.mae2a.cancel"), this::onClose);
     }
 
