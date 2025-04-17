@@ -15,6 +15,8 @@ public interface IMessage<MSG> {
 
     Class<MSG> getPacketClass();
 
-    boolean isClient();
+    default boolean isClient() {
+        return false;
+    }
 
 }

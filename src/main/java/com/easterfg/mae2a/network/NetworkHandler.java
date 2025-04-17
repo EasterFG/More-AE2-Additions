@@ -1,12 +1,12 @@
 package com.easterfg.mae2a.network;
 
-import com.easterfg.mae2a.MoreAE2Additions;
-import com.easterfg.mae2a.network.packet.IMessage;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+import org.apache.commons.lang3.tuple.Pair;
+
 import io.netty.buffer.Unpooled;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.FriendlyByteBuf;
@@ -22,10 +22,14 @@ import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.event.EventNetworkChannel;
-import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import com.easterfg.mae2a.MoreAE2Additions;
+import com.easterfg.mae2a.network.packet.IMessage;
+
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 
 /**
  * @author EasterFG on 2024/10/3
@@ -105,6 +109,7 @@ public class NetworkHandler {
 
     /**
      * send network packet to all players
+     * 
      * @param message the packet to send
      */
     public void sendToAll(IMessage<?> message) {
@@ -116,8 +121,9 @@ public class NetworkHandler {
 
     /**
      * send network packet to target player
+     * 
      * @param message the packet to send
-     * @param player target player
+     * @param player  target player
      */
     public void sendTo(IMessage<?> message, ServerPlayer player) {
         player.connection.send(this.toPacket(message, NetworkDirection.PLAY_TO_CLIENT));
@@ -125,14 +131,16 @@ public class NetworkHandler {
 
     /**
      * send network packet to server
+     * 
      * @param message the packet to send
      */
     public void sendToServer(IMessage<?> message) {
         ClientPacketListener connection = Minecraft.getInstance().getConnection();
-        if (connection == null) return;
+        if (connection == null)
+            return;
         connection.send(this.toPacket(message, NetworkDirection.PLAY_TO_SERVER));
     }
-    
+
     private Packet<?> toPacket(IMessage<?> message, NetworkDirection direction) {
         var buf = new FriendlyByteBuf(Unpooled.buffer(1024));
         var id = this.packetIDMap.getOrDefault(message.getPacketClass(), -1);
