@@ -9,6 +9,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
 
+import appeng.block.AEBaseBlock;
+import appeng.block.AEBaseBlockItem;
+import appeng.items.AEBaseItem;
+
 import com.easterfg.mae2a.MoreAE2Additions;
 import com.easterfg.mae2a.api.definition.ItemDefinition;
 import com.easterfg.mae2a.common.definition.ModItems;
@@ -27,12 +31,28 @@ public class MainCreativeMod {
         var tab = CreativeModeTab.builder()
                 .title(Component.translatable("tooltip.mae2a.creative.tab"))
                 .icon(() -> ModItems.PATTERN_MODIFY_TOOL.stack(1))
-                .displayItems((__, output) -> itemDefinitions.forEach(output::accept))
+                .displayItems(MainCreativeMod::buildDisplayItems)
                 .build();
         Registry.register(registry, MAIN, tab);
     }
 
     public static void add(ItemDefinition<?> itemDef) {
         itemDefinitions.add(itemDef);
+    }
+
+    private static void buildDisplayItems(CreativeModeTab.ItemDisplayParameters itemDisplayParameters,
+            CreativeModeTab.Output output) {
+        for (var itemDef : itemDefinitions) {
+            var item = itemDef.asItem();
+
+            if (item instanceof AEBaseBlockItem baseItem
+                    && baseItem.getBlock() instanceof AEBaseBlock baseBlock) {
+                baseBlock.addToMainCreativeTab(output);
+            } else if (item instanceof AEBaseItem baseItem) {
+                baseItem.addToMainCreativeTab(output);
+            } else {
+                output.accept(itemDef);
+            }
+        }
     }
 }

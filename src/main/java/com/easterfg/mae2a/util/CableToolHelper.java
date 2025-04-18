@@ -5,6 +5,7 @@ import java.util.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import appeng.api.config.Actionable;
@@ -15,6 +16,7 @@ import appeng.api.util.AEColor;
 import appeng.core.definitions.AEBlocks;
 import appeng.items.parts.ColoredPartItem;
 
+import com.easterfg.mae2a.common.items.ItemCablePlaceTool;
 import com.easterfg.mae2a.common.menu.host.CablePlaceToolHost;
 import com.easterfg.mae2a.util.strategy.AEStrategy;
 import com.easterfg.mae2a.util.strategy.IStrategy;
@@ -24,11 +26,26 @@ import com.easterfg.mae2a.util.strategy.InventoryStrategy;
  * @author EasterFG on 2025/4/11
  */
 public class CableToolHelper {
-    public static void place(Player player, Level level, BlockPos bindPos, BlockPos start, BlockPos end,
+    public static void place(ItemStack stack, Player player, Level level, BlockPos bindPos, BlockPos start,
+            BlockPos end,
             CablePlaceToolHost.Settings settings) {
+        if (!(stack.getItem() instanceof ItemCablePlaceTool placeTool)) {
+            return;
+        }
         Set<BlockPos> path = VectorHelper.generatePath(start, end);
         int size = path.size();
-        var item = CableType.values()[settings.getCable()];
+        var cable = CableType.values()[settings.getCable()];
+        // consume power
+        double power;
+        if (settings.getColor() == AEColor.TRANSPARENT) {
+            power = size * 1D;
+        } else {
+            power = size * 4D;
+        }
+        if (placeTool.extractAEPower(stack, power, Actionable.SIMULATE) < power) {
+            return;
+        }
+        placeTool.extractAEPower(stack, power, Actionable.MODULATE);
         int available;
         List<IStrategy> queues = new LinkedList<>();
         queues.add(new AEStrategy(player, level, bindPos));
@@ -40,7 +57,7 @@ public class CableToolHelper {
             for (IStrategy strategy : queues) {
                 if (result >= size)
                     break;
-                result += strategy.consume(size, item);
+                result += strategy.consume(size, cable);
             }
             available = result;
         }
@@ -48,7 +65,7 @@ public class CableToolHelper {
             if (available <= 0) {
                 break;
             }
-            var part = placeCable(player, level, item.getItems().item(settings.getColor()), pos, settings.isReplace());
+            var part = placeCable(player, level, cable.getItems().item(settings.getColor()), pos, settings.isReplace());
             if (part) {
                 available--;
             }
@@ -56,7 +73,7 @@ public class CableToolHelper {
         // 退还消耗失败部分
         if (available > 0) {
             for (IStrategy strategy : queues) {
-                available -= strategy.refund(available, item);
+                available -= strategy.refund(available, cable);
             }
         }
     }

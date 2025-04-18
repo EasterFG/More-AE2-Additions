@@ -1,8 +1,5 @@
 package com.easterfg.mae2a.util;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,25 +31,15 @@ public final class NBTHelper {
     @Nullable
     public static BlockPos getBlockPos(ItemStack stack, String name) {
         var tag = stack.getTag();
+        return getBlockPos(tag, name);
+    }
+
+    @Nullable
+    public static BlockPos getBlockPos(@Nullable CompoundTag tag, String name) {
         if (tag == null || !tag.contains(name)) {
             return null;
         }
         return BlockPos.of(tag.getLong(name));
-    }
-
-    @NotNull
-    public static Map<String, BlockPos> getBlocks(ItemStack stack, String... names) {
-        var tag = stack.getTag();
-        if (tag == null) {
-            return Map.of();
-        }
-        Map<String, BlockPos> result = new HashMap<>();
-        for (String name : names) {
-            if (tag.contains(name)) {
-                result.put(name, BlockPos.of(tag.getLong(name)));
-            }
-        }
-        return result;
     }
 
     public static void saveBlockPos(@NotNull ItemStack stack, @NotNull BlockPos pos, String name) {
