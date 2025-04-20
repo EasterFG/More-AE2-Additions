@@ -1,3 +1,12 @@
+## v1.0.3
+### English
+1. Fixed malfunction in Blueprint Upgrade Tool
+2. Added Energy System to Cable Placer Tool
+3. Implemented Multiplier Mode in Pattern Modifier
+### 中文
+1. 修复样板升级工具无法正常使用的故障
+2. 样板放置工具新增能量系统
+3. 样板修改器支持倍率模式
 ## v.1.0.2
 ### 英文
 1. Fixed cable placement tool malfunction when providers exist
