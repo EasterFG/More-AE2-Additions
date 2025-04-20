@@ -15,6 +15,8 @@ public class PatternModifySetting {
     private int minFluidLimit = 1000;
     private boolean saveByProducts = false;
     private ModifyMode mode = ModifyMode.MULTIPLY;
+    private boolean limitMode = true;
+    private int rate = 2;
 
     public enum ModifyMode {
         MULTIPLY(Component.translatable("gui.mae2a.multiply"), Items.STONE.getDefaultInstance()),
@@ -46,6 +48,8 @@ public class PatternModifySetting {
             minFluidLimit = compound.getInt("minFluidLimit");
             saveByProducts = compound.getBoolean("saveByProducts");
             mode = ModifyMode.valueOf(compound.getString("mode"));
+            limitMode = compound.getBoolean("limitMode");
+            rate = compound.getInt("rate");
         }
     }
 
@@ -56,5 +60,7 @@ public class PatternModifySetting {
         data.putInt("minFluidLimit", minFluidLimit);
         data.putBoolean("saveByProducts", saveByProducts);
         data.putString("mode", mode.name());
+        data.putBoolean("limitMode", limitMode);
+        data.putInt("rate", rate);
     }
 }

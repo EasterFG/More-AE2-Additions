@@ -17,6 +17,7 @@ import appeng.client.gui.widgets.AETextField;
 import appeng.client.gui.widgets.TabButton;
 
 import com.easterfg.mae2a.MoreAE2Additions;
+import com.easterfg.mae2a.client.gui.widget.CustomIconButton;
 import com.easterfg.mae2a.common.menu.PatternModifyMenu;
 import com.easterfg.mae2a.common.settings.PatternModifySetting;
 import com.easterfg.mae2a.common.settings.PatternModifySetting.ModifyMode;
@@ -29,6 +30,7 @@ public class PatternModifyScreen extends AEBaseScreen<PatternModifyMenu> {
     private final AETextField itemInput;
     private final AETextField fluidInput;
     private final AECheckbox saveByProducts;
+    private final AETextField rateInput;
     private final PatternModifySetting setting;
     private final Map<ModifyMode, TabButton> modeTabButtons = new EnumMap<>(ModifyMode.class);
 
@@ -40,15 +42,21 @@ public class PatternModifyScreen extends AEBaseScreen<PatternModifyMenu> {
         super(menu, playerInventory, title, style);
         setting = menu.getHost().getPatternModifySetting();
 
+        var switchAction = new CustomIconButton(__ -> setActionMode(!menu.isLimitMode()),
+                MoreAE2Additions.id("textures/guis/modify_action.png"),
+                Component.translatable("gui.mae2a.action_limit"),
+                Component.translatable("gui.mae2a.action_rate"));
+        switchAction.setStatusSupplier(menu::isLimitMode);
+        switchAction.setMessage(Component.translatable("gui.mae2a.action_switch_tip"));
+        this.addToLeftToolbar(switchAction);
+
         itemInput = widgets.addTextField("item_input");
         fluidInput = widgets.addTextField("fluid_input");
-        itemInput.setFilter(str -> str.isEmpty() || INTEGER_REGEX.matcher(str).matches());
-        itemInput.setMaxLength(15);
-        itemInput.setResponder(s -> this.onUpdate(s, 0));
+        rateInput = widgets.addTextField("rate_input");
 
-        fluidInput.setFilter(str -> str.isEmpty() || FLOAT_REGEX.matcher(str).matches());
-        fluidInput.setMaxLength(15);
-        fluidInput.setResponder(s -> this.onUpdate(s, 1));
+        setInput(itemInput, INTEGER_REGEX, 15, 0);
+        setInput(fluidInput, FLOAT_REGEX, 15, 1);
+        setInput(rateInput, INTEGER_REGEX, 8, 2);
 
         for (var mode : ModifyMode.values()) {
             var tab = new TabButton(
@@ -63,9 +71,18 @@ public class PatternModifyScreen extends AEBaseScreen<PatternModifyMenu> {
         }
 
         saveByProducts = widgets.addCheckbox("save_by_products", Component.translatable("gui.mae2a.retain_by_products"),
-                menu::setSaveByProducts);
+                () -> {
+                    setting.setSaveByProducts(!setting.isSaveByProducts());
+                    menu.saveSetting(setting);
+                });
+        saveByProducts.setSelected(setting.isSaveByProducts());
+        updateState(setting.getMode(), setting.isLimitMode());
+    }
 
-        updateState(menu.getMode());
+    private void setInput(AETextField input, Pattern pattern, int maxLength, int type) {
+        input.setFilter(s -> s.isEmpty() || pattern.matcher(s).matches());
+        input.setMaxLength(maxLength);
+        input.setResponder(s -> this.onUpdate(s, type));
     }
 
     @Override
@@ -79,27 +96,38 @@ public class PatternModifyScreen extends AEBaseScreen<PatternModifyMenu> {
 
     private void setMode(ModifyMode mode) {
         menu.setMode(mode);
-        updateState(mode);
+        setting.setMode(mode);
+        updateState(mode, setting.isLimitMode());
     }
 
-    private void updateState(ModifyMode mode) {
-        String itemPlaceholderKey, fluidPlaceholderKey, tooltipKey, itemValue, fluidValue;
+    private void setActionMode(boolean visible) {
+        menu.setLimitMode(visible);
+        setting.setLimitMode(visible);
+        updateState(setting.getMode(), visible);
+    }
+
+    private void updateState(ModifyMode mode, boolean isLimitMode) {
+        String itemPlaceholderKey, fluidPlaceholderKey, ratePlaceholderTooltip, tooltipKey, itemValue, fluidValue;
+        String tooltipA;
+        String tooltipB;
 
         switch (mode) {
             case MULTIPLY -> {
+                tooltipA = "gui.mae2a.pattern_max_item_limit";
+                tooltipB = "gui.mae2a.pattern_max_fluid_limit";
                 itemPlaceholderKey = "gui.mae2a.pattern_max_item_limit";
                 fluidPlaceholderKey = "gui.mae2a.pattern_max_fluid_limit";
+                ratePlaceholderTooltip = "gui.mae2a.pattern_rate_multiply";
                 tooltipKey = "gui.mae2a.max_input_tip";
-                itemValue = String.valueOf(setting.getMaxItemLimit());
-                fluidValue = NUMBER_FORMAT.format(setting.getMaxFluidLimit() / 1000D);
-            }
 
+            }
             case DIVIDE -> {
+                tooltipA = "gui.mae2a.pattern_min_item_limit";
+                tooltipB = "gui.mae2a.pattern_min_fluid_limit";
                 itemPlaceholderKey = "gui.mae2a.pattern_min_item_limit";
                 fluidPlaceholderKey = "gui.mae2a.pattern_min_fluid_limit";
+                ratePlaceholderTooltip = "gui.mae2a.pattern_rate_divide";
                 tooltipKey = "gui.mae2a.min_input_tip";
-                itemValue = String.valueOf(setting.getMinItemLimit());
-                fluidValue = NUMBER_FORMAT.format(setting.getMinFluidLimit() / 1000D);
             }
             default -> {
                 MoreAE2Additions.LOGGER.warn("Unknown ModifyMode: " + mode);
@@ -107,10 +135,30 @@ public class PatternModifyScreen extends AEBaseScreen<PatternModifyMenu> {
             }
         }
 
+        if (isLimitMode) {
+            this.setTextHidden("tooltip_2", false);
+            this.setTextContent("tooltip_1", Component.translatable(tooltipA));
+            this.setTextContent("tooltip_2", Component.translatable(tooltipB));
+        } else {
+            this.setTextHidden("tooltip_2", true);
+            this.setTextContent("tooltip_1", Component.translatable("gui.mae2a.pattern_rate"));
+        }
+
+        itemValue = String.valueOf(getItemLimit(mode));
+        fluidValue = NUMBER_FORMAT.format(getFluidLimit(mode) / 1000D);
         updateInputFields(itemInput, itemPlaceholderKey, tooltipKey, itemValue);
         updateInputFields(fluidInput, fluidPlaceholderKey, tooltipKey, fluidValue);
+        updateInputFields(rateInput, "gui.mae2a.pattern_rate", ratePlaceholderTooltip,
+                String.valueOf(setting.getRate()));
 
         saveByProducts.setSelected(setting.isSaveByProducts());
+        updateInput(setting.isLimitMode());
+    }
+
+    private void updateInput(boolean visible) {
+        this.itemInput.setVisible(visible);
+        this.fluidInput.setVisible(visible);
+        this.rateInput.setVisible(!visible);
     }
 
     private void updateInputFields(AETextField input, String placeholder, String tooltip, String value) {
@@ -126,11 +174,52 @@ public class PatternModifyScreen extends AEBaseScreen<PatternModifyMenu> {
         try {
             Number number = NUMBER_FORMAT.parse(s);
             if (type == 0) {
-                menu.setItemLimit(number.intValue());
+                setItemLimit(number.intValue());
             } else if (type == 1) {
-                menu.setFluidLimit((int) (number.doubleValue() * 1000));
+                setFluidLimit((int) (number.doubleValue() * 1000));
+            } else if (type == 2) {
+                setting.setRate(number.intValue());
             }
+            menu.saveSetting(setting);
         } catch (ParseException ignored) {
         }
+    }
+
+    private void setItemLimit(int limit) {
+        if (setting.getMode() == ModifyMode.MULTIPLY) {
+            if (setting.getMaxItemLimit() == limit)
+                return;
+            setting.setMaxItemLimit(limit);
+        } else {
+            if (setting.getMinItemLimit() == limit)
+                return;
+            setting.setMinItemLimit(limit);
+        }
+    }
+
+    private void setFluidLimit(int limit) {
+        if (setting.getMode() == ModifyMode.MULTIPLY) {
+            if (setting.getMaxFluidLimit() == limit)
+                return;
+            setting.setMaxFluidLimit(limit);
+        } else {
+            if (setting.getMinFluidLimit() == limit)
+                return;
+            setting.setMinFluidLimit(limit);
+        }
+    }
+
+    private int getItemLimit(ModifyMode mode) {
+        if (mode == ModifyMode.MULTIPLY) {
+            return setting.getMaxItemLimit();
+        }
+        return setting.getMinItemLimit();
+    }
+
+    private int getFluidLimit(ModifyMode mode) {
+        if (mode == ModifyMode.MULTIPLY) {
+            return setting.getMaxFluidLimit();
+        }
+        return setting.getMinFluidLimit();
     }
 }

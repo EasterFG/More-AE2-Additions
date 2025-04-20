@@ -1,6 +1,8 @@
 package com.easterfg.mae2a.util;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -60,11 +62,14 @@ public final class PatternUtils {
             return null;
         GenericStack output = patter.getPrimaryOutput();
         boolean flag = setting.getMode() == PatternModifySetting.ModifyMode.MULTIPLY;
+        if (!setting.isLimitMode()) {
+            return apply(patter, setting.getRate(), setting.isSaveByProducts(), flag, patter.getPrimaryOutput());
+        }
         if (output.what() instanceof AEFluidKey) {
-            return apply(patter, flag ? setting.getMaxFluidLimit() : setting.getMinFluidLimit(),
+            return processLimitMode(patter, flag ? setting.getMaxFluidLimit() : setting.getMinFluidLimit(),
                     setting.isSaveByProducts(), flag);
         } else if (output.what() instanceof AEItemKey) {
-            return apply(patter, flag ? setting.getMaxItemLimit() : setting.getMinItemLimit(),
+            return processLimitMode(patter, flag ? setting.getMaxItemLimit() : setting.getMinItemLimit(),
                     setting.isSaveByProducts(), flag);
         }
         return itemStack;
@@ -150,58 +155,92 @@ public final class PatternUtils {
     }
 
     /**
-     * 应用修改
+     * 应用修改后的处理样板
      *
      * @param pattern       解码后的样板
-     * @param limit         限制
-     * @param hasByProducts 保留副产物
-     * @param flag          乘除标记
-     * @return 处理结果
+     * @param limit         数量限制
+     * @param hasByProducts 是否保留副产物
+     * @param multiplyMode  是否为乘法模式（true=倍增，false=倍减）
+     * @return 处理后的新样板，或null（当无法调整时）
      */
-    public static @Nullable ItemStack apply(AEProcessingPattern pattern, long limit, boolean hasByProducts,
-            boolean flag) {
+    public static @Nullable ItemStack processLimitMode(AEProcessingPattern pattern, long limit, boolean hasByProducts,
+            boolean multiplyMode) {
         var primary = pattern.getPrimaryOutput();
-        if (primary.amount() >= limit && flag)
+        if (!isScalingApplicable(primary.amount(), limit, multiplyMode)) {
             return null;
-        if (primary.amount() <= limit && !flag)
+        }
+
+        int times = calculateScalingFactor(primary.amount(), limit, multiplyMode);
+        return apply(pattern, times, hasByProducts, multiplyMode, primary);
+    }
+
+    @Nullable
+    private static ItemStack apply(AEProcessingPattern pattern, int times, boolean hasByProducts, boolean multiplyMode,
+            GenericStack primary) {
+        if (times <= 1)
             return null;
         GenericStack[] outputs = pattern.getSparseOutputs();
         GenericStack[] inputs = pattern.getSparseInputs();
-        var newOutput = new GenericStack[outputs.length];
-        var newInputs = new GenericStack[inputs.length];
-
-        if (hasByProducts) {
-            System.arraycopy(outputs, 1, newOutput, 1, outputs.length - 1);
-        }
-        int times;
-        if (flag) {
-            times = (int) Math.floor(limit / (double) primary.amount());
-            if (times <= 1)
-                return null;
-            newInputs = Arrays.stream(inputs)
-                    .filter(Objects::nonNull)
-                    .map(input -> new GenericStack(input.what(), input.amount() * times))
-                    .toArray(GenericStack[]::new);
-            newOutput[0] = new GenericStack(primary.what(), primary.amount() * times);
-        } else {
-            times = (int) Math.floor((double) primary.amount() / limit);
-            if (times <= 1)
-                return null;
-            newInputs = Arrays.stream(inputs)
-                    .filter(Objects::nonNull)
-                    .map(input -> {
-                        if (input.amount() % times != 0) {
-                            return null;
-                        }
-                        return new GenericStack(input.what(), input.amount() / times);
-                    })
-                    .filter(Objects::nonNull)
-                    .toArray(GenericStack[]::new);
-            newOutput[0] = new GenericStack(primary.what(), primary.amount() / times);
-            if (newInputs.length != pattern.getInputs().length)
-                return null;
+        GenericStack[] newInputs = scaleStacks(inputs, times, multiplyMode);
+        GenericStack[] newOutput = scaleOutputs(outputs, primary, times, multiplyMode, hasByProducts);
+        if (newInputs == null || newOutput == null) {
+            return null;
         }
         return PatternDetailsHelper.encodeProcessingPattern(newInputs, newOutput);
+    }
+
+    public static GenericStack[] scaleStacks(GenericStack[] stacks, int times, boolean multiplyMode) {
+        GenericStack[] scaled = new GenericStack[stacks.length];
+        int count = 0, finalCount = 0;
+        for (GenericStack stack : stacks) {
+            if (stack == null) {
+                continue;
+            }
+            finalCount++;
+            long newAmount;
+            if (multiplyMode) {
+                newAmount = stack.amount() * times;
+            } else {
+                if (stack.amount() % times != 0) {
+                    continue;
+                }
+                newAmount = stack.amount() / times;
+            }
+            scaled[count++] = new GenericStack(stack.what(), newAmount);
+        }
+        if (count != finalCount) {
+            return null;
+        }
+        return scaled;
+    }
+
+    private static GenericStack[] scaleOutputs(GenericStack[] outputs, GenericStack primary,
+            int times, boolean multiplyMode, boolean hasByProducts) {
+        GenericStack[] scaled = new GenericStack[outputs.length];
+
+        // primary
+        long newAmount = multiplyMode
+                ? primary.amount() * times
+                : primary.amount() / times;
+        if (newAmount <= 0) return null;
+        scaled[0] = new GenericStack(primary.what(), newAmount);
+
+        // other
+        if (hasByProducts && outputs.length > 1) {
+            System.arraycopy(outputs, 1, scaled, 1, outputs.length - 1);
+        }
+
+        return scaled;
+    }
+
+    private static int calculateScalingFactor(long currentAmount, long limit, boolean multiplyMode) {
+        return (int) (multiplyMode
+                ? Math.floor(limit / (double) currentAmount)
+                : Math.floor((double) currentAmount / limit));
+    }
+
+    private static boolean isScalingApplicable(long currentAmount, long limit, boolean multiplyMode) {
+        return multiplyMode ? currentAmount < limit : currentAmount > limit;
     }
 
     public static CompoundTag writeVec3(Vec3 vec3) {

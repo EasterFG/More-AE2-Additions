@@ -8,6 +8,7 @@ import appeng.menu.guisync.GuiSync;
 import appeng.menu.implementations.MenuTypeBuilder;
 
 import com.easterfg.mae2a.common.menu.host.PatternModifyHost;
+import com.easterfg.mae2a.common.settings.PatternModifySetting;
 import com.easterfg.mae2a.common.settings.PatternModifySetting.ModifyMode;
 
 import lombok.Getter;
@@ -20,16 +21,20 @@ public class PatternModifyMenu extends AEBaseMenu {
 
     protected final PatternModifyHost host;
 
-    private static final String ACTION_SAVE_ITEM = "save_item";
-    private static final String ACTION_SAVE_FLUID = "save_fluid";
-    private static final String ACTION_SWITCH_SAVE = "switch_save";
     private static final String ACTION_SET_MODE = "set_mode";
+    private static final String ACTION_SET_ACTION = "set_action";
+    private static final String ACTION_SAVE_SETTING = "save_setting";
 
     private ModifyMode currentMode;
+    private boolean currentActionMode;
 
     @Getter
     @GuiSync(1)
     public ModifyMode mode = ModifyMode.MULTIPLY;
+
+    @Getter
+    @GuiSync(2)
+    public boolean limitMode = true;
 
     public static final MenuType<PatternModifyMenu> TYPE = MenuTypeBuilder
             .create(PatternModifyMenu::new, PatternModifyHost.class)
@@ -39,36 +44,9 @@ public class PatternModifyMenu extends AEBaseMenu {
         super(TYPE, id, ip, host);
         this.host = host;
 
-        registerClientAction(ACTION_SAVE_ITEM, Integer.class, this::setItemLimit);
-        registerClientAction(ACTION_SAVE_FLUID, Integer.class, this::setFluidLimit);
-        registerClientAction(ACTION_SWITCH_SAVE, this::setSaveByProducts);
+        registerClientAction(ACTION_SAVE_SETTING, PatternModifySetting.class, this::saveSetting);
         registerClientAction(ACTION_SET_MODE, ModifyMode.class, host::setMode);
-    }
-
-    public void setItemLimit(int value) {
-        if (isClientSide()) {
-            sendClientAction(ACTION_SAVE_ITEM, value);
-            return;
-        }
-
-        this.host.setItemLimit(value);
-    }
-
-    public void setFluidLimit(int value) {
-        if (isClientSide()) {
-            sendClientAction(ACTION_SAVE_FLUID, value);
-            return;
-        }
-
-        this.host.setFluidLimit(value);
-    }
-
-    public void setSaveByProducts() {
-        if (isClientSide()) {
-            sendClientAction(ACTION_SWITCH_SAVE);
-            return;
-        }
-        this.host.switchSave();
+        registerClientAction(ACTION_SET_ACTION, Boolean.class, host::setActionMode);
     }
 
     public void setMode(ModifyMode mode) {
@@ -79,6 +57,14 @@ public class PatternModifyMenu extends AEBaseMenu {
         }
     }
 
+    public void setLimitMode(boolean limitMode) {
+        if (isClientSide()) {
+            sendClientAction(ACTION_SET_ACTION, limitMode);
+        } else {
+            this.limitMode = limitMode;
+        }
+    }
+
     @Override
     public void broadcastChanges() {
         super.broadcastChanges();
@@ -86,6 +72,10 @@ public class PatternModifyMenu extends AEBaseMenu {
         if (isServerSide()) {
             if (this.mode != host.getMode()) {
                 this.setMode(host.getMode());
+            }
+
+            if (this.limitMode != host.isLimitMode()) {
+                this.setLimitMode(host.isLimitMode());
             }
         }
     }
@@ -99,5 +89,18 @@ public class PatternModifyMenu extends AEBaseMenu {
             this.currentMode = this.mode;
         }
 
+        if (this.currentActionMode != this.limitMode) {
+            this.host.setActionMode(this.limitMode);
+            this.currentActionMode = this.limitMode;
+        }
+
+    }
+
+    public void saveSetting(PatternModifySetting setting) {
+        if (isClientSide()) {
+            sendClientAction(ACTION_SAVE_SETTING, setting);
+            return;
+        }
+        this.host.saveSetting(setting);
     }
 }

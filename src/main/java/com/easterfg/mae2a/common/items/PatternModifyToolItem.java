@@ -57,11 +57,12 @@ public class PatternModifyToolItem extends Item implements IMenuItem {
     public void appendHoverText(@NotNull ItemStack itemStack, @Nullable Level level, @NotNull List<Component> tooltip,
             @NotNull TooltipFlag flag) {
         tooltip.add(Component.translatable("tooltip.mae2a.pattern_modify_tool.1"));
-        tooltip.add(Component.translatable("tooltip.mae2a.pattern_modify_tool.2"));
-        tooltip.add(Component.translatable("tooltip.mae2a.pattern_modify_tool.3"));
-        tooltip.add(Component.translatable("tooltip.mae2a.pattern_modify_tool.4"));
-        tooltip.add(Component.translatable("tooltip.mae2a.pattern_modify_tool.5"));
-        tooltip.add(Component.translatable("tooltip.mae2a.pattern_modify_tool.6"));
+        tooltip.add(Component.translatable("tooltip.mae2a.pattern_modify_tool.limit"));
+        tooltip.add(Component.translatable("tooltip.mae2a.pattern_modify_tool.rate"));
+        tooltip.add(Component.translatable("tooltip.mae2a.pattern_modify_tool.preview"));
+        tooltip.add(Component.translatable("tooltip.mae2a.pattern_modify_tool.block"));
+        tooltip.add(Component.translatable("tooltip.mae2a.pattern_modify_tool.network"));
+        tooltip.add(Component.translatable("tooltip.mae2a.pattern_modify_tool.warring"));
     }
 
     @Override

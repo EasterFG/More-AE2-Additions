@@ -10,15 +10,19 @@ public final class TooltipLanguage {
         add("tooltip.mae2a.creative.tab", "更多AE2工具", "More AE2 Additions");
         add("tooltip.mae2a.pattern_modify_tool.1", "§7一个快捷修改样板的工具，§e右键空气§7打开设置菜单",
                 "§7A tool for quick pattern modification. §eRight-click air§7 to open settings");
-        add("tooltip.mae2a.pattern_modify_tool.2", "§7物品/流体的§b上限/下限§c仅对主产物生效§7，材料数量§a自动翻倍",
-                "§7§bUpper/Lower limits§c only affect primary products§7. Material quantity will §aauto-double");
-        add("tooltip.mae2a.pattern_modify_tool.3", "§a预览模式§7: 预览即将处理的全部样板 (§6右键§7样板供应器)",
+        add("tooltip.mae2a.pattern_modify_tool.limit",
+                "§b限制模式§r: §6将产物调整至目标数量§r，§a自动平衡材料配比",
+                "§bLimit Mode§r: §6Adjusts outputs to target quantity§r, §aauto-balances materials");
+        add("tooltip.mae2a.pattern_modify_tool.rate",
+                "§b倍率模式§r: §6直接应用乘/除运算§r，§c除法仅处理整除配方",
+                "§bRatio Mode§r: §6Applies multiplier/divisor directly§r, §crequires exact division§r");
+        add("tooltip.mae2a.pattern_modify_tool.preview", "§a预览模式§7: 预览即将处理的全部样板 (§6右键§7样板供应器)",
                 "§aPreview Mode§7: Preview all pending patterns (§6Right-click§7 Pattern Provider)");
-        add("tooltip.mae2a.pattern_modify_tool.4", "§a方块模式§7: 翻倍供应器中的全部样板 (§6Shift右键§7样板供应器)",
+        add("tooltip.mae2a.pattern_modify_tool.block", "§a方块模式§7: 翻倍供应器中的全部样板 (§6Shift右键§7样板供应器)",
                 "§aBlock Mode§7: Double all patterns in provider (§6Shift + Right-click§7 Pattern Provider)");
-        add("tooltip.mae2a.pattern_modify_tool.5", "§a网络模式§7: 翻倍网络中的全部样板 (§6Shift右键§7样板编码终端)",
+        add("tooltip.mae2a.pattern_modify_tool.network", "§a网络模式§7: 翻倍网络中的全部样板 (§6Shift右键§7样板编码终端)",
                 "§aNetwork Mode§7: Double all patterns in network (§6Shift + Right-click§7 Pattern Encoding Terminal)");
-        add("tooltip.mae2a.pattern_modify_tool.6", "§c注意: 翻倍网络中的全部样板将覆盖全部样板，请谨慎使用",
+        add("tooltip.mae2a.pattern_modify_tool.warring", "§c注意: 翻倍网络中的全部样板将覆盖全部样板，请谨慎使用",
                 "§cWarning: Doubling all patterns in the network will overwrite all existing patterns. Use with caution");
         add("tooltip.mae2a.pattern_modify_tool.many_result", "本次操作了§6%s§r台机器的§6%s§r个样板",
                 "§7Modified §6%s§r patterns across §6%s§r machines");

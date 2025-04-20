@@ -65,6 +65,14 @@ public class PatternModifyHost extends ItemMenuHost {
         setting.writeFromNBT(itemStack.getOrCreateTagElement("setting"));
     }
 
+    public void saveSetting(PatternModifySetting setting) {
+        ItemStack stack = getItemStack();
+        if (stack == null) {
+            return;
+        }
+        setting.writeFromNBT(stack.getOrCreateTagElement("setting"));
+    }
+
     public void setMode(PatternModifySetting.ModifyMode mode) {
         setting.setMode(mode);
         saveSetting();
@@ -74,19 +82,27 @@ public class PatternModifyHost extends ItemMenuHost {
         return setting.getMode();
     }
 
-    public void setItemLimit(int value) {
-        if (setting.getMode() == PatternModifySetting.ModifyMode.MULTIPLY) {
+    public void setItemLimit(int value, PatternModifySetting.ModifyMode type) {
+        if (type == PatternModifySetting.ModifyMode.MULTIPLY) {
+            if (value == setting.getMaxItemLimit())
+                return;
             setting.setMaxItemLimit(value);
         } else {
+            if (value == setting.getMinItemLimit())
+                return;
             setting.setMinItemLimit(value);
         }
         saveSetting();
     }
 
-    public void setFluidLimit(int value) {
-        if (setting.getMode() == PatternModifySetting.ModifyMode.MULTIPLY) {
+    public void setFluidLimit(int value, PatternModifySetting.ModifyMode type) {
+        if (type == PatternModifySetting.ModifyMode.MULTIPLY) {
+            if (value == setting.getMaxFluidLimit())
+                return;
             setting.setMaxFluidLimit(value);
         } else {
+            if (value == setting.getMinFluidLimit())
+                return;
             setting.setMinFluidLimit(value);
         }
         saveSetting();
@@ -95,5 +111,35 @@ public class PatternModifyHost extends ItemMenuHost {
     public void switchSave() {
         setting.setSaveByProducts(!setting.isSaveByProducts());
         saveSetting();
+    }
+
+    public void setActionMode(boolean limit) {
+        setting.setLimitMode(limit);
+        saveSetting();
+    }
+
+    public boolean isLimitMode() {
+        return setting.isLimitMode();
+    }
+
+    public void setRate(int rate) {
+        setting.setRate(rate);
+        saveSetting();
+    }
+
+    public int getFluidLimit(PatternModifySetting.ModifyMode mode) {
+        if (mode == PatternModifySetting.ModifyMode.MULTIPLY) {
+            return setting.getMaxFluidLimit();
+        } else {
+            return setting.getMinFluidLimit();
+        }
+    }
+
+    public int getItemLimit(PatternModifySetting.ModifyMode mode) {
+        if (mode == PatternModifySetting.ModifyMode.MULTIPLY) {
+            return setting.getMaxItemLimit();
+        } else {
+            return setting.getMinItemLimit();
+        }
     }
 }

@@ -1,5 +1,8 @@
 {
   "block.mae2a.pattern_provider_plus": "样板供应器 Plus",
+  "gui.mae2a.action_limit": "限制模式",
+  "gui.mae2a.action_rate": "倍率模式",
+  "gui.mae2a.action_switch_tip": "切换操作模式",
   "gui.mae2a.cable_picker": "线缆选择",
   "gui.mae2a.cable_place_tool": "线缆放置工具",
   "gui.mae2a.cancel": "取消",
@@ -28,6 +31,9 @@
   "gui.mae2a.pattern_min_item_limit": "最小物品数量",
   "gui.mae2a.pattern_provider_plus": "ME样板供应器Plus",
   "gui.mae2a.pattern_provider_plus.package_mode": "打包模式: %s",
+  "gui.mae2a.pattern_rate": "单次操作倍率",
+  "gui.mae2a.pattern_rate_divide": "将产物和原料数量➗指定倍数, 无法整除部分将被跳过",
+  "gui.mae2a.pattern_rate_multiply": "将产物和原料数量✖指定倍数",
   "gui.mae2a.pattern_tool_setting": "样板工具设置",
   "gui.mae2a.picker.replace": "替换模式",
   "gui.mae2a.picker.select_range": "§7选取范围: ",
@@ -62,11 +68,12 @@
   "tooltip.mae2a.creative.tab": "更多AE2工具",
   "tooltip.mae2a.infinite_dyes_cell": "这是一个无限染料元件",
   "tooltip.mae2a.pattern_modify_tool.1": "§7一个快捷修改样板的工具，§e右键空气§7打开设置菜单",
-  "tooltip.mae2a.pattern_modify_tool.2": "§7物品/流体的§b上限/下限§c仅对主产物生效§7，材料数量§a自动翻倍",
-  "tooltip.mae2a.pattern_modify_tool.3": "§a预览模式§7: 预览即将处理的全部样板 (§6右键§7样板供应器)",
-  "tooltip.mae2a.pattern_modify_tool.4": "§a方块模式§7: 翻倍供应器中的全部样板 (§6Shift右键§7样板供应器)",
-  "tooltip.mae2a.pattern_modify_tool.5": "§a网络模式§7: 翻倍网络中的全部样板 (§6Shift右键§7样板编码终端)",
-  "tooltip.mae2a.pattern_modify_tool.6": "§c注意: 翻倍网络中的全部样板将覆盖全部样板，请谨慎使用",
+  "tooltip.mae2a.pattern_modify_tool.block": "§a方块模式§7: 翻倍供应器中的全部样板 (§6Shift右键§7样板供应器)",
+  "tooltip.mae2a.pattern_modify_tool.limit": "§b限制模式§r: §6将产物调整至目标数量§r，§a自动平衡材料配比",
   "tooltip.mae2a.pattern_modify_tool.many_result": "本次操作了§6%s§r台机器的§6%s§r个样板",
-  "tooltip.mae2a.pattern_modify_tool.one_result": "本次操作了§6%s§r个样板"
+  "tooltip.mae2a.pattern_modify_tool.network": "§a网络模式§7: 翻倍网络中的全部样板 (§6Shift右键§7样板编码终端)",
+  "tooltip.mae2a.pattern_modify_tool.one_result": "本次操作了§6%s§r个样板",
+  "tooltip.mae2a.pattern_modify_tool.preview": "§a预览模式§7: 预览即将处理的全部样板 (§6右键§7样板供应器)",
+  "tooltip.mae2a.pattern_modify_tool.rate": "§b倍率模式§r: §6直接应用乘/除运算§r，§c除法仅处理整除配方",
+  "tooltip.mae2a.pattern_modify_tool.warring": "§c注意: 翻倍网络中的全部样板将覆盖全部样板，请谨慎使用"
 }

@@ -22,6 +22,14 @@ public final class GuiLanguage {
 
         add("gui.mae2a.multiply", "乘法模式", "Multi Mode");
         add("gui.mae2a.divide", "除法模式", "Divide Mode");
+        add("gui.mae2a.action_rate", "倍率模式", "Rate Mode");
+        add("gui.mae2a.action_limit", "限制模式", "Limit Mode");
+        add("gui.mae2a.action_switch_tip", "切换操作模式", "Switch Action Mode");
+
+        add("gui.mae2a.pattern_rate", "单次操作倍率", "Batch Operation Rate");
+        add("gui.mae2a.pattern_rate_multiply", "将产物和原料数量✖指定倍数", "Multiply products and ingredients by ?");
+        add("gui.mae2a.pattern_rate_divide", "将产物和原料数量➗指定倍数, 无法整除部分将被跳过",
+                "Divide products and ingredients by ?, remainders will be discarded");
 
         add("gui.mae2a.retain_by_products", "保留副产物", "Retain By-products");
         add("gui.mae2a.max_input_tip", "输入0来禁用，产物数量不会高于设定上限", "Set 0 to disable - Output won't exceed limit");
