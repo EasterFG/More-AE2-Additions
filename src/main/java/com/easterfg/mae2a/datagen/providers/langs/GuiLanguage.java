@@ -35,6 +35,8 @@ public final class GuiLanguage {
         add("gui.mae2a.pattern_rate_divide", "将产物和原料数量➗指定倍数, 无法整除部分将被跳过",
                 "Divide products and ingredients by ?, remainders will be discarded");
 
+        add("gui.mae2a.preview_config_tooltip", "§7此倍率可前往配置文件中修改", "§aThis rate can be modified in the config file");
+
         add("gui.mae2a.retain_by_products", "保留副产物", "Retain By-products");
         add("gui.mae2a.max_input_tip", "输入0来禁用，产物/原料数量不会高于设定上限", "Set 0 to disable - Input/Output won't exceed limit");
         add("gui.mae2a.min_input_tip", "输入0来禁用，产物/原料数量不会低于设定下限",

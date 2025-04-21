@@ -10,11 +10,11 @@ import lombok.Getter;
  * @author EasterFG on 2025/4/6
  */
 @Getter
-public class PatternListLogic implements InternalInventoryHost {
+public class PatternPreviewListLogic implements InternalInventoryHost {
 
     protected final AppEngInternalInventory patternInventory;
 
-    public PatternListLogic(int patternInventorySize) {
+    public PatternPreviewListLogic(int patternInventorySize) {
         this.patternInventory = new AppEngInternalInventory(this, patternInventorySize);
 
     }

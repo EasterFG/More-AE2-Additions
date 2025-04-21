@@ -87,7 +87,7 @@ public class PatternModifyScreen extends AEBaseScreen<PatternModifyMenu> {
                     menu.saveSetting(setting);
                 });
         saveByProducts.setSelected(setting.isSaveByProducts());
-        updateState(setting.getMode(), setting.isLimitMode());
+//        updateState(setting.getMode(), setting.isLimitMode());
     }
 
     private AETextField addInput(String id, Pattern pattern, int maxLength, int type) {
@@ -105,6 +105,7 @@ public class PatternModifyScreen extends AEBaseScreen<PatternModifyMenu> {
             boolean selected = menu.getMode() == mode;
             modeTabButtons.get(mode).setSelected(selected);
         }
+        this.updateState(setting.getMode(), setting.isLimitMode());
     }
 
     private void setMode(ModifyMode mode) {

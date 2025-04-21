@@ -9,7 +9,9 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -20,6 +22,7 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 import com.easterfg.mae2a.api.MainCreativeMod;
 import com.easterfg.mae2a.client.MoreAE2AdditionsClient;
 import com.easterfg.mae2a.client.register.*;
+import com.easterfg.mae2a.config.MAE2AConfig;
 import com.easterfg.mae2a.integration.wt.WTCommonLoad;
 import com.easterfg.mae2a.util.Platform;
 
@@ -35,6 +38,7 @@ public class MoreAE2Additions {
 
     public MoreAE2Additions() {
         INSTANCE = this;
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MAE2AConfig.SPEC);
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> modEventBus.register(MoreAE2AdditionsClient.INSTANCE));
         modEventBus.addListener((RegisterEvent event) -> {

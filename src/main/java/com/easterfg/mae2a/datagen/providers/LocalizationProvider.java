@@ -15,10 +15,7 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 
-import com.easterfg.mae2a.datagen.providers.langs.GuiLanguage;
-import com.easterfg.mae2a.datagen.providers.langs.ItemAndBlockLanguage;
-import com.easterfg.mae2a.datagen.providers.langs.MiscLanguage;
-import com.easterfg.mae2a.datagen.providers.langs.TooltipLanguage;
+import com.easterfg.mae2a.datagen.providers.langs.*;
 
 /**
  * @author EasterFG on 2025/3/23
@@ -70,6 +67,7 @@ public final class LocalizationProvider implements DataProvider {
         GuiLanguage.init();
         TooltipLanguage.init();
         MiscLanguage.init();
+        ConfigLanguage.init();
         return CompletableFuture.allOf(save(cached, LangCode.EN_US), save(cached, LangCode.ZH_CN));
     }
 

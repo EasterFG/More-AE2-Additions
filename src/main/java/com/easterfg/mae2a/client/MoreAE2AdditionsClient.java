@@ -14,14 +14,14 @@ import appeng.init.client.InitScreens;
 import com.easterfg.mae2a.client.forge.ForgeClientEvent;
 import com.easterfg.mae2a.client.render.PackageClientTooltipComponent;
 import com.easterfg.mae2a.client.screen.CablePlaceToolScreen;
-import com.easterfg.mae2a.client.screen.PatternListScreen;
 import com.easterfg.mae2a.client.screen.PatternModifyScreen;
+import com.easterfg.mae2a.client.screen.PatternPreviewListScreen;
 import com.easterfg.mae2a.client.screen.PatternProviderPlusScreen;
 import com.easterfg.mae2a.common.definition.ModItems;
 import com.easterfg.mae2a.common.items.PackageItemTooltipComponent;
 import com.easterfg.mae2a.common.menu.CablePlaceToolMenu;
-import com.easterfg.mae2a.common.menu.PatternListMenu;
 import com.easterfg.mae2a.common.menu.PatternModifyMenu;
+import com.easterfg.mae2a.common.menu.PatternPreviewListMenu;
 import com.easterfg.mae2a.common.menu.PatternProviderPlusMenu;
 import com.easterfg.mae2a.network.NetworkHandler;
 import com.easterfg.mae2a.network.packet.OpenMenuPacket;
@@ -58,9 +58,9 @@ public class MoreAE2AdditionsClient {
                 "/screens/pattern_provider_plus.json");
 
         InitScreens.register(
-                PatternListMenu.TYPE,
-                PatternListScreen::new,
-                "/screens/pattern_list.json");
+                PatternPreviewListMenu.TYPE,
+                PatternPreviewListScreen::new,
+                "/screens/pattern_preview_list.json");
 
         InitScreens.register(
                 CablePlaceToolMenu.TYPE,

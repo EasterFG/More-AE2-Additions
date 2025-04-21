@@ -27,10 +27,10 @@ import com.easterfg.mae2a.util.PatternUtils;
 /**
  * @author EasterFG on 2025/4/6
  */
-public class PatternListMenu extends AEBaseMenu {
-    public static final MenuType<PatternListMenu> TYPE = MenuTypeBuilder
-            .create(PatternListMenu::new, PatternModifyHost.class)
-            .build("pattern_list");
+public class PatternPreviewListMenu extends AEBaseMenu {
+    public static final MenuType<PatternPreviewListMenu> TYPE = MenuTypeBuilder
+            .create(PatternPreviewListMenu::new, PatternModifyHost.class)
+            .build("pattern_preview_list");
 
     private final static String ACTION_CONFIRM = "confirm";
     private final static String ACTION_SWITCH = "switch";
@@ -39,7 +39,7 @@ public class PatternListMenu extends AEBaseMenu {
 
     protected final PatternModifyHost host;
 
-    public PatternListMenu(int id, Inventory playerInventory, PatternModifyHost host) {
+    public PatternPreviewListMenu(int id, Inventory playerInventory, PatternModifyHost host) {
         super(TYPE, id, playerInventory, host);
         this.host = host;
 

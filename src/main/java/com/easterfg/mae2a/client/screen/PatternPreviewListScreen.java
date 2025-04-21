@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -21,12 +22,13 @@ import appeng.client.gui.style.ScreenStyle;
 import appeng.core.AppEng;
 import appeng.core.definitions.AEItems;
 
-import com.easterfg.mae2a.common.menu.PatternListMenu;
+import com.easterfg.mae2a.common.menu.PatternPreviewListMenu;
+import com.easterfg.mae2a.config.MAE2AConfig;
 
 /**
  * @author EasterFG on 2025/4/6
  */
-public class PatternListScreen extends AEBaseScreen<PatternListMenu> {
+public class PatternPreviewListScreen extends AEBaseScreen<PatternPreviewListMenu> {
 
     private int rows;
 
@@ -39,14 +41,15 @@ public class PatternListScreen extends AEBaseScreen<PatternListMenu> {
     private static final int GUI_ROW_HEIGHT = 18;
     private static final int GUI_WIDTH = 176;
 
-    public PatternListScreen(PatternListMenu menu, Inventory playerInventory, Component title, ScreenStyle style) {
+    public PatternPreviewListScreen(PatternPreviewListMenu menu, Inventory playerInventory, Component title,
+            ScreenStyle style) {
         super(menu, playerInventory, title, style);
-        int[] r = { 2, 4, 8, 64 };
         for (int i = 0; i < 4; i++) {
-            final int times = r[i];
-            widgets.addButton("multiply_" + i, Component.literal("x" + times), () -> menu.multiply(times));
-
-            widgets.addButton("divide_" + i, Component.literal("÷" + times), () -> menu.divide(times));
+            final int times = MAE2AConfig.buttonTimes.get(i);
+            var mb = widgets.addButton("multiply_" + i, Component.literal("x" + times), () -> menu.multiply(times));
+            var db = widgets.addButton("divide_" + i, Component.literal("÷" + times), () -> menu.divide(times));
+            mb.setTooltip(Tooltip.create(Component.translatable("gui.mae2a.preview_config_tooltip", times)));
+            db.setTooltip(Tooltip.create(Component.translatable("gui.mae2a.preview_config_tooltip", times)));
         }
 
         this.confirm = widgets.addButton("confirm", Component.translatable("gui.mae2a.confirm"), () -> {

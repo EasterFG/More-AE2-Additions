@@ -38,8 +38,8 @@ import appeng.menu.locator.MenuLocators;
 import appeng.parts.encoding.PatternEncodingTerminalPart;
 import appeng.util.Platform;
 
-import com.easterfg.mae2a.common.menu.PatternListMenu;
 import com.easterfg.mae2a.common.menu.PatternModifyMenu;
+import com.easterfg.mae2a.common.menu.PatternPreviewListMenu;
 import com.easterfg.mae2a.common.menu.host.PatternModifyHost;
 import com.easterfg.mae2a.common.settings.PatternModifySetting;
 import com.easterfg.mae2a.util.PatternUtils;
@@ -159,7 +159,7 @@ public class PatternModifyToolItem extends Item implements IMenuItem {
                     p.displayClientMessage(Component.translatable("tools.mae2a.no_pattern"), true);
                     return false;
                 } else if (!p.isShiftKeyDown()) {
-                    MenuOpener.open(PatternListMenu.TYPE, p, MenuLocators.forItemUseContext(useContext));
+                    MenuOpener.open(PatternPreviewListMenu.TYPE, p, MenuLocators.forItemUseContext(useContext));
                     return true;
                 }
             } else if (!network) {

@@ -6,8 +6,8 @@ import net.minecraftforge.registries.IForgeRegistry;
 import appeng.core.AppEng;
 
 import com.easterfg.mae2a.common.menu.CablePlaceToolMenu;
-import com.easterfg.mae2a.common.menu.PatternListMenu;
 import com.easterfg.mae2a.common.menu.PatternModifyMenu;
+import com.easterfg.mae2a.common.menu.PatternPreviewListMenu;
 import com.easterfg.mae2a.common.menu.PatternProviderPlusMenu;
 
 /**
@@ -17,7 +17,7 @@ public class MenuTypeRegister {
     public static void init(IForgeRegistry<MenuType<?>> registry) {
         registry.register(AppEng.makeId("pattern_modify"), PatternModifyMenu.TYPE);
         registry.register(AppEng.makeId("pattern_provider_plus"), PatternProviderPlusMenu.TYPE);
-        registry.register(AppEng.makeId("pattern_list"), PatternListMenu.TYPE);
+        registry.register(AppEng.makeId("pattern_preview_list"), PatternPreviewListMenu.TYPE);
         registry.register(AppEng.makeId("cable_place_tool"), CablePlaceToolMenu.TYPE);
     }
 }
