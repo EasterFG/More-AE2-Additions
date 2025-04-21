@@ -9,9 +9,6 @@
   },
   "text": {
     "dialog_title": {
-      "text": {
-        "translate": "gui.mae2a.pattern_tool_setting"
-      },
       "position": {
         "left": 8,
         "top": 6

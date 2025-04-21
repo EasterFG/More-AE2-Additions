@@ -20,21 +20,12 @@ import com.easterfg.mae2a.common.menu.PatternProviderPlusMenu;
  */
 public class PatternProviderPlusScreen extends PatternProviderScreen<PatternProviderPlusMenu> {
 
-//    private final CustomIconButton packageMode;
-
     public PatternProviderPlusScreen(PatternProviderPlusMenu menu, Inventory playerInventory, Component title,
             ScreenStyle style) {
         super(menu, playerInventory, title, style);
         this.widgets.add("upgrades", new UpgradesPanel(
                 menu.getSlots(SlotSemantics.UPGRADE),
                 this::getCompatibleUpgrades));
-//        if (menu.getHost().getConfigManager().hasSetting(AdditionalSettings.PACKAGE_ITEM)) {
-//            packageMode = new CustomIconButton((__) -> setPackageMode(),
-//                    MoreAE2Additions.id("textures/item/fake_crafting_card.png"), Component.empty(), Component.empty());
-//            addToLeftToolbar(packageMode);
-//        } else {
-//            packageMode = null;
-//        }
     }
 
     private List<Component> getCompatibleUpgrades() {
@@ -43,23 +34,4 @@ public class PatternProviderPlusScreen extends PatternProviderScreen<PatternProv
         list.addAll(Upgrades.getTooltipLinesForMachine(menu.getUpgrades().getUpgradableItem()));
         return list;
     }
-
-//    private void setPackageModeMessage() {
-//        switch (menu.getPackageItem()) {
-//            case YES -> packageMode.setMessage(Component.translatable("gui.mae2a.pattern_provider_plus.package_mode",
-//                    Component.translatable("gui.mae2a.mode.on")));
-//            case NO -> packageMode.setMessage(Component.translatable("gui.mae2a.pattern_provider_plus.package_mode",
-//                    Component.translatable("gui.mae2a.mode.off")));
-//        }
-//    }
-//
-//    @Override
-//    protected void updateBeforeRender() {
-//        super.updateBeforeRender();
-//        if (this.packageMode != null) {
-//            this.packageMode.setActive(menu.getPackageItem() == YesNo.YES);
-//            this.packageMode.setVisibility(menu.hasUpgrade(ModItems.FAKE_CRAFT_CARD));
-//            this.setPackageModeMessage();
-//        }
-//    }
 }

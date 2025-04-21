@@ -35,16 +35,6 @@ public final class PatternUtils {
     }
 
     /**
-     * Check if the item is a process pattern.
-     *
-     * @param itemStack The item to check.
-     * @return True if the item is a process pattern, false otherwise.
-     */
-    public static boolean isProcessingPattern(ItemStack itemStack) {
-        return itemStack.getItem() instanceof ProcessingPatternItem;
-    }
-
-    /**
      * 处理样板
      *
      * @param level     维度
@@ -54,9 +44,8 @@ public final class PatternUtils {
      */
     public static @Nullable ItemStack processingPattern(Level level, ItemStack itemStack,
             PatternModifySetting setting) {
-        if (!isProcessingPattern(itemStack))
+        if (!(itemStack.getItem() instanceof ProcessingPatternItem item))
             return null;
-        ProcessingPatternItem item = (ProcessingPatternItem) itemStack.getItem();
         AEProcessingPattern patter = item.decode(itemStack, level, false);
         if (patter == null)
             return null;
@@ -67,10 +56,10 @@ public final class PatternUtils {
         }
         if (output.what() instanceof AEFluidKey) {
             return processLimitMode(patter, flag ? setting.getMaxFluidLimit() : setting.getMinFluidLimit(),
-                    setting.isSaveByProducts(), flag);
+                    setting.isSaveByProducts(), flag, setting.isProduct());
         } else if (output.what() instanceof AEItemKey) {
             return processLimitMode(patter, flag ? setting.getMaxItemLimit() : setting.getMinItemLimit(),
-                    setting.isSaveByProducts(), flag);
+                    setting.isSaveByProducts(), flag, setting.isProduct());
         }
         return itemStack;
     }
@@ -164,17 +153,21 @@ public final class PatternUtils {
      * @return 处理后的新样板，或null（当无法调整时）
      */
     public static @Nullable ItemStack processLimitMode(AEProcessingPattern pattern, long limit, boolean hasByProducts,
-            boolean multiplyMode) {
+            boolean multiplyMode, boolean productsMode) {
         var primary = pattern.getPrimaryOutput();
-        if (!isScalingApplicable(primary.amount(), limit, multiplyMode)) {
+        if (!productsMode && !isScalingApplicable(primary.amount(), limit, multiplyMode)) {
             return null;
         }
 
-        int times = calculateScalingFactor(primary.amount(), limit, multiplyMode);
+        int times;
+        if (productsMode) {
+            times = calculateScalingFactor(pattern.getSparseInputs(), limit, multiplyMode);
+        } else {
+            times = calculateScalingFactor(primary.amount(), limit, multiplyMode);
+        }
         return apply(pattern, times, hasByProducts, multiplyMode, primary);
     }
 
-    @Nullable
     public static ItemStack apply(AEProcessingPattern pattern, int times, boolean hasByProducts, boolean multiplyMode,
             GenericStack primary) {
         if (times <= 1)
@@ -193,7 +186,7 @@ public final class PatternUtils {
         GenericStack[] scaled = new GenericStack[stacks.length];
         int count = 0, finalCount = 0;
         for (GenericStack stack : stacks) {
-            if (stack == null) {
+            if (stack == null || stack.amount() == 0) {
                 continue;
             }
             finalCount++;
@@ -202,7 +195,7 @@ public final class PatternUtils {
                 newAmount = stack.amount() * times;
             } else {
                 if (stack.amount() % times != 0) {
-                    continue;
+                    return null;
                 }
                 newAmount = stack.amount() / times;
             }
@@ -238,6 +231,34 @@ public final class PatternUtils {
         return (int) (multiplyMode
                 ? Math.floor(limit / (double) currentAmount)
                 : Math.floor((double) currentAmount / limit));
+    }
+
+    /**
+     * 计算产物限制倍率
+     * 
+     * @param limit        限制
+     * @param multiplyMode 乘法模式
+     * @return 预期倍率
+     */
+    private static int calculateScalingFactor(GenericStack[] stacks, long limit, boolean multiplyMode) {
+        int rate = Integer.MAX_VALUE;
+        for (GenericStack stack : stacks) {
+            if (stack == null || stack.amount() == 0)
+                continue;
+            final long current = stack.amount();
+            if (multiplyMode) {
+                if (limit < current)
+                    return 0;
+                int candidate = (int) (limit / current);
+                rate = Math.min(rate, candidate);
+            } else {
+                if (current < limit)
+                    return 0;
+                int candidate = (int) (current / limit);
+                rate = Math.min(rate, candidate);
+            }
+        }
+        return rate == Integer.MAX_VALUE ? 1 : Math.max(rate, 1);
     }
 
     private static boolean isScalingApplicable(long currentAmount, long limit, boolean multiplyMode) {

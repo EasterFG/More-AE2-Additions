@@ -11,8 +11,8 @@ public final class TooltipLanguage {
         add("tooltip.mae2a.pattern_modify_tool.1", "§7一个快捷修改样板的工具，§e右键空气§7打开设置菜单",
                 "§7A tool for quick pattern modification. §eRight-click air§7 to open settings");
         add("tooltip.mae2a.pattern_modify_tool.limit",
-                "§b限制模式§r: §6将产物调整至目标数量§r，§a自动平衡材料配比",
-                "§bLimit Mode§r: §6Adjusts outputs to target quantity§r, §aauto-balances materials");
+                "§b限制模式§r: §6将产物/原料调整至目标数量§r，§a自动平衡材料配比",
+                "§bLimit Mode§r: §6Adjusts Inputs/Outputs to target quantity§r, §aauto-balances materials");
         add("tooltip.mae2a.pattern_modify_tool.rate",
                 "§b倍率模式§r: §6直接应用乘/除运算§r，§c除法仅处理整除配方",
                 "§bRatio Mode§r: §6Applies multiplier/divisor directly§r, §crequires exact division§r");

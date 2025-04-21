@@ -109,8 +109,6 @@ public class PatternListMenu extends AEBaseMenu {
         var stack = slot.getItem();
         if (stack.isEmpty() || stack.is(Items.BARRIER) || stack.is(AEItems.BLANK_PATTERN.asItem()))
             return null;
-        if (!PatternUtils.isProcessingPattern(stack))
-            return null;
         if (stack.getItem() instanceof ProcessingPatternItem patternItem) {
             AEProcessingPattern details = patternItem.decode(stack,
                     getPlayer().getCommandSenderWorld(), false);

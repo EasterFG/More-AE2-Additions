@@ -15,6 +15,7 @@ public class PatternModifySetting {
     private int minFluidLimit = 1000;
     private boolean saveByProducts = false;
     private ModifyMode mode = ModifyMode.MULTIPLY;
+    private boolean isProduct = true;
     private boolean limitMode = true;
     private int rate = 2;
 
@@ -48,6 +49,7 @@ public class PatternModifySetting {
             minFluidLimit = compound.getInt("minFluidLimit");
             saveByProducts = compound.getBoolean("saveByProducts");
             mode = ModifyMode.valueOf(compound.getString("mode"));
+            isProduct = compound.getBoolean("isProduct");
             limitMode = compound.getBoolean("limitMode");
             rate = compound.getInt("rate");
         }
@@ -60,6 +62,7 @@ public class PatternModifySetting {
         data.putInt("minFluidLimit", minFluidLimit);
         data.putBoolean("saveByProducts", saveByProducts);
         data.putString("mode", mode.name());
+        data.putBoolean("isProduct", isProduct);
         data.putBoolean("limitMode", limitMode);
         data.putInt("rate", rate);
     }

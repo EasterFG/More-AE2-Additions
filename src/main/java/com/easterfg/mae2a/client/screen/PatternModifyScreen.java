@@ -11,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
 import appeng.client.gui.AEBaseScreen;
+import appeng.client.gui.style.Blitter;
 import appeng.client.gui.style.ScreenStyle;
 import appeng.client.gui.widgets.AECheckbox;
 import appeng.client.gui.widgets.AETextField;
@@ -31,6 +32,7 @@ public class PatternModifyScreen extends AEBaseScreen<PatternModifyMenu> {
     private final AETextField fluidInput;
     private final AECheckbox saveByProducts;
     private final AETextField rateInput;
+    private final CustomIconButton switchTarget;
     private final PatternModifySetting setting;
     private final Map<ModifyMode, TabButton> modeTabButtons = new EnumMap<>(ModifyMode.class);
 
@@ -50,13 +52,22 @@ public class PatternModifyScreen extends AEBaseScreen<PatternModifyMenu> {
         switchAction.setMessage(Component.translatable("gui.mae2a.action_switch_tip"));
         this.addToLeftToolbar(switchAction);
 
-        itemInput = widgets.addTextField("item_input");
-        fluidInput = widgets.addTextField("fluid_input");
-        rateInput = widgets.addTextField("rate_input");
+        var TARGET_TEXTURE = Blitter.texture(MoreAE2Additions.id("textures/guis/modify_target.png"), 32, 16);
+        switchTarget = new CustomIconButton(__ -> {
+            setting.setProduct(!setting.isProduct());
+            menu.saveSetting(setting);
+        },
+                TARGET_TEXTURE.copy().src(0, 0, 16, 16),
+                TARGET_TEXTURE.copy().src(16, 0, 16, 16),
+                Component.translatable("gui.mae2a.target_material"),
+                Component.translatable("gui.mae2a.target_product"));
+        switchTarget.setMessage(Component.translatable("gui.mae2a.target_tip"));
+        switchTarget.setStatusSupplier(setting::isProduct);
+        this.addToLeftToolbar(switchTarget);
 
-        setInput(itemInput, INTEGER_REGEX, 15, 0);
-        setInput(fluidInput, FLOAT_REGEX, 15, 1);
-        setInput(rateInput, INTEGER_REGEX, 8, 2);
+        itemInput = addInput("item_input", INTEGER_REGEX, 15, 0);
+        fluidInput = addInput("fluid_input", FLOAT_REGEX, 15, 1);
+        rateInput = addInput("rate_input", INTEGER_REGEX, 8, 2);
 
         for (var mode : ModifyMode.values()) {
             var tab = new TabButton(
@@ -79,10 +90,12 @@ public class PatternModifyScreen extends AEBaseScreen<PatternModifyMenu> {
         updateState(setting.getMode(), setting.isLimitMode());
     }
 
-    private void setInput(AETextField input, Pattern pattern, int maxLength, int type) {
-        input.setFilter(s -> s.isEmpty() || pattern.matcher(s).matches());
-        input.setMaxLength(maxLength);
-        input.setResponder(s -> this.onUpdate(s, type));
+    private AETextField addInput(String id, Pattern pattern, int maxLength, int type) {
+        AETextField field = widgets.addTextField(id);
+        field.setFilter(s -> s.isEmpty() || pattern.matcher(s).matches());
+        field.setMaxLength(maxLength);
+        field.setResponder(s -> this.onUpdate(s, type));
+        return field;
     }
 
     @Override
@@ -150,8 +163,11 @@ public class PatternModifyScreen extends AEBaseScreen<PatternModifyMenu> {
         updateInputFields(fluidInput, fluidPlaceholderKey, tooltipKey, fluidValue);
         updateInputFields(rateInput, "gui.mae2a.pattern_rate", ratePlaceholderTooltip,
                 String.valueOf(setting.getRate()));
-
+        this.setTextContent("dialog_title", Component.translatable("gui.mae2a.pattern_tool_setting",
+                Component.translatable(
+                        setting.getMode() == ModifyMode.MULTIPLY ? "gui.mae2a.multiply" : "gui.mae2a.divide")));
         saveByProducts.setSelected(setting.isSaveByProducts());
+        this.switchTarget.setVisibility(setting.isLimitMode());
         updateInput(setting.isLimitMode());
     }
 
