@@ -175,7 +175,7 @@ public final class PatternUtils {
     }
 
     @Nullable
-    private static ItemStack apply(AEProcessingPattern pattern, int times, boolean hasByProducts, boolean multiplyMode,
+    public static ItemStack apply(AEProcessingPattern pattern, int times, boolean hasByProducts, boolean multiplyMode,
             GenericStack primary) {
         if (times <= 1)
             return null;
@@ -222,7 +222,8 @@ public final class PatternUtils {
         long newAmount = multiplyMode
                 ? primary.amount() * times
                 : primary.amount() / times;
-        if (newAmount <= 0) return null;
+        if (newAmount <= 0)
+            return null;
         scaled[0] = new GenericStack(primary.what(), newAmount);
 
         // other

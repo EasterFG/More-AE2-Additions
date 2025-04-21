@@ -33,14 +33,22 @@ public class PatternListScreen extends AEBaseScreen<PatternListMenu> {
     private final Button confirm;
     private final Button cancel;
 
-    private static final int GUI_HEADER_HEIGHT = 28;
-    private static final int GUI_FOOTER_OFFSET = 46;
+    private static final int GUI_HEADER_HEIGHT = 54;
+    private static final int GUI_FOOTER_OFFSET = 72;
     private static final int GUI_FOOTER_HEIGHT = 32;
     private static final int GUI_ROW_HEIGHT = 18;
     private static final int GUI_WIDTH = 176;
 
     public PatternListScreen(PatternListMenu menu, Inventory playerInventory, Component title, ScreenStyle style) {
         super(menu, playerInventory, title, style);
+        int[] r = { 2, 4, 8, 64 };
+        for (int i = 0; i < 4; i++) {
+            final int times = r[i];
+            widgets.addButton("multiply_" + i, Component.literal("x" + times), () -> menu.multiply(times));
+
+            widgets.addButton("divide_" + i, Component.literal("÷" + times), () -> menu.divide(times));
+        }
+
         this.confirm = widgets.addButton("confirm", Component.translatable("gui.mae2a.confirm"), () -> {
             menu.confirm();
             onClose();
@@ -107,7 +115,7 @@ public class PatternListScreen extends AEBaseScreen<PatternListMenu> {
     public void drawBG(GuiGraphics guiGraphics, int offsetX, int offsetY, int mouseX, int mouseY, float partialTicks) {
         blit(guiGraphics, offsetX, offsetY, new Rect2i(0, 0, GUI_WIDTH, GUI_HEADER_HEIGHT));
 
-        int currentY = 28 + offsetY;
+        int currentY = GUI_HEADER_HEIGHT + offsetY;
 
         blit(guiGraphics, offsetX, currentY + rows * GUI_ROW_HEIGHT,
                 new Rect2i(0, GUI_FOOTER_OFFSET, GUI_WIDTH, GUI_FOOTER_HEIGHT));
