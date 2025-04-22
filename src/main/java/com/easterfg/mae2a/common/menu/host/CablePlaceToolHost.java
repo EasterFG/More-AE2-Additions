@@ -59,6 +59,10 @@ public class CablePlaceToolHost extends ItemMenuHost {
         return settings.getPicker();
     }
 
+    public boolean isReplace() {
+        return settings.isReplace();
+    }
+
     @Data
     @AllArgsConstructor
     public static class Settings {

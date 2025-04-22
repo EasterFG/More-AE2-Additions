@@ -24,10 +24,9 @@ public class CablePlaceToolMenu extends AEBaseMenu {
     private final static String ACTION_COLOR = "change_color";
     private final static String ACTION_CABLE = "change_cable";
     private final static String ACTION_PICKER = "change_picker";
+    private final static String ACTION_REPLACE = "change_replace";
 
     private final CablePlaceToolHost host;
-
-    private boolean replace;
 
     public CablePlaceToolMenu(int id, Inventory playerInventory, CablePlaceToolHost host) {
         super(TYPE, id, playerInventory, host);
@@ -36,13 +35,7 @@ public class CablePlaceToolMenu extends AEBaseMenu {
         registerClientAction(ACTION_COLOR, AEColor.class, this::changeColor);
         registerClientAction(ACTION_CABLE, Integer.class, this::changeCable);
         registerClientAction(ACTION_PICKER, Integer.class, this::changePicker);
-    }
-
-    public void setReplace(boolean replace) {
-        if (replace == this.replace)
-            return;
-        this.replace = replace;
-        this.host.setReplace(replace);
+        registerClientAction(ACTION_REPLACE, Boolean.class, this::changeReplaceMode);
     }
 
     public void changeColor(AEColor color) {
@@ -79,5 +72,17 @@ public class CablePlaceToolMenu extends AEBaseMenu {
         }
 
         this.host.setPicker(distance);
+    }
+
+    public void changeReplaceMode(boolean replace) {
+        if (isClientSide()) {
+            sendClientAction(ACTION_REPLACE, replace);
+            return;
+        }
+
+        if (this.host.isReplace() == replace) {
+            return;
+        }
+        this.host.setReplace(replace);
     }
 }

@@ -14,8 +14,6 @@ import com.easterfg.mae2a.client.gui.widget.CablePickerWidget;
 import com.easterfg.mae2a.client.gui.widget.ColorPickerWidget;
 import com.easterfg.mae2a.client.gui.widget.CustomIconButton;
 import com.easterfg.mae2a.common.menu.CablePlaceToolMenu;
-import com.easterfg.mae2a.network.NetworkHandler;
-import com.easterfg.mae2a.network.packet.UpdateSettingPackage;
 
 /**
  * @author EasterFG on 2025/4/10
@@ -25,9 +23,12 @@ public class CablePlaceToolScreen extends AEBaseScreen<CablePlaceToolMenu> {
     private final CablePickerWidget cablePicker;
     private final ForgeSlider pickBlock;
 
+    private boolean replace;
+
     public CablePlaceToolScreen(CablePlaceToolMenu menu, Inventory playerInventory, Component title,
             ScreenStyle style) {
         super(menu, playerInventory, title, style);
+        replace = menu.getHost().isReplace();
         var colorPicker = new ColorPickerWidget(this.getMenu().getHost().getColor());
         colorPicker.setOnColorChanged(this::changeColor);
         widgets.add("colors", colorPicker);
@@ -40,11 +41,14 @@ public class CablePlaceToolScreen extends AEBaseScreen<CablePlaceToolMenu> {
                 1, 64, this.getMenu().getHost().getPicker(), true);
         widgets.add("pick_distance", pickBlock);
         var switchReplace = new CustomIconButton(
-                (__) -> NetworkHandler.INSTANCE.sendToServer(new UpdateSettingPackage(!menu.isReplace())),
+                (__) -> {
+                    replace = !replace;
+                    menu.changeReplaceMode(replace);
+                },
                 MoreAE2Additions.id("textures/guis/replace.png"),
                 Component.translatable("gui.mae2a.mode.on"),
                 Component.translatable("gui.mae2a.mode.off"));
-        switchReplace.setStatusSupplier(menu::isReplace);
+        switchReplace.setStatusSupplier(() -> replace);
         switchReplace.setMessage(Component.translatable("gui.mae2a.picker.replace"));
         addToLeftToolbar(switchReplace);
     }
