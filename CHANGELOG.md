@@ -1,3 +1,14 @@
+## v1.0.4
+### English
+1. [Feature] Pattern Modify Tool: Add output restriction mode and preview interface doubling button with customizable rate multiplier (#3)
+2. [Feature] Cable Placement Tool: Support multi-node selection and add new hotkey
+3. [Fix] Cable Placement Tool: Resolve mode switching failure in replacement mode
+4. [Tooltip] Pattern Modify Tool: Require re-craft if tool fails to open ui
+### 中文
+1. [功能] 样板修改工具新增原料限制模式,预览界面新增翻倍按钮.可自定义配置按钮倍率 (#3)
+2. [功能] 线缆放置工具支持多节点选择添加放置快捷键
+3. [修复] 修复线缆放置工具替换模式无法切换的问题
+4. [提示] 如出现样板修改工具无法打开的情况,则需重新合成
 ## v1.0.3
 ### English
 1. Fixed malfunction in Blueprint Upgrade Tool
@@ -7,16 +18,3 @@
 1. 修复样板升级工具无法正常使用的故障
 2. 样板放置工具新增能量系统
 3. 样板修改器支持倍率模式
-## v.1.0.2
-### 英文
-1. Fixed cable placement tool malfunction when providers exist
-2. Fixed premature cancellation issue in Fake Crafting process
-3. Fixed crash caused by button clicks in Pattern Provider Plus
-4. Updated Pattern Modifier UI interface
-5. Add Pattern Provider Plus Upgrade Item
-### 中文
-1. 修复存在供应器时线缆工具无法正确放置的问题
-2. 修复假合成提前终止合成流程的异常
-3. 修复样板供应器Plus界面按钮点击导致的崩溃
-4. 优化样板修改器用户界面
-5. 新增样板供应器Plus升级工具
