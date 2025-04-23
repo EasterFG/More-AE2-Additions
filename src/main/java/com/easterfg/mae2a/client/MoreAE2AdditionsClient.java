@@ -1,5 +1,6 @@
 package com.easterfg.mae2a.client;
 
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
@@ -25,6 +26,7 @@ import com.easterfg.mae2a.common.menu.PatternPreviewListMenu;
 import com.easterfg.mae2a.common.menu.PatternProviderPlusMenu;
 import com.easterfg.mae2a.network.NetworkHandler;
 import com.easterfg.mae2a.network.packet.OpenMenuPacket;
+import com.easterfg.mae2a.network.packet.PlaceCablePacket;
 
 /**
  * @author EasterFG on 2025/4/1
@@ -73,7 +75,9 @@ public class MoreAE2AdditionsClient {
     }
 
     public void onKeyRegister(RegisterKeyMappingsEvent event) {
-        event.register(KeyBindings.OPEN_CABLE_UI);
+        for (KeyMapping mapping : KeyBindings.getKeyBindings()) {
+            event.register(mapping);
+        }
     }
 
     public void handleEventInput(TickEvent.ClientTickEvent event) {
@@ -88,13 +92,16 @@ public class MoreAE2AdditionsClient {
         if (tool.isEmpty() && !tool.is(ModItems.CABLE_PLACE_TOOL.asItem()))
             return;
 
-        boolean mainKeyPressed = KeyBindings.OPEN_CABLE_UI.isDown();
-
-        if (mainKeyPressed) {
+        if (KeyBindings.OPEN_CABLE_UI.isDown()) {
             if (!isPressed) {
                 isPressed = true;
                 NetworkHandler.INSTANCE
                         .sendToServer(new OpenMenuPacket("ae2:cable_place_tool", mc.player.getUsedItemHand()));
+            }
+        } else if (KeyBindings.PLACE_CABLE.isDown()) {
+            if (!isPressed) {
+                isPressed = true;
+                NetworkHandler.INSTANCE.sendToServer(new PlaceCablePacket(mc.player.getUsedItemHand()));
             }
         } else {
             isPressed = false;

@@ -15,6 +15,7 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 
+import com.easterfg.mae2a.client.KeyBindings;
 import com.easterfg.mae2a.datagen.providers.langs.*;
 
 /**
@@ -68,6 +69,7 @@ public final class LocalizationProvider implements DataProvider {
         TooltipLanguage.init();
         MiscLanguage.init();
         ConfigLanguage.init();
+        KeyBindings.init();
         return CompletableFuture.allOf(save(cached, LangCode.EN_US), save(cached, LangCode.ZH_CN));
     }
 
