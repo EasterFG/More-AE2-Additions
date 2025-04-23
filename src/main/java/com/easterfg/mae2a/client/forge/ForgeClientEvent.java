@@ -1,17 +1,19 @@
 package com.easterfg.mae2a.client.forge;
 
-import java.util.Objects;
+import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import appeng.blockentity.networking.CableBusBlockEntity;
 
 import com.easterfg.mae2a.client.render.CableRender;
 import com.easterfg.mae2a.common.definition.ModItems;
@@ -23,8 +25,7 @@ import com.easterfg.mae2a.util.VectorHelper;
  */
 @OnlyIn(Dist.CLIENT)
 public final class ForgeClientEvent {
-
-    private static int frameCount = 0;
+    private static List<Vec3> CACHE;
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     static void onClientTickEvent(RenderLevelStageEvent event) {
@@ -47,15 +48,16 @@ public final class ForgeClientEvent {
         BlockHitResult lookingAt = VectorHelper.getLookAt(player, setting.getPicker());
 
         BlockPos endPos = lookingAt.getBlockPos();
-        if (!level.getBlockState(endPos).isAir()) {
+        var te = level.getBlockEntity(endPos);
+        if (!(te instanceof CableBusBlockEntity)) {
             endPos = endPos.relative(lookingAt.getDirection(), 1);
         }
 
-        BlockPos startPos = NBTHelper.getBlockPos(heldItem, "start_pos");
-        CableRender.render(event, Objects.requireNonNullElse(startPos, endPos), endPos);
-        if (frameCount++ % 5 == 0 && startPos != null) {
-            int manhattan = startPos.distManhattan(endPos);
-            player.displayClientMessage(Component.literal(String.valueOf(manhattan)), true);
+        var blocks = NBTHelper.getBlockList(heldItem.getOrCreateTag(), NBTHelper.POS_LIST_ID);
+        if (CACHE == null || CACHE.size() != blocks.size()) {
+            CACHE = blocks.stream().map(BlockPos::getCenter).toList();
         }
+
+        CableRender.render(event, CACHE, endPos.getCenter());
     }
 }

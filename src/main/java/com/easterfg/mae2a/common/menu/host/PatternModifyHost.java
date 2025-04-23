@@ -41,7 +41,7 @@ public class PatternModifyHost extends ItemMenuHost {
             CompoundTag tag = itemStack.getOrCreateTag();
             this.setting.readFromNBT(tag);
             hitPos = PatternUtils.readVec3(tag.getCompound("hitPos"));
-            tag.remove("pos");
+            tag.remove("hitPos");
         }
 
         if (hitPos != null && clickPos != null) {

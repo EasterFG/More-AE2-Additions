@@ -26,13 +26,12 @@ import appeng.items.tools.powered.powersink.AEBasePoweredItem;
 
 import com.easterfg.mae2a.client.KeyBindings;
 import com.easterfg.mae2a.common.menu.host.CablePlaceToolHost;
-import com.easterfg.mae2a.util.CableToolHelper;
 import com.easterfg.mae2a.util.CableType;
 import com.easterfg.mae2a.util.NBTHelper;
 import com.easterfg.mae2a.util.VectorHelper;
 
 /**
- * @author EasterFG on 2025/4/8
+ * @author EasterFG on 2025/4/80.
  */
 public class ItemCablePlaceTool extends AEBasePoweredItem implements IMenuItem {
 
@@ -54,7 +53,7 @@ public class ItemCablePlaceTool extends AEBasePoweredItem implements IMenuItem {
             return InteractionResultHolder.success(stack);
 
         if (player.isShiftKeyDown()) {
-            player.getItemInHand(hand).removeTagKey(NBTHelper.START_POS_ID);
+            NBTHelper.removeLastBlock(player.getItemInHand(hand), NBTHelper.POS_LIST_ID);
         } else {
             handlerClick(player, level, stack);
         }
@@ -103,6 +102,8 @@ public class ItemCablePlaceTool extends AEBasePoweredItem implements IMenuItem {
             components.add(Component.translatable("tooltip.mae2a.cable_place_tool.not_bind_ae"));
         }
 
+        components.add(Component.translatable("tooltip.mae2a.fast_place_tool.select_tip"));
+        components.add(Component.translatable("tooltip.mae2a.fast_place_tool.undo_select_tip"));
         components.add(Component.translatable("tooltip.mae2a.cable_place_tool.cable",
                 CableType.values()[toolSetting.getCable()].getTranslation()));
         components.add(Component.translatable("tooltip.mae2a.cable_place_tool.color",
@@ -110,8 +111,9 @@ public class ItemCablePlaceTool extends AEBasePoweredItem implements IMenuItem {
         components.add(Component.translatable("tooltip.mae2a.cable_place_tool.open_ui",
                 Component.literal(KeyBindings.OPEN_CABLE_UI.getTranslatedKeyMessage().getString())
                         .withStyle(ChatFormatting.AQUA)));
-        components.add(Component.translatable("tooltip.mae2a.cable_place_tool.1"));
-        components.add(Component.translatable("tooltip.mae2a.cable_place_tool.2"));
+        components.add(Component.translatable("tooltip.mae2a.cable_place_tool.place_cable",
+                Component.literal(KeyBindings.PLACE_CABLE.getTranslatedKeyMessage().getString())
+                        .withStyle(ChatFormatting.AQUA)));
     }
 
     private BlockPos getTargetBlock(Player player, Level level, int rayDistance) {
@@ -121,27 +123,9 @@ public class ItemCablePlaceTool extends AEBasePoweredItem implements IMenuItem {
     }
 
     private void handlerClick(Player player, Level level, ItemStack stack) {
-        var pos = NBTHelper.getBlockPos(stack, NBTHelper.START_POS_ID);
         var toolSetting = NBTHelper.readSetting(stack);
-        if (pos == null) {
-            BlockPos targetBlock = getTargetBlock(player, level, toolSetting.getPicker());
-            NBTHelper.saveBlockPos(stack, targetBlock, NBTHelper.START_POS_ID);
-        } else {
-            place(player, level, stack);
-        }
-    }
-
-    private void place(Player player, Level level, ItemStack stack) {
-        var start = NBTHelper.getBlockPos(stack, NBTHelper.START_POS_ID);
-        if (start == null) {
-            return;
-        }
-        var toolSetting = NBTHelper.readSetting(stack);
-        BlockPos end = getTargetBlock(player, level, toolSetting.getPicker());
-        var bind = NBTHelper.getBlockPos(stack, NBTHelper.BIND_POS_ID);
-
-        CableToolHelper.place(stack, player, level, bind, start, end, toolSetting);
-        stack.removeTagKey(NBTHelper.START_POS_ID);
+        BlockPos targetBlock = getTargetBlock(player, level, toolSetting.getPicker());
+        NBTHelper.addBlock(stack, NBTHelper.POS_LIST_ID, targetBlock);
     }
 
     @Override

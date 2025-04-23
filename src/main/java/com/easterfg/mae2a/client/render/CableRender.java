@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -22,6 +21,8 @@ import net.minecraftforge.client.event.RenderLevelStageEvent;
 
 import appeng.hooks.RenderBlockOutlineHook;
 
+import com.easterfg.mae2a.util.VectorHelper;
+
 /**
  * @author EasterFG on 2025/4/9
  */
@@ -29,9 +30,8 @@ public class CableRender {
 
     private static final double THICKNESS = 0.2;
 
-    public static void render(RenderLevelStageEvent event, @NotNull BlockPos startPos, @NotNull BlockPos endPos) {
-        List<Pair<Vec3, Vec3>> segments = generateAdjustedSegments(startPos.getCenter(), endPos.getCenter());
-
+    public static void render(RenderLevelStageEvent event, @NotNull List<Vec3> blocks, Vec3 endPos) {
+        List<Pair<Vec3, Vec3>> segments = VectorHelper.generateMultiSegments(blocks, endPos);
         PoseStack poseStack = event.getPoseStack();
         MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
         Vec3 cameraPos = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
@@ -91,41 +91,5 @@ public class CableRender {
                     .normal(poseStack.last().normal(), dx, dy, dz)
                     .endVertex();
         });
-    }
-
-    public static List<Pair<Vec3, Vec3>> generateAdjustedSegments(Vec3 start, Vec3 end) {
-        List<Pair<Vec3, Vec3>> rawSegments = new ArrayList<>();
-        Vec3 current = start;
-
-        if (start.equals(end)) {
-            return List.of(Pair.of(start, end));
-        }
-
-        double x = end.x - current.x;
-        if (x != 0) {
-            Vec3 next = new Vec3(end.x, current.y, current.z);
-            rawSegments.add(Pair.of(current, next));
-            current = next;
-        }
-
-        double z = end.z - current.z;
-        if (z != 0) {
-            Vec3 next = new Vec3(current.x, current.y, end.z);
-            rawSegments.add(Pair.of(current, next));
-            current = next;
-        }
-
-        double y = end.y - current.y;
-        if (y != 0) {
-            Vec3 next = new Vec3(current.x, end.y, current.z);
-            rawSegments.add(Pair.of(current, next));
-            current = next;
-        }
-
-        if (!current.equals(end)) {
-            rawSegments.add(Pair.of(current, end));
-        }
-
-        return rawSegments;
     }
 }

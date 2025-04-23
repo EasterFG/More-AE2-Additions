@@ -26,13 +26,12 @@ import com.easterfg.mae2a.util.strategy.InventoryStrategy;
  * @author EasterFG on 2025/4/11
  */
 public class CableToolHelper {
-    public static void place(ItemStack stack, Player player, Level level, BlockPos bindPos, BlockPos start,
-            BlockPos end,
+    public static void place(ItemStack stack, Player player, Level level, BlockPos bindPos, List<BlockPos> nodeList,
             CablePlaceToolHost.Settings settings) {
         if (!(stack.getItem() instanceof ItemCablePlaceTool placeTool)) {
             return;
         }
-        Set<BlockPos> path = VectorHelper.generatePath(start, end);
+        Set<BlockPos> path = VectorHelper.generatePath(nodeList);
         int size = path.size();
         var cable = CableType.values()[settings.getCable()];
         // consume power
@@ -70,7 +69,7 @@ public class CableToolHelper {
                 available--;
             }
         }
-        // 退还消耗失败部分
+        // refund
         if (available > 0) {
             for (IStrategy strategy : queues) {
                 available -= strategy.refund(available, cable);

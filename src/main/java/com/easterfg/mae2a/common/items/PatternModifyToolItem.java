@@ -89,7 +89,6 @@ public class PatternModifyToolItem extends Item implements IMenuItem {
 
         Level level = context.getLevel();
 
-        // 写入点击位置nbt
         CompoundTag tag = stack.getOrCreateTag();
         tag.put("hitPos", PatternUtils.writeVec3(context.getClickLocation()));
 

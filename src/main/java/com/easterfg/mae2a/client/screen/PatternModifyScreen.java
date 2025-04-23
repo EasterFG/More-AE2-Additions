@@ -87,7 +87,6 @@ public class PatternModifyScreen extends AEBaseScreen<PatternModifyMenu> {
                     menu.saveSetting(setting);
                 });
         saveByProducts.setSelected(setting.isSaveByProducts());
-//        updateState(setting.getMode(), setting.isLimitMode());
     }
 
     private AETextField addInput(String id, Pattern pattern, int maxLength, int type) {

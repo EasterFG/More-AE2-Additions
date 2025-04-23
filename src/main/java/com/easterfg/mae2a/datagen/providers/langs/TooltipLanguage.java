@@ -29,17 +29,18 @@ public final class TooltipLanguage {
         add("tooltip.mae2a.pattern_modify_tool.one_result", "本次操作了§6%s§r个样板", "§7Modified §6%s§r pattern");
         add("tooltip.mae2a.infinite_dyes_cell", "这是一个无限染料元件", "This is an infinite dyes cell");
         // fast place
-        add("tooltip.mae2a.cable_place_tool.1", "§7右键空气清除起始坐标", "§7§eRight-click air§7 to clear start position");
-        add("tooltip.mae2a.cable_place_tool.2", "§7右键§bME无线访问点§7绑定ME网络",
+        add("tooltip.mae2a.fast_place_tool.select_tip", "§6右键§7将坐标添加至合集",
+                "§6Right-click§7 to add coordinates to the collection");
+        add("tooltip.mae2a.fast_place_tool.undo_select_tip", "§6Shift右键空气§7撤销最近一次添加",
+                "§6Shift+Right-click air§7 to undo the last addition");
+        add("tooltip.mae2a.cable_place_tool.bind_tip", "§7右键§bME无线访问点§7绑定ME网络",
                 "§7Right-click §bME Wireless Access Point §7to bind ME network");
         add("tooltip.mae2a.cable_place_tool.bind_ae", "§a已连接至ME网络 §8[§7%s, %s, %s§8]",
                 "§aConnected to ME Network §8[§7%s, %s, %s§8]");
         add("tooltip.mae2a.cable_place_tool.not_bind_ae", "§c未连接至ME网络", "§cNot connected to ME Network");
-        add("tooltip.mae2a.cable_place_tool.start_pos", "§a起始坐标已设定 §8[§7%s, %s, %s§8]",
-                "§aStart position set §8[§7%s, %s, %s§8]");
-        add("tooltip.mae2a.cable_place_tool.not_start_pos", "§c未设定起始坐标", "§cStart position not configured");
-        add("tooltip.mae2a.cable_place_tool.cable", "§7线缆类型: %s", "§Cable Type: %s");
-        add("tooltip.mae2a.cable_place_tool.color", "§7线缆颜色: %s", "§Cable Color: %s");
+        add("tooltip.mae2a.cable_place_tool.cable", "§7线缆类型: %s", "§cCable Type: %s");
+        add("tooltip.mae2a.cable_place_tool.color", "§7线缆颜色: %s", "§cCable Color: %s");
         add("tooltip.mae2a.cable_place_tool.open_ui", "%s§7 打开配置界面", "%s§7 Open Configuration GUI");
+        add("tooltip.mae2a.cable_place_tool.place_cable", "%s§7 放置线缆", "%s§7 Place the cable");
     }
 }
