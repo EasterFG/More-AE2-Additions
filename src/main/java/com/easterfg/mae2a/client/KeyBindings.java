@@ -24,12 +24,13 @@ public class KeyBindings {
 
     private static final List<KeyMapping> KEY_BINDINGS = new ArrayList<>();
 
-    public static final KeyMapping OPEN_CABLE_UI = create(KeyModifier.CONTROL, GLFW.GLFW_KEY_G,
+    public static final KeyMapping OPEN_CABLE_UI = create(GLFW.GLFW_KEY_G,
             "key.mae2a.open_cable_ui");
-    public static final KeyMapping PLACE_CABLE = create(KeyModifier.CONTROL, GLFW.GLFW_KEY_P, "key.mae2a.place_cable");
+    public static final KeyMapping PLACE_CABLE = create(GLFW.GLFW_KEY_P, "key.mae2a.place_cable");
 
-    static KeyMapping create(KeyModifier modifier, int keyCode, String description) {
-        var key = new KeyMapping(description, KeyConflictContext.IN_GAME, modifier, InputConstants.Type.KEYSYM, keyCode,
+    static KeyMapping create(int keyCode, String description) {
+        var key = new KeyMapping(description, KeyConflictContext.IN_GAME, KeyModifier.CONTROL,
+                InputConstants.Type.KEYSYM, keyCode,
                 "key.category.mae2a");
         KEY_BINDINGS.add(key);
         return key;

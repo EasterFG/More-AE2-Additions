@@ -3,9 +3,9 @@
   "includes": ["common/common.json", "common/player_inventory.json"],
   "background": {
     "texture": "guis/pattern_provider_plus.png",
-    "textureHeight": 320,
-    "textureWidth": 320,
-    "srcRect": [0, 0, 176, 279]
+    "textureHeight": 256,
+    "textureWidth": 256,
+    "srcRect": [0, 0, 193, 243]
   },
   "slots": {
     "ENCODED_PATTERN": {
@@ -15,7 +15,7 @@
     },
     "STORAGE": {
       "left": 8,
-      "top": 163,
+      "top": 127,
       "grid": "HORIZONTAL"
     }
   },
@@ -44,7 +44,7 @@
       },
       "position": {
         "left": 8,
-        "top": 152
+        "top": 116
       }
     }
   },
@@ -56,6 +56,10 @@
     "lockReason": {
       "left": 5,
       "top": 15
+    },
+    "scroll_bar": {
+      "left": 174,
+      "top": 42
     }
   }
 }

@@ -18,6 +18,7 @@ import appeng.blockentity.crafting.PatternProviderBlockEntity;
 import com.easterfg.mae2a.common.definition.ModBlocks;
 import com.easterfg.mae2a.common.menu.host.PatternProviderPlusLoginHost;
 import com.easterfg.mae2a.common.menu.logic.PatternProviderPlusLogic;
+import com.easterfg.mae2a.config.MAE2AConfig;
 
 /**
  * @author EasterFG on 2025/4/3
@@ -33,7 +34,7 @@ public class PatternProviderPlusBlockEntity extends PatternProviderBlockEntity
     }
 
     protected PatternProviderPlusLogic createLogic() {
-        return new PatternProviderPlusLogic(this.getMainNode(), this, 54);
+        return new PatternProviderPlusLogic(this.getMainNode(), this, MAE2AConfig.plusMaxSlot);
     }
 
     @Override

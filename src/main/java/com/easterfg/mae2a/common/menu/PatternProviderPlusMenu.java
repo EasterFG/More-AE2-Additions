@@ -4,9 +4,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.ItemLike;
 
-import appeng.api.config.YesNo;
 import appeng.api.upgrades.IUpgradeInventory;
-import appeng.menu.guisync.GuiSync;
 import appeng.menu.implementations.MenuTypeBuilder;
 import appeng.menu.implementations.PatternProviderMenu;
 
@@ -23,9 +21,6 @@ public class PatternProviderPlusMenu extends PatternProviderMenu {
     public static final MenuType<PatternProviderPlusMenu> TYPE = MenuTypeBuilder
             .create(PatternProviderPlusMenu::new, PatternProviderPlusLoginHost.class)
             .build("pattern_provider_plus");
-
-    @GuiSync(8)
-    public YesNo packageItem = YesNo.NO;
 
     private final PatternProviderPlusLoginHost host;
 

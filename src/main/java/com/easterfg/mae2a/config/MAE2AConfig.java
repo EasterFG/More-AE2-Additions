@@ -20,13 +20,22 @@ public class MAE2AConfig {
             .translation("config.preview.button_tip")
             .define("preview.button", Lists.newArrayList(2, 16, 64, 100));
 
+    private static final ForgeConfigSpec.IntValue PROVIDER_MAX_SLOT = BUILDER
+            .comment("Set me provider plus max slot")
+            .defineInRange("plus_max_slot", 54, 36, 576);
+
     public static final ForgeConfigSpec SPEC = BUILDER.build();
 
     public static List<Integer> buttonTimes;
+    public static int plusMaxSlot;
 
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {
         buttonTimes = CUSTOM_BUTTON.get().subList(0, 4);
+        plusMaxSlot = PROVIDER_MAX_SLOT.get();
+        if (plusMaxSlot % 9 != 0) {
+            plusMaxSlot -= plusMaxSlot % 9;
+        }
     }
 
 }

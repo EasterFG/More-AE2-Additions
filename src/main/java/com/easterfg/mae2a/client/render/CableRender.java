@@ -21,6 +21,7 @@ import net.minecraftforge.client.event.RenderLevelStageEvent;
 
 import appeng.hooks.RenderBlockOutlineHook;
 
+import com.easterfg.mae2a.util.TooltipHelper;
 import com.easterfg.mae2a.util.VectorHelper;
 
 /**
@@ -41,8 +42,9 @@ public class CableRender {
 
         VoxelShape finalShape = buildCompleteShape(segments);
 
-        renderVoxelShape(RenderType.LINES, poseStack, bufferSource, finalShape, 0xFF_E6194B);
-        renderVoxelShape(RenderBlockOutlineHook.LINES_BEHIND_BLOCK, poseStack, bufferSource, finalShape, 0x80_E6194B);
+        var color = TooltipHelper.PREVIEW_GRADIENT.getARGB();
+        renderVoxelShape(RenderType.LINES, poseStack, bufferSource, finalShape, color);
+        renderVoxelShape(RenderBlockOutlineHook.LINES_BEHIND_BLOCK, poseStack, bufferSource, finalShape, color);
 
         poseStack.popPose();
         bufferSource.endBatch();

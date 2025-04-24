@@ -26,6 +26,7 @@ import com.easterfg.mae2a.common.definition.ModParts;
 import com.easterfg.mae2a.common.menu.PatternProviderPlusMenu;
 import com.easterfg.mae2a.common.menu.host.PatternProviderPlusLoginHost;
 import com.easterfg.mae2a.common.menu.logic.PatternProviderPlusLogic;
+import com.easterfg.mae2a.config.MAE2AConfig;
 
 /**
  * @author EasterFG on 2025/4/5
@@ -51,13 +52,13 @@ public class PatternProviderPlusPart extends PatternProviderPart
 
     public PatternProviderPlusPart(IPartItem<?> partItem) {
         super(partItem);
-        upgrades = UpgradeInventories.forMachine(ModBlocks.PATTERN_PROVIDER_PLUS, 2, this::saveChanges);
+        upgrades = UpgradeInventories.forMachine(ModBlocks.PATTERN_PROVIDER_PLUS, 1, this::saveChanges);
 
     }
 
     @Override
     protected PatternProviderPlusLogic createLogic() {
-        return new PatternProviderPlusLogic(this.getMainNode(), this, 54);
+        return new PatternProviderPlusLogic(this.getMainNode(), this, MAE2AConfig.plusMaxSlot);
     }
 
     @Override
