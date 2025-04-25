@@ -72,7 +72,7 @@ public final class TooltipHelper {
         }
 
         public int getARGB() {
-            return 0xFF000000 + colors[getOffset()];
+            return 0xFF000000 | colors[getOffset()];
         }
     }
 

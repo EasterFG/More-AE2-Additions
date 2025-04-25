@@ -38,7 +38,7 @@ public class MoreAE2Additions {
 
     public MoreAE2Additions() {
         INSTANCE = this;
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MAE2AConfig.SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MAE2AConfig.build());
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> modEventBus.register(MoreAE2AdditionsClient.INSTANCE));
         modEventBus.addListener((RegisterEvent event) -> {

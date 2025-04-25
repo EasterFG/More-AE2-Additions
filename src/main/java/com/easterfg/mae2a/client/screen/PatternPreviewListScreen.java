@@ -45,7 +45,7 @@ public class PatternPreviewListScreen extends AEBaseScreen<PatternPreviewListMen
             ScreenStyle style) {
         super(menu, playerInventory, title, style);
         for (int i = 0; i < 4; i++) {
-            final int times = MAE2AConfig.buttonTimes.get(i);
+            final int times = MAE2AConfig.buttonTimes[i];
             var mb = widgets.addButton("multiply_" + i, Component.literal("x" + times), () -> menu.multiply(times));
             var db = widgets.addButton("divide_" + i, Component.literal("÷" + times), () -> menu.divide(times));
             mb.setTooltip(Tooltip.create(Component.translatable("gui.mae2a.preview_config_tooltip", times)));
