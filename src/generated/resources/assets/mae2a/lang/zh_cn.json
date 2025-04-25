@@ -1,6 +1,8 @@
 {
   "block.mae2a.pattern_provider_plus": "样板供应器 Plus",
-  "config.preview.button_tip": "配置样板预览界面按钮倍率",
+  "config.mae2a.button_tip": "样板预览界面按钮倍率",
+  "config.mae2a.preview_color": "线缆放置工具预览颜色",
+  "config.mae2a.slot": "样板供应器Plus最大槽位",
   "gui.mae2a.action_limit": "限制模式",
   "gui.mae2a.action_rate": "倍率模式",
   "gui.mae2a.action_switch_tip": "切换操作模式",

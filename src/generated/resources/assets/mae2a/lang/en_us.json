@@ -1,6 +1,8 @@
 {
   "block.mae2a.pattern_provider_plus": "Pattern Provider Plus",
-  "config.preview.button_tip": "",
+  "config.mae2a.button_tip": "Pattern Preview Button Rate",
+  "config.mae2a.preview_color": "Cable Place Tool Preview Color",
+  "config.mae2a.slot": "Pattern Provider Plus Max Slot",
   "gui.mae2a.action_limit": "Limit Mode",
   "gui.mae2a.action_rate": "Rate Mode",
   "gui.mae2a.action_switch_tip": "Switch Action Mode",

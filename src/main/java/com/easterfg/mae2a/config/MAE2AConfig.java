@@ -16,10 +16,12 @@ public class MAE2AConfig {
 
     private static final ForgeConfigSpec.IntValue PROVIDER_MAX_SLOT = BUILDER
             .comment("Set Provider Plus max slot, must be a multiple of 9")
+            .translation("config.mae2a.slot")
             .defineInRange("plus_max_slot", 54, 36, 576);
 
     private static final ForgeConfigSpec.ConfigValue<String> PREVIEW_BOX_COLOR = BUILDER
             .comment("Set the color of the preview box")
+            .translation("config.mae2a.preview_color")
             .define("preview.color", "FF0EBEFF");
 
     public static Integer[] buttonTimes;
@@ -55,7 +57,7 @@ public class MAE2AConfig {
         public static void init(ForgeConfigSpec.Builder builder) {
             builder.push("preview")
                     .comment("Set up to 4 button multipliers/divide on the preview screen.")
-                    .translation("config.preview.button_tip");
+                    .translation("config.mae2a.button_tip");
             values.add(builder.defineInRange("button_0", 2, 2, 65536));
             values.add(builder.defineInRange("button_1", 16, 2, 65536));
             values.add(builder.defineInRange("button_2", 64, 2, 65536));
