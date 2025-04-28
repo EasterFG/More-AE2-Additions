@@ -56,6 +56,7 @@ public final class ForgeClientEvent {
         var blocks = NBTHelper.getBlockList(heldItem.getOrCreateTag(), NBTHelper.POS_LIST_ID);
         if (CACHE == null || CACHE.size() != blocks.size()) {
             CACHE = blocks.stream().map(BlockPos::getCenter).toList();
+            CableRender.markDirty();
         }
 
         CableRender.render(event, CACHE, endPos.getCenter());

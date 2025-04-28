@@ -90,26 +90,14 @@ public final class VectorHelper {
         }
     }
 
-    public static List<Pair<Vec3, Vec3>> generateMultiSegments(@NotNull List<Vec3> nodes, Vec3 endPos) {
-        if (nodes.isEmpty()) {
-            return List.of(Pair.of(endPos, endPos));
-        }
-
-        List<Pair<Vec3, Vec3>> segments = IntStream.range(1, nodes.size())
+    public static List<Pair<Vec3, Vec3>> generateMultiSegments(@NotNull List<Vec3> nodes) {
+        return IntStream.range(1, nodes.size())
                 .mapToObj(i -> Pair.of(nodes.get(i - 1), nodes.get(i)))
                 .flatMap(pair -> generateAdjustedSegments(pair.getFirst(), pair.getSecond()).stream())
                 .collect(Collectors.toCollection(ArrayList::new));
-
-        // 处理终点连接
-        Vec3 lastNode = nodes.get(nodes.size() - 1);
-        if (!lastNode.equals(endPos)) {
-            segments.addAll(generateAdjustedSegments(lastNode, endPos));
-        }
-
-        return segments;
     }
 
-    private static List<Pair<Vec3, Vec3>> generateAdjustedSegments(Vec3 start, Vec3 end) {
+    public static List<Pair<Vec3, Vec3>> generateAdjustedSegments(Vec3 start, Vec3 end) {
         List<Pair<Vec3, Vec3>> segments = new ArrayList<>();
 
         if (start.equals(end)) {
