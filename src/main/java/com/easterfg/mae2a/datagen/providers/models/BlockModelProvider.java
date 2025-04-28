@@ -12,7 +12,7 @@ import appeng.block.crafting.PatternProviderBlock;
 import appeng.datagen.providers.models.AE2BlockStateProvider;
 
 import com.easterfg.mae2a.MoreAE2Additions;
-import com.easterfg.mae2a.common.definition.ModBlocks;
+import com.easterfg.mae2a.common.definition.MAE2ABlocks;
 
 /**
  * @author EasterFG on 2025/4/3
@@ -28,7 +28,7 @@ public class BlockModelProvider extends AE2BlockStateProvider {
     }
 
     public void patternProvider() {
-        var def = ModBlocks.PATTERN_PROVIDER_PLUS;
+        var def = MAE2ABlocks.PATTERN_PROVIDER_PLUS;
         var normalModel = cubeAll(def.asBlock());
         simpleBlockItem(def.asBlock(), normalModel);
 

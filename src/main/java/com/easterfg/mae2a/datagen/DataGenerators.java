@@ -10,7 +10,7 @@ import com.easterfg.mae2a.datagen.providers.LocalizationProvider;
 import com.easterfg.mae2a.datagen.providers.loot.BlockLootProvider;
 import com.easterfg.mae2a.datagen.providers.models.BlockModelProvider;
 import com.easterfg.mae2a.datagen.providers.models.ItemModelProvider;
-import com.easterfg.mae2a.datagen.providers.recipes.ModRecipeProvider;
+import com.easterfg.mae2a.datagen.providers.recipes.MAE2ARecipeProvider;
 
 /**
  * @author EasterFG on 2025/3/23
@@ -27,7 +27,7 @@ public class DataGenerators {
 
         generator.addProvider(event.includeServer(), new BlockModelProvider(generator.getPackOutput(),
                 event.getExistingFileHelper()));
-        generator.addProvider(event.includeServer(), new ModRecipeProvider(generator.getPackOutput()));
+        generator.addProvider(event.includeServer(), new MAE2ARecipeProvider(generator.getPackOutput()));
         generator.addProvider(event.includeServer(), new BlockLootProvider(generator.getPackOutput()));
     }
 }

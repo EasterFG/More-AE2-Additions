@@ -24,7 +24,7 @@ import com.easterfg.mae2a.common.block.PatternProviderPlusBlock;
 /**
  * @author EasterFG on 2025/4/3
  */
-public class ModBlocks {
+public class MAE2ABlocks {
 
     private static final List<BlockDefinition<?>> BLOCKS = new ArrayList<>();
 

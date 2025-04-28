@@ -12,7 +12,7 @@ import appeng.helpers.patternprovider.PatternProviderLogic;
 import appeng.helpers.patternprovider.PatternProviderLogicHost;
 import appeng.me.cluster.implementations.CraftingCPUCluster;
 
-import com.easterfg.mae2a.common.definition.ModItems;
+import com.easterfg.mae2a.common.definition.MAE2AItems;
 import com.easterfg.mae2a.common.menu.host.PatternProviderPlusLoginHost;
 import com.easterfg.mae2a.integration.mixin.ICrafting;
 
@@ -34,7 +34,7 @@ public class PatternProviderPlusLogic extends PatternProviderLogic {
     @Override
     public boolean pushPattern(IPatternDetails patternDetails, KeyCounter[] inputHolder) {
         if (!(patternDetails instanceof AEProcessingPattern) ||
-                !host.getUpgrades().isInstalled(ModItems.FAKE_CRAFT_CARD)) {
+                !host.getUpgrades().isInstalled(MAE2AItems.FAKE_CRAFT_CARD)) {
             return super.pushPattern(patternDetails, inputHolder);
         }
         var result = super.pushPattern(patternDetails, inputHolder);

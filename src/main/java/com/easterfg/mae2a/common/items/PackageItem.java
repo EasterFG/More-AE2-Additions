@@ -19,7 +19,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 
-import com.easterfg.mae2a.common.definition.ModItems;
+import com.easterfg.mae2a.common.definition.MAE2AItems;
 
 /**
  * @author EasterFG on 2025/3/31
@@ -41,6 +41,8 @@ public class PackageItem extends Item {
         if (player == null || !stack.hasTag()) {
             return InteractionResult.PASS;
         }
+
+        player.getPersistentData().putInt("times", 150);
 
         getStorageItem(stack).forEach(item -> {
             ItemEntity itemEntity = new ItemEntity(level, player.getX(), player.getY() + 0.1, player.getZ(), item);
@@ -75,7 +77,7 @@ public class PackageItem extends Item {
         if (items.isEmpty()) {
             return ItemStack.EMPTY;
         }
-        var item = new ItemStack(ModItems.PACKAGES_ITEM, 1);
+        var item = new ItemStack(MAE2AItems.PACKAGES_ITEM, 1);
         var tag = new ListTag();
         for (ItemStack stack : items) {
             CompoundTag itemTag = new CompoundTag();

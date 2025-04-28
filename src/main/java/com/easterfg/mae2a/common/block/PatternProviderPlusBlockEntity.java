@@ -15,7 +15,7 @@ import appeng.api.upgrades.IUpgradeableObject;
 import appeng.api.upgrades.UpgradeInventories;
 import appeng.blockentity.crafting.PatternProviderBlockEntity;
 
-import com.easterfg.mae2a.common.definition.ModBlocks;
+import com.easterfg.mae2a.common.definition.MAE2ABlocks;
 import com.easterfg.mae2a.common.menu.host.PatternProviderPlusLoginHost;
 import com.easterfg.mae2a.common.menu.logic.PatternProviderPlusLogic;
 import com.easterfg.mae2a.config.MAE2AConfig;
@@ -30,7 +30,7 @@ public class PatternProviderPlusBlockEntity extends PatternProviderBlockEntity
 
     public PatternProviderPlusBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState blockState) {
         super(blockEntityType, pos, blockState);
-        this.upgrades = UpgradeInventories.forMachine(ModBlocks.PATTERN_PROVIDER_PLUS, 2, this::saveChanges);
+        this.upgrades = UpgradeInventories.forMachine(MAE2ABlocks.PATTERN_PROVIDER_PLUS, 2, this::saveChanges);
     }
 
     protected PatternProviderPlusLogic createLogic() {
@@ -69,12 +69,12 @@ public class PatternProviderPlusBlockEntity extends PatternProviderBlockEntity
 
     @Override
     public ItemStack getMainMenuIcon() {
-        return ModBlocks.PATTERN_PROVIDER_PLUS.stack(1);
+        return MAE2ABlocks.PATTERN_PROVIDER_PLUS.stack(1);
     }
 
     @Override
     public AEItemKey getTerminalIcon() {
-        return AEItemKey.of(ModBlocks.PATTERN_PROVIDER_PLUS.stack(1));
+        return AEItemKey.of(MAE2ABlocks.PATTERN_PROVIDER_PLUS.stack(1));
     }
 
     @Override

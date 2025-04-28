@@ -24,7 +24,7 @@ import com.easterfg.mae2a.common.block.PatternProviderPlusBlockEntity;
  * @author EasterFG on 2025/4/3
  */
 @SuppressWarnings("unused")
-public class ModBlockEntities {
+public class MAE2ABlockEntities {
 
     private static final Map<ResourceLocation, BlockEntityType<?>> BLOCK_ENTITY_TYPES = new HashMap<>();
 
@@ -32,13 +32,13 @@ public class ModBlockEntities {
             "pattern_provider_plus",
             PatternProviderPlusBlockEntity.class,
             PatternProviderPlusBlockEntity::new,
-            ModBlocks.PATTERN_PROVIDER_PLUS);
+            MAE2ABlocks.PATTERN_PROVIDER_PLUS);
 
     @SuppressWarnings("unchecked")
     @SafeVarargs
     private static <T extends AEBaseBlockEntity> BlockEntityType<T> create(String shortId,
             Class<T> entityClass,
-            ModBlockEntities.BlockEntityFactory<T> factory,
+            MAE2ABlockEntities.BlockEntityFactory<T> factory,
             BlockDefinition<? extends AEBaseEntityBlock<?>>... blockDefinitions) {
         Preconditions.checkArgument(blockDefinitions.length > 0);
 

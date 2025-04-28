@@ -20,7 +20,7 @@ import com.easterfg.mae2a.common.items.*;
  * @author EasterFG on 2024/9/25
  */
 @SuppressWarnings("unused")
-public class ModItems {
+public class MAE2AItems {
     private static final List<ItemDefinition<?>> ITEMS = new ArrayList<>();
 
     public static final ItemDefinition<Item> PATTERN_MODIFY_TOOL = item("Pattern Modify Tool", "样板修改工具",

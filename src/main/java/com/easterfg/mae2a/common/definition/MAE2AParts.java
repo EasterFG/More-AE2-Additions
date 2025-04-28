@@ -17,7 +17,7 @@ import com.easterfg.mae2a.common.part.PatternProviderPlusPart;
 /**
  * @author EasterFG on 2025/4/5
  */
-public class ModParts {
+public class MAE2AParts {
 
     public static final ItemDefinition<PartItem<PatternProviderPlusPart>> PATTERN_PROVIDER_PLUS = createPart(
             "ME Pattern Provider Plus", "ME样板供应器Plus",
@@ -32,7 +32,7 @@ public class ModParts {
             Function<IPartItem<T>, T> factory) {
 
         PartModels.registerModels(PartModelsHelper.createModels(partClass));
-        return ModItems.item(en, cn, id, props -> new PartItem<>(props, partClass, factory));
+        return MAE2AItems.item(en, cn, id, props -> new PartItem<>(props, partClass, factory));
     }
 
     public static void init() {

@@ -16,7 +16,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import appeng.blockentity.networking.CableBusBlockEntity;
 
 import com.easterfg.mae2a.client.render.CableRender;
-import com.easterfg.mae2a.common.definition.ModItems;
+import com.easterfg.mae2a.common.definition.MAE2AItems;
 import com.easterfg.mae2a.util.NBTHelper;
 import com.easterfg.mae2a.util.VectorHelper;
 
@@ -39,7 +39,7 @@ public final class ForgeClientEvent {
             return;
 
         ItemStack heldItem = player.getMainHandItem();
-        if (ModItems.CABLE_PLACE_TOOL.asItem() != heldItem.getItem()) {
+        if (MAE2AItems.CABLE_PLACE_TOOL.asItem() != heldItem.getItem()) {
             return;
         }
 

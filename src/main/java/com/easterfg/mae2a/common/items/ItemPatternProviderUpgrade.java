@@ -20,9 +20,9 @@ import appeng.blockentity.networking.CableBusBlockEntity;
 import appeng.items.parts.PartItem;
 import appeng.parts.AEBasePart;
 
-import com.easterfg.mae2a.common.definition.ModBlockEntities;
-import com.easterfg.mae2a.common.definition.ModBlocks;
-import com.easterfg.mae2a.common.definition.ModParts;
+import com.easterfg.mae2a.common.definition.MAE2ABlockEntities;
+import com.easterfg.mae2a.common.definition.MAE2ABlocks;
+import com.easterfg.mae2a.common.definition.MAE2AParts;
 import com.easterfg.mae2a.common.menu.host.PatternProviderPlusLoginHost;
 
 public class ItemPatternProviderUpgrade extends Item {
@@ -42,7 +42,7 @@ public class ItemPatternProviderUpgrade extends Item {
         var ctx = new BlockPlaceContext(context);
         if (te instanceof PatternProviderBlockEntity tile && tile.getTerminalPatternInventory().size() < 54) {
             var origin = level.getBlockState(clickedPos);
-            var state = ModBlocks.PATTERN_PROVIDER_PLUS.asBlock().getStateForPlacement(ctx);
+            var state = MAE2ABlocks.PATTERN_PROVIDER_PLUS.asBlock().getStateForPlacement(ctx);
             if (state == null) {
                 return InteractionResult.PASS;
             }
@@ -56,7 +56,7 @@ public class ItemPatternProviderUpgrade extends Item {
                 } catch (Exception ignore) {
                 }
             }
-            BlockEntity be = ModBlockEntities.PATTERN_PROVIDER_PLUS_BLOCK_ENTITY.create(clickedPos, state);
+            BlockEntity be = MAE2ABlockEntities.PATTERN_PROVIDER_PLUS_BLOCK_ENTITY.create(clickedPos, state);
             replace(level, clickedPos, te, be, state);
             context.getItemInHand().shrink(1);
             return InteractionResult.CONSUME;
@@ -72,11 +72,12 @@ public class ItemPatternProviderUpgrade extends Item {
                 var side = pp.getSide();
                 var content = new CompoundTag();
 
-                PartItem<?> item = (PartItem<?>) ModParts.PATTERN_PROVIDER_PLUS.asItem();
+                PartItem<?> item = (PartItem<?>) MAE2AParts.PATTERN_PROVIDER_PLUS.asItem();
                 pp.writeToNBT(content);
                 var place = cable.replacePart(item, side, context.getPlayer(), null);
                 if (place != null) {
                     place.readFromNBT(content);
+                    place.addToWorld();
                 }
                 context.getItemInHand().shrink(1);
                 return InteractionResult.sidedSuccess(level.isClientSide);

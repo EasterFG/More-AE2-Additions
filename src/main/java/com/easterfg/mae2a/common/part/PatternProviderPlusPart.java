@@ -21,8 +21,8 @@ import appeng.parts.PartModel;
 import appeng.parts.crafting.PatternProviderPart;
 
 import com.easterfg.mae2a.MoreAE2Additions;
-import com.easterfg.mae2a.common.definition.ModBlocks;
-import com.easterfg.mae2a.common.definition.ModParts;
+import com.easterfg.mae2a.common.definition.MAE2ABlocks;
+import com.easterfg.mae2a.common.definition.MAE2AParts;
 import com.easterfg.mae2a.common.menu.PatternProviderPlusMenu;
 import com.easterfg.mae2a.common.menu.host.PatternProviderPlusLoginHost;
 import com.easterfg.mae2a.common.menu.logic.PatternProviderPlusLogic;
@@ -52,7 +52,7 @@ public class PatternProviderPlusPart extends PatternProviderPart
 
     public PatternProviderPlusPart(IPartItem<?> partItem) {
         super(partItem);
-        upgrades = UpgradeInventories.forMachine(ModBlocks.PATTERN_PROVIDER_PLUS, 1, this::saveChanges);
+        upgrades = UpgradeInventories.forMachine(MAE2ABlocks.PATTERN_PROVIDER_PLUS, 1, this::saveChanges);
 
     }
 
@@ -99,7 +99,7 @@ public class PatternProviderPlusPart extends PatternProviderPart
 
     @Override
     public ItemStack getMainMenuIcon() {
-        return ModParts.PATTERN_PROVIDER_PLUS.stack(1);
+        return MAE2AParts.PATTERN_PROVIDER_PLUS.stack(1);
     }
 
     @Override

@@ -6,7 +6,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 import com.easterfg.mae2a.MoreAE2Additions;
 import com.easterfg.mae2a.api.definition.ItemDefinition;
-import com.easterfg.mae2a.common.definition.ModItems;
+import com.easterfg.mae2a.common.definition.MAE2AItems;
 
 /**
  * @author EasterFG on 2025/4/2
@@ -19,14 +19,14 @@ public class ItemModelProvider extends net.minecraftforge.client.model.generator
 
     @Override
     protected void registerModels() {
-        flatSingleLayer(ModItems.PACKAGES_ITEM, "item/item_package");
-        flatSingleLayer(ModItems.PATTERN_MODIFY_TOOL, "item/pattern_modify_tool");
-        flatSingleLayer(ModItems.INFINITE_DYES_CELL, "item/infinite_dyes_cell");
-        flatSingleLayer(ModItems.FAKE_CRAFT_CARD, "item/fake_crafting_card");
-        flatSingleLayer(ModItems.PATTERN_REFILL_CARD, "item/pattern_refill_card");
+        flatSingleLayer(MAE2AItems.PACKAGES_ITEM, "item/item_package");
+        flatSingleLayer(MAE2AItems.PATTERN_MODIFY_TOOL, "item/pattern_modify_tool");
+        flatSingleLayer(MAE2AItems.INFINITE_DYES_CELL, "item/infinite_dyes_cell");
+        flatSingleLayer(MAE2AItems.FAKE_CRAFT_CARD, "item/fake_crafting_card");
+        flatSingleLayer(MAE2AItems.PATTERN_REFILL_CARD, "item/pattern_refill_card");
 
-        flatSingleLayer(ModItems.CABLE_PLACE_TOOL, "item/cable_place_tools");
-        flatSingleLayer(ModItems.PATTERN_PROVIDER_UPGRADE, "item/pattern_provider_upgrade");
+        flatSingleLayer(MAE2AItems.CABLE_PLACE_TOOL, "item/cable_place_tools");
+        flatSingleLayer(MAE2AItems.PATTERN_PROVIDER_UPGRADE, "item/pattern_provider_upgrade");
     }
 
     private ItemModelBuilder flatSingleLayer(ItemDefinition<?> item, String texture) {

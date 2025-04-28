@@ -18,7 +18,7 @@ import com.easterfg.mae2a.client.screen.CablePlaceToolScreen;
 import com.easterfg.mae2a.client.screen.PatternModifyScreen;
 import com.easterfg.mae2a.client.screen.PatternPreviewListScreen;
 import com.easterfg.mae2a.client.screen.PatternProviderPlusScreen;
-import com.easterfg.mae2a.common.definition.ModItems;
+import com.easterfg.mae2a.common.definition.MAE2AItems;
 import com.easterfg.mae2a.common.items.PackageItemTooltipComponent;
 import com.easterfg.mae2a.common.menu.CablePlaceToolMenu;
 import com.easterfg.mae2a.common.menu.PatternModifyMenu;
@@ -89,7 +89,7 @@ public class MoreAE2AdditionsClient {
             return;
 
         ItemStack tool = mc.player.getMainHandItem();
-        if (tool.isEmpty() && !tool.is(ModItems.CABLE_PLACE_TOOL.asItem()))
+        if (tool.isEmpty() && !tool.is(MAE2AItems.CABLE_PLACE_TOOL.asItem()))
             return;
 
         if (KeyBindings.OPEN_CABLE_UI.isDown()) {

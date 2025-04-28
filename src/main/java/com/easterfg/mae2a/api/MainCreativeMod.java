@@ -15,7 +15,7 @@ import appeng.items.AEBaseItem;
 
 import com.easterfg.mae2a.MoreAE2Additions;
 import com.easterfg.mae2a.api.definition.ItemDefinition;
-import com.easterfg.mae2a.common.definition.ModItems;
+import com.easterfg.mae2a.common.definition.MAE2AItems;
 
 /**
  * @author EasterFG on 2025/3/25
@@ -30,7 +30,7 @@ public class MainCreativeMod {
     public static void init(Registry<CreativeModeTab> registry) {
         var tab = CreativeModeTab.builder()
                 .title(Component.translatable("tooltip.mae2a.creative.tab"))
-                .icon(() -> ModItems.PATTERN_MODIFY_TOOL.stack(1))
+                .icon(() -> MAE2AItems.PATTERN_MODIFY_TOOL.stack(1))
                 .displayItems(MainCreativeMod::buildDisplayItems)
                 .build();
         Registry.register(registry, MAIN, tab);

@@ -23,7 +23,7 @@ import appeng.menu.me.common.MEStorageMenu;
 import appeng.menu.me.items.PatternEncodingTermMenu;
 import appeng.menu.slot.RestrictedInputSlot;
 
-import com.easterfg.mae2a.common.definition.ModItems;
+import com.easterfg.mae2a.common.definition.MAE2AItems;
 
 /**
  * @author EasterFG on 2025/3/20
@@ -46,7 +46,7 @@ public abstract class PatternEncodingTermMenuMixin extends MEStorageMenu impleme
 
     @Inject(method = "encode", at = @At(value = "INVOKE", target = "Lappeng/menu/slot/RestrictedInputSlot;set(Lnet/minecraft/world/item/ItemStack;)V", ordinal = 1))
     private void hookEncode(CallbackInfo ci) {
-        if (!mae2a_getUpgrades().isInstalled(ModItems.PATTERN_REFILL_CARD))
+        if (!mae2a_getUpgrades().isInstalled(MAE2AItems.PATTERN_REFILL_CARD))
             return;
         ItemStack blankPattern = this.blankPatternSlot.getItem();
         MEStorage inventory = getHost().getInventory();
