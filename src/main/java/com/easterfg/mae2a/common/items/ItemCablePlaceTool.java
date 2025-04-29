@@ -75,7 +75,7 @@ public class ItemCablePlaceTool extends AEBasePoweredItem implements IMenuItem {
         var click = context.getClickedPos();
         var tile = level.getBlockEntity(click);
         if (tile instanceof WirelessAccessPointBlockEntity wireless && wireless.getGridNode() != null) {
-            NBTHelper.saveBlockPos(stack, click, NBTHelper.BIND_POS_ID);
+            NBTHelper.saveGlobalPos(stack, wireless.getGlobalPos(), NBTHelper.BIND_POS_ID);
             player.displayClientMessage(Component.translatable("tools.mae2a.bind_ae"), false);
         } else if (tile instanceof ChargerBlockEntity) {
             return InteractionResult.PASS;
@@ -90,14 +90,14 @@ public class ItemCablePlaceTool extends AEBasePoweredItem implements IMenuItem {
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> components,
             @NotNull TooltipFlag flag) {
         super.appendHoverText(stack, level, components, flag);
-        var nbt = stack.getTag();
-        var bindPos = NBTHelper.getBlockPos(nbt, NBTHelper.BIND_POS_ID);
+        var bindPos = NBTHelper.getGlobalPos(stack, NBTHelper.BIND_POS_ID);
         var toolSetting = NBTHelper.readSetting(stack);
 
         if (bindPos != null) {
+            var pos = bindPos.pos();
             components.add(
-                    Component.translatable("tooltip.mae2a.cable_place_tool.bind_ae", bindPos.getX(), bindPos.getY(),
-                            bindPos.getZ()));
+                    Component.translatable("tooltip.mae2a.cable_place_tool.bind_ae", pos.getX(), pos.getY(),
+                            pos.getZ()));
         } else {
             components.add(Component.translatable("tooltip.mae2a.cable_place_tool.not_bind_ae"));
         }

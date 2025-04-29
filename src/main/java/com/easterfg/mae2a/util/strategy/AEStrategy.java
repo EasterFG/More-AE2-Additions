@@ -1,8 +1,8 @@
 package com.easterfg.mae2a.util.strategy;
 
-import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 
 import appeng.api.config.Actionable;
 import appeng.api.implementations.blockentities.IWirelessAccessPoint;
@@ -19,23 +19,28 @@ import com.easterfg.mae2a.util.CableType;
 public class AEStrategy implements IStrategy {
 
     private final Player player;
-    private final Level level;
-    private final BlockPos bindPos;
+    private final ServerLevel serverLevel;
+    private final GlobalPos bindPos;
 
-    public AEStrategy(Player player, Level level, BlockPos bindPos) {
+    public AEStrategy(Player player, ServerLevel serverLevel, GlobalPos bindPos) {
         this.player = player;
-        this.level = level;
+        this.serverLevel = serverLevel;
         this.bindPos = bindPos;
     }
 
     private MEStorage getMestorage() {
         if (bindPos == null)
             return null;
-        var tile = level.getBlockEntity(bindPos);
-        if (tile instanceof IWirelessAccessPoint wireless) {
-            var grid = wireless.getGrid();
-            if (grid != null) {
-                return grid.getStorageService().getInventory();
+        var pos = bindPos.pos();
+        var dimension = bindPos.dimension();
+        var level = serverLevel.getServer().getLevel(dimension);
+        if (level != null) {
+            var tile = level.getBlockEntity(pos);
+            if (tile instanceof IWirelessAccessPoint wireless) {
+                var grid = wireless.getGrid();
+                if (grid != null) {
+                    return grid.getStorageService().getInventory();
+                }
             }
         }
         return null;

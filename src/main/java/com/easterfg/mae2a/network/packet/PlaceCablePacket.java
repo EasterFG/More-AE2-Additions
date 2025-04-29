@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 
@@ -33,13 +34,17 @@ public class PlaceCablePacket implements IMessage<PlaceCablePacket> {
 
     @Override
     public void onMessage(Player player) {
+        var level = player.getCommandSenderWorld();
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return;
+        }
         var stack = player.getItemInHand(this.hand);
         List<BlockPos> blockList = NBTHelper.getBlockList(stack.getTag(), NBTHelper.POS_LIST_ID);
         if (blockList.isEmpty()) {
             return;
         }
-        BlockPos bind = NBTHelper.getBlockPos(stack, NBTHelper.BIND_POS_ID);
-        CableToolHelper.place(stack, player, player.level(), bind, blockList, NBTHelper.readSetting(stack));
+        var bind = NBTHelper.getGlobalPos(stack, NBTHelper.BIND_POS_ID);
+        CableToolHelper.place(stack, player, serverLevel, bind, blockList, NBTHelper.readSetting(stack));
         stack.removeTagKey(NBTHelper.POS_LIST_ID);
     }
 

@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.jetbrains.annotations.NotNull;
+import com.mojang.datafixers.util.Pair;
+
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.LongTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.nbt.*;
 import net.minecraft.world.item.ItemStack;
 
 import appeng.api.util.AEColor;
@@ -36,22 +35,21 @@ public final class NBTHelper {
     }
 
     @Nullable
-    public static BlockPos getBlockPos(ItemStack stack, String name) {
+    public static GlobalPos getGlobalPos(ItemStack stack, String name) {
         var tag = stack.getTag();
-        return getBlockPos(tag, name);
-    }
-
-    @Nullable
-    public static BlockPos getBlockPos(@Nullable CompoundTag tag, String name) {
-        if (tag == null || !tag.contains(name)) {
-            return null;
+        if (tag != null && tag.contains(name, Tag.TAG_COMPOUND)) {
+            return GlobalPos.CODEC.decode(NbtOps.INSTANCE, tag.get(name))
+                    .result()
+                    .map(Pair::getFirst)
+                    .orElse(null);
         }
-        return BlockPos.of(tag.getLong(name));
+        return null;
     }
 
-    public static void saveBlockPos(@NotNull ItemStack stack, @NotNull BlockPos pos, String name) {
-        var tag = stack.getOrCreateTag();
-        tag.putLong(name, pos.asLong());
+    public static void saveGlobalPos(ItemStack stack, GlobalPos pos, String name) {
+        GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, pos)
+                .result()
+                .ifPresent(tag -> stack.getOrCreateTag().put(name, tag));
     }
 
     public static void addBlock(ItemStack stack, String name, BlockPos pos) {

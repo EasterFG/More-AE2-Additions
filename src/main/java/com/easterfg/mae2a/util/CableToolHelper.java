@@ -3,6 +3,8 @@ package com.easterfg.mae2a.util;
 import java.util.*;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -26,7 +28,8 @@ import com.easterfg.mae2a.util.strategy.InventoryStrategy;
  * @author EasterFG on 2025/4/11
  */
 public class CableToolHelper {
-    public static void place(ItemStack stack, Player player, Level level, BlockPos bindPos, List<BlockPos> nodeList,
+    public static void place(ItemStack stack, Player player, ServerLevel level, GlobalPos bindPos,
+            List<BlockPos> nodeList,
             CablePlaceToolHost.Settings settings) {
         if (!(stack.getItem() instanceof ItemCablePlaceTool placeTool)) {
             return;
