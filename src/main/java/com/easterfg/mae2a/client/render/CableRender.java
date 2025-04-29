@@ -54,7 +54,17 @@ public class CableRender {
             CACHE = merge(segments);
         }
 
-        VoxelShape shape = blocks.isEmpty() ? merge(segments) : merge(blocks.get(blocks.size() - 1), endPos);
+        VoxelShape shape;
+        if (blocks.isEmpty()) {
+            shape = merge(segments);
+        } else {
+            var last = blocks.get(blocks.size() - 1);
+            if (last.equals(endPos) && CACHE.isEmpty()) {
+                shape = Shapes.create(new AABB(last, endPos).inflate(THICKNESS));
+            } else {
+                shape = merge(last, endPos);
+            }
+        }
 
         renderVoxelShape(RenderType.LINES, poseStack, bufferSource, shape, MAE2AConfig.boxColor);
         renderVoxelShape(RenderBlockOutlineHook.LINES_BEHIND_BLOCK, poseStack, bufferSource, shape,
@@ -79,9 +89,6 @@ public class CableRender {
     }
 
     private static VoxelShape merge(Vec3 last, Vec3 end) {
-        if (last.equals(end)) {
-            return Shapes.create(new AABB(last, end).inflate(THICKNESS));
-        }
         return VectorHelper.generateAdjustedSegments(last, end)
                 .stream()
                 .map(pair -> new AABB(pair.getFirst(), pair.getSecond()).inflate(THICKNESS))
