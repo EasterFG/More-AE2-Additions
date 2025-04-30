@@ -4,12 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
-import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
@@ -17,18 +15,20 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-import appeng.client.gui.AEBaseScreen;
+import appeng.api.inventories.InternalInventory;
 import appeng.client.gui.style.ScreenStyle;
 import appeng.core.AppEng;
 import appeng.core.definitions.AEItems;
 
+import com.easterfg.mae2a.client.gui.AbstractScrollerScreen;
+import com.easterfg.mae2a.client.gui.slot.OnlyShowSlot;
 import com.easterfg.mae2a.common.menu.PatternPreviewListMenu;
 import com.easterfg.mae2a.config.MAE2AConfig;
 
 /**
  * @author EasterFG on 2025/4/6
  */
-public class PatternPreviewListScreen extends AEBaseScreen<PatternPreviewListMenu> {
+public class PatternPreviewListScreen extends AbstractScrollerScreen<PatternPreviewListMenu, OnlyShowSlot> {
 
     private int rows;
 
@@ -40,6 +40,10 @@ public class PatternPreviewListScreen extends AEBaseScreen<PatternPreviewListMen
     private static final int GUI_FOOTER_HEIGHT = 32;
     private static final int GUI_ROW_HEIGHT = 18;
     private static final int GUI_WIDTH = 176;
+
+    private static final int GUI_SCROLLBAR_OFFSET = 173;
+    private static final int GUI_SCROLLBAR_WIDTH = 21;
+    private static final int GUI_SCROLLBAR_HEIGHT = 133;
 
     public PatternPreviewListScreen(PatternPreviewListMenu menu, Inventory playerInventory, Component title,
             ScreenStyle style) {
@@ -57,6 +61,9 @@ public class PatternPreviewListScreen extends AEBaseScreen<PatternPreviewListMen
             onClose();
         });
         this.cancel = widgets.addButton("cancel", Component.translatable("gui.mae2a.cancel"), this::onClose);
+
+        scrollbar.setHeight(70);
+        scrollbar.setVisible(false);
     }
 
     @Override
@@ -71,20 +78,10 @@ public class PatternPreviewListScreen extends AEBaseScreen<PatternPreviewListMen
     }
 
     protected void resize() {
-        confirm.setY(confirm.getY() + rows * GUI_ROW_HEIGHT);
-        cancel.setY(cancel.getY() + rows * GUI_ROW_HEIGHT);
-    }
-
-    @Override
-    protected void slotClicked(@Nullable Slot slot, int slotIdx, int mouseButton, ClickType clickType) {
-        if (getMenu().isClientSideSlot(slot) || slot == null) {
-            return;
-        }
-
-        var stack = slot.getItem();
-        if (stack.isEmpty() || stack.is(AEItems.BLANK_PATTERN.asItem()))
-            return;
-        menu.switchEnable(slotIdx);
+        int min = Math.min(rows, 4);
+        confirm.setY(confirm.getY() + min * GUI_ROW_HEIGHT);
+        cancel.setY(cancel.getY() + min * GUI_ROW_HEIGHT);
+        scrollbar.setRange(0, (rows - 4), 1);
     }
 
     @Override
@@ -116,25 +113,59 @@ public class PatternPreviewListScreen extends AEBaseScreen<PatternPreviewListMen
 
     @Override
     public void drawBG(GuiGraphics guiGraphics, int offsetX, int offsetY, int mouseX, int mouseY, float partialTicks) {
-        blit(guiGraphics, offsetX, offsetY, new Rect2i(0, 0, GUI_WIDTH, GUI_HEADER_HEIGHT));
+        var texture = AppEng.makeId("textures/guis/pattern_list_preview.png");
+        guiGraphics.blit(texture, offsetX, offsetY, 0, 0, GUI_WIDTH,
+                GUI_HEADER_HEIGHT);
 
         int currentY = GUI_HEADER_HEIGHT + offsetY;
 
-        blit(guiGraphics, offsetX, currentY + rows * GUI_ROW_HEIGHT,
-                new Rect2i(0, GUI_FOOTER_OFFSET, GUI_WIDTH, GUI_FOOTER_HEIGHT));
+        guiGraphics.blit(texture, offsetX, currentY + 4 * GUI_ROW_HEIGHT,
+                0, GUI_FOOTER_OFFSET, GUI_WIDTH, GUI_FOOTER_HEIGHT);
 
-        for (int i = 0; i < rows; ++i) {
-            Rect2i box = new Rect2i(0, GUI_HEADER_HEIGHT, GUI_WIDTH, GUI_ROW_HEIGHT);
-            blit(guiGraphics, offsetX, currentY, box);
+        int count = Math.min(4, rows);
+        for (int i = 0; i < count; ++i) {
+            guiGraphics.blit(texture, offsetX, currentY, 0, GUI_HEADER_HEIGHT, GUI_WIDTH,
+                    GUI_ROW_HEIGHT);
             currentY += 18;
+        }
+
+        if (rows > 4) {
+            drawScrollbar(guiGraphics, offsetX, offsetY);
         }
 
     }
 
-    private void blit(GuiGraphics guiGraphics, int offsetX, int offsetY, Rect2i srcRect) {
+    private void drawScrollbar(GuiGraphics guiGraphics, int offsetX, int offsetY) {
         var texture = AppEng.makeId("textures/guis/pattern_list_preview.png");
-        guiGraphics.blit(texture, offsetX, offsetY, srcRect.getX(), srcRect.getY(), srcRect.getWidth(),
-                srcRect.getHeight());
+        scrollbar.setVisible(true);
+        guiGraphics.blit(texture, offsetX + GUI_SCROLLBAR_OFFSET, offsetY, 0, 105, GUI_SCROLLBAR_WIDTH,
+                GUI_SCROLLBAR_HEIGHT);
     }
 
+    @Override
+    protected OnlyShowSlot createViewSlot(InternalInventory inventory, int index) {
+        OnlyShowSlot slot = new OnlyShowSlot(inventory, index);
+        slot.x = 8 + (index % 9) * 18;
+        slot.y = GUI_HEADER_HEIGHT + 1 + (index / 9) * 18;
+        return slot;
+    }
+
+    @Override
+    protected boolean validSlot(Slot slot) {
+        return slot instanceof OnlyShowSlot;
+    }
+
+    @Override
+    protected boolean handlerSlotClick(Slot slot, int slotIdx, int mouseButton, ClickType clickType) {
+        if (getMenu().isClientSideSlot(slot)) {
+            return false;
+        }
+
+        var stack = slot.getItem();
+        if (stack.isEmpty() || stack.is(AEItems.BLANK_PATTERN.asItem())) {
+            return false;
+        }
+        menu.switchEnable(slotIdx);
+        return true;
+    }
 }

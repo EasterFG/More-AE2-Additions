@@ -70,6 +70,10 @@
       "width": 28,
       "height": 16
     },
+    "scroll_bar": {
+      "top": 55,
+      "left": 174
+    },
     "confirm": {
       "top": 60,
       "left": 8,
