@@ -1,3 +1,14 @@
+## v1.0.5
+### English
+1. Pattern Provider Plus now supports customizable slot counts.
+2. Pattern Modify Tool adds scrollbar support.
+3. Fixed rendering issues in Cable Placement Tool.
+4. Fixed cross-dimension AE storage access failure in Cable Placement Tool.
+### 中文
+1. 样板供应器plus支持自定义栏位数量
+2. 样板修改工具支持滚动条
+3. 修复线缆放置工具渲染问题 
+4. 修复线缆放置工具无法跨纬度访问ae存储
 ## v1.0.4
 ### English
 1. [Feature] Pattern Modify Tool: Add output restriction mode and preview interface doubling button with customizable rate multiplier (#3)
@@ -9,12 +20,3 @@
 2. [功能] 线缆放置工具支持多节点选择添加放置快捷键
 3. [修复] 修复线缆放置工具替换模式无法切换的问题
 4. [提示] 如出现样板修改工具无法打开的情况,则需重新合成
-## v1.0.3
-### English
-1. Fixed malfunction in Blueprint Upgrade Tool
-2. Added Energy System to Cable Placer Tool
-3. Implemented Multiplier Mode in Pattern Modifier
-### 中文
-1. 修复样板升级工具无法正常使用的故障
-2. 样板放置工具新增能量系统
-3. 样板修改器支持倍率模式
