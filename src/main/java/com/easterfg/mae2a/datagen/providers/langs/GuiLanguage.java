@@ -7,7 +7,7 @@ import static com.easterfg.mae2a.datagen.providers.LocalizationProvider.add;
  */
 public final class GuiLanguage {
     public static void init() {
-        add("gui.mae2a.pattern_tool_setting", "样板工具设置 - %s", "Pattern Tool Configuration - %s");
+        add("gui.mae2a.pattern_tool_setting", "样板工具设置", "Pattern Tool Configuration");
 
         add("gui.mae2a.pattern_max_item_limit", "最大物品数量", "Max Item Quantity");
         add("gui.mae2a.pattern_max_fluid_limit", "最大流体数量(B)", "Max Fluid Volume(B)");

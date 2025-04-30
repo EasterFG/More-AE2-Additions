@@ -37,7 +37,7 @@
   "gui.mae2a.pattern_rate": "单次操作倍率",
   "gui.mae2a.pattern_rate_divide": "将产物和原料数量➗指定倍数, 无法整除部分将被跳过",
   "gui.mae2a.pattern_rate_multiply": "将产物和原料数量✖指定倍数",
-  "gui.mae2a.pattern_tool_setting": "样板工具设置 - %s",
+  "gui.mae2a.pattern_tool_setting": "样板工具设置",
   "gui.mae2a.picker.replace": "替换模式",
   "gui.mae2a.picker.select_range": "§7选取范围: ",
   "gui.mae2a.picker.unit": "§7格",

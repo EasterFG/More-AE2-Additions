@@ -2,8 +2,10 @@ package com.easterfg.mae2a.common.settings;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+
+import appeng.client.gui.style.Blitter;
+
+import com.easterfg.mae2a.MoreAE2Additions;
 
 import lombok.Data;
 
@@ -20,23 +22,28 @@ public class PatternModifySetting {
     private int rate = 2;
 
     public enum ModifyMode {
-        MULTIPLY(Component.translatable("gui.mae2a.multiply"), Items.STONE.getDefaultInstance()),
-        DIVIDE(Component.translatable("gui.mae2a.divide"), Items.SAND.getDefaultInstance());
+
+        MULTIPLY(Component.translatable("gui.mae2a.multiply"), 0, 0),
+        DIVIDE(Component.translatable("gui.mae2a.divide"), 16, 0);
+
+        static final Blitter TEXTURE = Blitter.texture(MoreAE2Additions.id("textures/guis/action.png"), 32, 16);
 
         final Component tooltip;
-        final ItemStack icon;
+        final int x;
+        final int y;
 
-        ModifyMode(Component tooltip, ItemStack icon) {
+        ModifyMode(Component tooltip, int x, int y) {
             this.tooltip = tooltip;
-            this.icon = icon;
+            this.x = x;
+            this.y = y;
         }
 
         public Component tooltip() {
             return tooltip;
         }
 
-        public ItemStack icon() {
-            return icon;
+        public Blitter icon() {
+            return TEXTURE.copy().src(x, y, 16, 16);
         }
     }
 

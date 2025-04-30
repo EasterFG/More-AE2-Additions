@@ -19,6 +19,7 @@ import appeng.client.gui.widgets.TabButton;
 
 import com.easterfg.mae2a.MoreAE2Additions;
 import com.easterfg.mae2a.client.gui.widget.CustomIconButton;
+import com.easterfg.mae2a.client.gui.widget.CustomTabButton;
 import com.easterfg.mae2a.common.menu.PatternModifyMenu;
 import com.easterfg.mae2a.common.settings.PatternModifySetting;
 import com.easterfg.mae2a.common.settings.PatternModifySetting.ModifyMode;
@@ -70,7 +71,7 @@ public class PatternModifyScreen extends AEBaseScreen<PatternModifyMenu> {
         rateInput = addInput("rate_input", INTEGER_REGEX, 8, 2);
 
         for (var mode : ModifyMode.values()) {
-            var tab = new TabButton(
+            var tab = new CustomTabButton(
                     mode.icon(),
                     mode.tooltip(),
                     press -> setMode(mode));

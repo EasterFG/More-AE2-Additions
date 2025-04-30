@@ -37,7 +37,7 @@
   "gui.mae2a.pattern_rate": "Batch Operation Rate",
   "gui.mae2a.pattern_rate_divide": "Divide products and ingredients by ?, remainders will be discarded",
   "gui.mae2a.pattern_rate_multiply": "Multiply products and ingredients by ?",
-  "gui.mae2a.pattern_tool_setting": "Pattern Tool Configuration - %s",
+  "gui.mae2a.pattern_tool_setting": "Pattern Tool Configuration",
   "gui.mae2a.picker.replace": "Switch Replace Mode",
   "gui.mae2a.picker.select_range": "§7Selection Range: ",
   "gui.mae2a.picker.unit": "§7Blocks",
