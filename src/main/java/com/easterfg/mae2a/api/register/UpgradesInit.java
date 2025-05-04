@@ -1,4 +1,4 @@
-package com.easterfg.mae2a.client.register;
+package com.easterfg.mae2a.api.register;
 
 import appeng.api.upgrades.Upgrades;
 import appeng.core.definitions.AEParts;

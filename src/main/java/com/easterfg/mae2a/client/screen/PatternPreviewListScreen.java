@@ -20,8 +20,8 @@ import appeng.client.gui.style.ScreenStyle;
 import appeng.core.AppEng;
 import appeng.core.definitions.AEItems;
 
+import com.easterfg.mae2a.api.slot.OnlyShowSlot;
 import com.easterfg.mae2a.client.gui.AbstractScrollerScreen;
-import com.easterfg.mae2a.client.gui.slot.OnlyShowSlot;
 import com.easterfg.mae2a.common.menu.PatternPreviewListMenu;
 import com.easterfg.mae2a.config.MAE2AConfig;
 

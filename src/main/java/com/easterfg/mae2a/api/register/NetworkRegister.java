@@ -1,4 +1,4 @@
-package com.easterfg.mae2a.client.register;
+package com.easterfg.mae2a.api.register;
 
 import com.easterfg.mae2a.network.NetworkHandler;
 import com.easterfg.mae2a.network.packet.OpenMenuPacket;

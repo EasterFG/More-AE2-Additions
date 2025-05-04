@@ -13,6 +13,8 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import appeng.api.util.AEColor;
 
@@ -23,6 +25,7 @@ import lombok.Setter;
 /**
  * @author EasterFG on 2025/4/10
  */
+@OnlyIn(Dist.CLIENT)
 public class CablePickerWidget extends AbstractWidget {
 
     private static final int ITEM_SPACING = 0;

@@ -1,4 +1,4 @@
-package com.easterfg.mae2a.client.register;
+package com.easterfg.mae2a.api.register;
 
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.registries.IForgeRegistry;

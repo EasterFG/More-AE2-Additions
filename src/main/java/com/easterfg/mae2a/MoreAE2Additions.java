@@ -20,8 +20,8 @@ import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 import com.easterfg.mae2a.api.MainCreativeMod;
+import com.easterfg.mae2a.api.register.*;
 import com.easterfg.mae2a.client.MoreAE2AdditionsClient;
-import com.easterfg.mae2a.client.register.*;
 import com.easterfg.mae2a.config.MAE2AConfig;
 import com.easterfg.mae2a.integration.wt.WTCommonLoad;
 import com.easterfg.mae2a.util.Platform;

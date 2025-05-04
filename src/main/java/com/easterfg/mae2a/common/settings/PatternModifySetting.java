@@ -2,6 +2,8 @@ package com.easterfg.mae2a.common.settings;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import appeng.client.gui.style.Blitter;
 
@@ -26,8 +28,6 @@ public class PatternModifySetting {
         MULTIPLY(Component.translatable("gui.mae2a.multiply"), 0, 0),
         DIVIDE(Component.translatable("gui.mae2a.divide"), 16, 0);
 
-        static final Blitter TEXTURE = Blitter.texture(MoreAE2Additions.id("textures/guis/action.png"), 32, 16);
-
         final Component tooltip;
         final int x;
         final int y;
@@ -42,8 +42,9 @@ public class PatternModifySetting {
             return tooltip;
         }
 
+        @OnlyIn(Dist.CLIENT)
         public Blitter icon() {
-            return TEXTURE.copy().src(x, y, 16, 16);
+            return Blitter.texture(MoreAE2Additions.id("textures/guis/action.png"), 32, 16).src(x, y, 16, 16);
         }
     }
 

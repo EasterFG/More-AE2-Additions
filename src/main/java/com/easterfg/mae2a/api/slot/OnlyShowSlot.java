@@ -1,4 +1,4 @@
-package com.easterfg.mae2a.client.gui.slot;
+package com.easterfg.mae2a.api.slot;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

@@ -20,7 +20,7 @@ import appeng.menu.SlotSemantics;
 import appeng.menu.implementations.MenuTypeBuilder;
 import appeng.util.inv.AppEngInternalInventory;
 
-import com.easterfg.mae2a.client.gui.slot.OnlyShowSlot;
+import com.easterfg.mae2a.api.slot.OnlyShowSlot;
 import com.easterfg.mae2a.common.menu.host.PatternModifyHost;
 import com.easterfg.mae2a.util.PatternUtils;
 

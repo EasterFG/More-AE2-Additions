@@ -1,4 +1,4 @@
-package com.easterfg.mae2a.client.register;
+package com.easterfg.mae2a.api.register;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
