@@ -13,7 +13,7 @@ import com.easterfg.mae2a.common.menu.PatternProviderPlusMenu;
 /**
  * @author EasterFG on 2025/4/3
  */
-public interface PatternProviderPlusLoginHost extends PatternProviderLogicHost {
+public interface PatternProviderPlusLogicHost extends PatternProviderLogicHost {
     IUpgradeInventory getUpgrades();
 
     default void openMenu(Player player, MenuLocator locator) {

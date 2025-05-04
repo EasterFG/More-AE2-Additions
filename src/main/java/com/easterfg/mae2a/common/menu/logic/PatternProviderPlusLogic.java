@@ -13,7 +13,7 @@ import appeng.helpers.patternprovider.PatternProviderLogicHost;
 import appeng.me.cluster.implementations.CraftingCPUCluster;
 
 import com.easterfg.mae2a.common.definition.MAE2AItems;
-import com.easterfg.mae2a.common.menu.host.PatternProviderPlusLoginHost;
+import com.easterfg.mae2a.common.menu.host.PatternProviderPlusLogicHost;
 import com.easterfg.mae2a.integration.mixin.ICrafting;
 
 /**
@@ -21,13 +21,13 @@ import com.easterfg.mae2a.integration.mixin.ICrafting;
  */
 public class PatternProviderPlusLogic extends PatternProviderLogic {
 
-    private final PatternProviderPlusLoginHost host;
+    private final PatternProviderPlusLogicHost host;
     private final IManagedGridNode mainNode;
 
     public PatternProviderPlusLogic(IManagedGridNode mainNode, PatternProviderLogicHost host,
             int patternInventorySize) {
         super(mainNode, host, patternInventorySize);
-        this.host = (PatternProviderPlusLoginHost) host;
+        this.host = (PatternProviderPlusLogicHost) host;
         this.mainNode = mainNode;
     }
 

@@ -17,13 +17,15 @@ import net.minecraft.world.phys.Vec3;
 import appeng.blockentity.AEBaseBlockEntity;
 import appeng.blockentity.crafting.PatternProviderBlockEntity;
 import appeng.blockentity.networking.CableBusBlockEntity;
+import appeng.helpers.patternprovider.PatternProviderLogicHost;
 import appeng.items.parts.PartItem;
 import appeng.parts.AEBasePart;
 
+import com.easterfg.mae2a.common.block.PatternProviderPlusBlockEntity;
 import com.easterfg.mae2a.common.definition.MAE2ABlockEntities;
 import com.easterfg.mae2a.common.definition.MAE2ABlocks;
 import com.easterfg.mae2a.common.definition.MAE2AParts;
-import com.easterfg.mae2a.common.menu.host.PatternProviderPlusLoginHost;
+import com.easterfg.mae2a.common.menu.host.PatternProviderPlusLogicHost;
 
 public class ItemPatternProviderUpgrade extends Item {
     public ItemPatternProviderUpgrade(Properties pProperties) {
@@ -40,7 +42,7 @@ public class ItemPatternProviderUpgrade extends Item {
             return InteractionResult.PASS;
         }
         var ctx = new BlockPlaceContext(context);
-        if (te instanceof PatternProviderBlockEntity tile && tile.getTerminalPatternInventory().size() < 54) {
+        if (te instanceof PatternProviderBlockEntity tile && !(tile instanceof PatternProviderPlusBlockEntity)) {
             var origin = level.getBlockState(clickedPos);
             var state = MAE2ABlocks.PATTERN_PROVIDER_PLUS.asBlock().getStateForPlacement(ctx);
             if (state == null) {
@@ -65,8 +67,7 @@ public class ItemPatternProviderUpgrade extends Item {
             Vec3 target = new Vec3(hit.x - clickedPos.getX(), hit.y - clickedPos.getY(), hit.z - clickedPos.getZ());
             var part = cable.getCableBus().selectPartLocal(target).part;
             if (part instanceof AEBasePart pp) {
-                if (pp instanceof PatternProviderPlusLoginHost logic
-                        && logic.getTerminalPatternInventory().size() < 54) {
+                if (!(pp instanceof PatternProviderLogicHost) || pp instanceof PatternProviderPlusLogicHost) {
                     return InteractionResult.PASS;
                 }
                 var side = pp.getSide();

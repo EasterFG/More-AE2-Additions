@@ -24,7 +24,7 @@ import com.easterfg.mae2a.MoreAE2Additions;
 import com.easterfg.mae2a.common.definition.MAE2ABlocks;
 import com.easterfg.mae2a.common.definition.MAE2AParts;
 import com.easterfg.mae2a.common.menu.PatternProviderPlusMenu;
-import com.easterfg.mae2a.common.menu.host.PatternProviderPlusLoginHost;
+import com.easterfg.mae2a.common.menu.host.PatternProviderPlusLogicHost;
 import com.easterfg.mae2a.common.menu.logic.PatternProviderPlusLogic;
 import com.easterfg.mae2a.config.MAE2AConfig;
 
@@ -32,7 +32,7 @@ import com.easterfg.mae2a.config.MAE2AConfig;
  * @author EasterFG on 2025/4/5
  */
 public class PatternProviderPlusPart extends PatternProviderPart
-        implements IUpgradeableObject, PatternProviderPlusLoginHost {
+        implements IUpgradeableObject, PatternProviderPlusLogicHost {
 
     public static final ResourceLocation MODEL_BASE = new ResourceLocation(MoreAE2Additions.MOD_ID,
             "part/pattern_provider_plus_base");
