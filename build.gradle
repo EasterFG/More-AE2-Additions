@@ -133,6 +133,10 @@ dependencies {
     // ae2wt
     implementation fg.deobf("dev:ae2wtlib:${ae2wt_version}")
 
+    // eae
+    implementation fg.deobf("curse.maven:ex-pattern-provider-892005:5847745")
+
+    runtimeOnly fg.deobf("curse.maven:glodium-957920:5226922")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}+${minecraft_version}")
     runtimeOnly fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
     runtimeOnly fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}")

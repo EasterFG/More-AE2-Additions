@@ -17,6 +17,7 @@ public class MAE2AConfig {
     private static final ForgeConfigSpec.IntValue PROVIDER_MAX_SLOT = BUILDER
             .comment("Set Provider Plus max slot, must be a multiple of 9")
             .translation("config.mae2a.slot")
+            .worldRestart()
             .defineInRange("plus_max_slot", 54, 36, 576);
 
     private static final ForgeConfigSpec.ConfigValue<String> PREVIEW_BOX_COLOR = BUILDER
