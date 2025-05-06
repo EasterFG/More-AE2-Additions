@@ -6,6 +6,8 @@ import java.util.List;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import appeng.api.inventories.InternalInventory;
 import appeng.api.upgrades.Upgrades;
@@ -22,7 +24,9 @@ import com.easterfg.mae2a.common.menu.PatternProviderPlusMenu;
 /**
  * @author EasterFG on 2025/4/3
  */
-public class PatternProviderPlusScreen extends AbstractPatternPlusScrollerScreen {
+@OnlyIn(Dist.CLIENT)
+public class PatternProviderPlusScreen
+        extends AbstractPatternPlusScrollerScreen<PatternProviderPlusMenu, RestrictedInputSlot> {
 
     public PatternProviderPlusScreen(PatternProviderPlusMenu menu, Inventory playerInventory, Component title,
             ScreenStyle style) {

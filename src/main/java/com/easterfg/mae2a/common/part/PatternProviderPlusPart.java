@@ -48,12 +48,12 @@ public class PatternProviderPlusPart extends PatternProviderPart
     @PartModels
     public static final PartModel MODELS_HAS_CHANNEL = new PartModel(MODEL_BASE,
             new ResourceLocation(AppEng.MOD_ID, "part/interface_has_channel"));
+
     private final IUpgradeInventory upgrades;
 
     public PatternProviderPlusPart(IPartItem<?> partItem) {
         super(partItem);
         upgrades = UpgradeInventories.forMachine(MAE2ABlocks.PATTERN_PROVIDER_PLUS, 1, this::saveChanges);
-
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.easterfg.mae2a.common.menu;
 
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.level.ItemLike;
 
 import appeng.api.upgrades.IUpgradeInventory;
 import appeng.menu.implementations.MenuTypeBuilder;
@@ -35,16 +34,7 @@ public class PatternProviderPlusMenu extends PatternProviderMenu {
         setupUpgrades(host.getUpgrades());
     }
 
-    @Override
-    public void broadcastChanges() {
-        super.broadcastChanges();
-    }
-
     public IUpgradeInventory getUpgrades() {
         return host.getUpgrades();
-    }
-
-    public boolean hasUpgrade(ItemLike upgradeCard) {
-        return host.getUpgrades().isInstalled(upgradeCard);
     }
 }
