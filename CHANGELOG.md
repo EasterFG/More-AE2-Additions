@@ -1,3 +1,18 @@
+buid## v1.0.6
+### English
+1. Fix the display issue of the Pattern Provider Plus sidebar
+2. Fix issues related to Pattern Provider upgrades
+3. Fix the inability to open the UI for the Pattern Modification Tool on the server side
+4. Fix the issue where Insulated Tape cannot be used on the Pattern Provider Plus
+5. Add an invert mode to the Pattern Preview interface
+6. Display the current primary output count in the Pattern Provider Plus and Pattern Preview interfaces
+### 中文
+1. 修复样板供应器plus侧边栏显示问题
+2. 修复样板供应器升级相关问题
+3. 修复样板修改工具无法在服务器中开启UI的问题
+4. 修复封装胶带无法对样板供应器plus使用的问题
+5. 样板预览界面新增反选模式
+6. 样板供应器plus和样板预览界面显示当前主输出物品数量
 ## v1.0.5
 ### English
 1. Pattern Provider Plus now supports customizable slot counts.
@@ -9,14 +24,3 @@
 2. 样板修改工具支持滚动条
 3. 修复线缆放置工具渲染问题 
 4. 修复线缆放置工具无法跨纬度访问ae存储
-## v1.0.4
-### English
-1. [Feature] Pattern Modify Tool: Add output restriction mode and preview interface doubling button with customizable rate multiplier (#3)
-2. [Feature] Cable Placement Tool: Support multi-node selection and add new hotkey
-3. [Fix] Cable Placement Tool: Resolve mode switching failure in replacement mode
-4. [Tooltip] Pattern Modify Tool: Require re-craft if tool fails to open ui
-### 中文
-1. [功能] 样板修改工具新增原料限制模式,预览界面新增翻倍按钮.可自定义配置按钮倍率 (#3)
-2. [功能] 线缆放置工具支持多节点选择添加放置快捷键
-3. [修复] 修复线缆放置工具替换模式无法切换的问题
-4. [提示] 如出现样板修改工具无法打开的情况,则需重新合成
