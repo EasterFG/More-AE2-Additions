@@ -20,7 +20,7 @@ import appeng.menu.SlotSemantics;
 import appeng.menu.implementations.MenuTypeBuilder;
 import appeng.util.inv.AppEngInternalInventory;
 
-import com.easterfg.mae2a.api.slot.OnlyShowSlot;
+import com.easterfg.mae2a.api.slot.PreviewSlot;
 import com.easterfg.mae2a.common.menu.host.PatternModifyHost;
 import com.easterfg.mae2a.util.PatternUtils;
 
@@ -36,8 +36,11 @@ public class PatternPreviewListMenu extends AEBaseMenu {
     private final static String ACTION_SWITCH = "switch";
     private static final String ACTION_DIVIDE = "divide";
     private static final String ACTION_MULTIPLY = "multiply";
+    private static final String ACTION_SELECT = "select";
 
     protected final PatternModifyHost host;
+
+    private boolean select = true;
 
     public PatternPreviewListMenu(int id, Inventory playerInventory, PatternModifyHost host) {
         super(TYPE, id, playerInventory, host);
@@ -48,14 +51,18 @@ public class PatternPreviewListMenu extends AEBaseMenu {
             var tempInv = new AppEngInternalInventory(patterns.size());
             for (int i = 0; i < patterns.size(); i++) {
                 var stack = patterns.get(i);
-                tempInv.setItemDirect(i, stack);
-                this.addSlot(new OnlyShowSlot(tempInv, i), SlotSemantics.ENCODED_PATTERN);
+                PreviewSlot slot = new PreviewSlot(tempInv, i);
+                if (!stack.isEmpty()) {
+                    slot.set(stack);
+                }
+                this.addSlot(slot, SlotSemantics.ENCODED_PATTERN);
             }
         }
         registerClientAction(ACTION_CONFIRM, this::confirm);
         registerClientAction(ACTION_SWITCH, Integer.class, this::switchEnable);
         registerClientAction(ACTION_MULTIPLY, Integer.class, this::multiply);
         registerClientAction(ACTION_DIVIDE, Integer.class, this::divide);
+        registerClientAction(ACTION_SELECT, this::switchSelect);
     }
 
     public List<ItemStack> getPatterns() {
@@ -78,40 +85,45 @@ public class PatternPreviewListMenu extends AEBaseMenu {
             var patternInv = patternLogin.getPatternInv();
             List<Slot> patterns = this.getSlots(SlotSemantics.ENCODED_PATTERN);
             for (Slot slot : patterns) {
-                var stack = slot.getItem();
-                if (stack.isEmpty() || stack.is(Items.BARRIER) || stack.is(AEItems.BLANK_PATTERN.asItem()))
-                    continue;
-                patternInv.setItemDirect(slot.getSlotIndex(), stack);
-                count++;
+                if (slot instanceof PreviewSlot previewSlot) {
+                    if (!slot.hasItem() || select != previewSlot.isEnable())
+                        continue;
+                    patternInv.setItemDirect(slot.getSlotIndex(), previewSlot.getItem());
+                    count++;
+                }
             }
         }
-        getPlayer().displayClientMessage(Component.translatable("tools.mae2a.one_patter_result", count), true);
+        if (count > 0) {
+            getPlayer().displayClientMessage(Component.translatable("tools.mae2a.one_patter_result", count), true);
+        }
     }
 
     public void switchEnable(int index) {
         if (isClientSide()) {
             sendClientAction(ACTION_SWITCH, index);
-            return;
         }
 
         var current = slots.get(index);
-        var stack = current.getItem();
 
-        if (stack.is(Items.BARRIER)) {
-            current.set(this.host.getPatterns().get(index));
-        } else {
-            current.set(Items.BARRIER.getDefaultInstance());
+        if (current instanceof PreviewSlot previewSlot) {
+            previewSlot.setStatus(previewSlot.isEnable() ? PreviewSlot.Status.DISABLE : PreviewSlot.Status.ENABLE);
         }
     }
 
+    public void switchSelect() {
+        if (isClientSide()) {
+            sendClientAction(ACTION_SELECT);
+        }
+        select = !select;
+    }
+
     @Nullable
-    private ItemStack processingSlot(Slot slot, int times, boolean multiplyMode) {
+    private ItemStack processingSlot(PreviewSlot slot, int times, boolean multiplyMode) {
         var stack = slot.getItem();
         if (stack.isEmpty() || stack.is(Items.BARRIER) || stack.is(AEItems.BLANK_PATTERN.asItem()))
             return null;
-        if (stack.getItem() instanceof ProcessingPatternItem patternItem) {
-            AEProcessingPattern details = patternItem.decode(stack,
-                    getPlayer().getCommandSenderWorld(), false);
+        if (stack.getItem() instanceof ProcessingPatternItem ppi) {
+            AEProcessingPattern details = ppi.decode(stack, getPlayer().level(), false);
             if (details == null)
                 return null;
             return PatternUtils.apply(details, times, true, multiplyMode, details.getPrimaryOutput());
@@ -126,9 +138,13 @@ public class PatternPreviewListMenu extends AEBaseMenu {
         }
         List<Slot> patterns = this.getSlots(SlotSemantics.ENCODED_PATTERN);
         for (Slot slot : patterns) {
-            var result = processingSlot(slot, times, false);
-            if (result != null) {
-                slot.set(result);
+            if (slot instanceof PreviewSlot previewSlot) {
+                if (select != previewSlot.isEnable())
+                    continue;
+                var result = processingSlot(previewSlot, times, false);
+                if (result != null) {
+                    slot.set(result);
+                }
             }
         }
     }
@@ -140,9 +156,13 @@ public class PatternPreviewListMenu extends AEBaseMenu {
         }
         List<Slot> patterns = this.getSlots(SlotSemantics.ENCODED_PATTERN);
         for (Slot slot : patterns) {
-            var result = processingSlot(slot, times, true);
-            if (result != null) {
-                slot.set(result);
+            if (slot instanceof PreviewSlot previewSlot) {
+                if (select != previewSlot.isEnable())
+                    continue;
+                var result = processingSlot(previewSlot, times, true);
+                if (result != null) {
+                    slot.set(result);
+                }
             }
         }
     }

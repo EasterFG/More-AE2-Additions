@@ -55,6 +55,13 @@ public final class GuiLanguage {
         add("gui.mae2a.pattern_list.cant_info", "§7当前样板已达成预设目标", "§Pattern already meets target parameters");
         add("gui.mae2a.pattern_list.disable_helper", "§7单击§c禁用§7此样板", "§7Click to §cdisable §7this pattern");
         add("gui.mae2a.pattern_list.enable_helper", "§7单击§a启用§7此样板", "§7Click to §aenable§7 this pattern");
+
+        add("gui.mae2a.pattern_list.select_mode", "选择模式", "Select Mode");
+        add("gui.mae2a.pattern_list.normal_mode", "正常模式", "Normal Mode");
+        add("gui.mae2a.pattern_list.invert_mode", "反选模式", "Invert Mode");
+        add("gui.mae2a.pattern_list.select_tip", "§7反选模式下,仅会处理选中的样板",
+                "In invert mode, only selected patterns will be processed");
+
         add("gui.mae2a.confirm", "确认", "Confirm");
         add("gui.mae2a.cancel", "取消", "Cancel");
 

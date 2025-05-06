@@ -1,10 +1,14 @@
 package com.easterfg.mae2a.client.screen;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.WeakHashMap;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
@@ -14,23 +18,38 @@ import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+import appeng.api.crafting.IPatternDetails;
+import appeng.api.crafting.PatternDetailsHelper;
 import appeng.api.inventories.InternalInventory;
+import appeng.api.stacks.AmountFormat;
+import appeng.api.stacks.GenericStack;
+import appeng.client.gui.me.common.StackSizeRenderer;
+import appeng.client.gui.style.Blitter;
 import appeng.client.gui.style.ScreenStyle;
 import appeng.core.AppEng;
 import appeng.core.definitions.AEItems;
+import appeng.crafting.pattern.EncodedPatternItem;
 
-import com.easterfg.mae2a.api.slot.OnlyShowSlot;
+import com.easterfg.mae2a.MoreAE2Additions;
+import com.easterfg.mae2a.api.slot.PreviewSlot;
 import com.easterfg.mae2a.client.gui.AbstractScrollerScreen;
+import com.easterfg.mae2a.client.gui.widget.CustomIconButton;
 import com.easterfg.mae2a.common.menu.PatternPreviewListMenu;
 import com.easterfg.mae2a.config.MAE2AConfig;
 
 /**
  * @author EasterFG on 2025/4/6
  */
-public class PatternPreviewListScreen extends AbstractScrollerScreen<PatternPreviewListMenu, OnlyShowSlot> {
+@OnlyIn(Dist.CLIENT)
+public class PatternPreviewListScreen extends AbstractScrollerScreen<PreviewSlot> {
+
+    private final Map<ItemStack, GenericStack> SHOW_CACHE = new WeakHashMap<>();
 
     private int rows;
+    private boolean mode = true;
 
     private final Button confirm;
     private final Button cancel;
@@ -62,6 +81,20 @@ public class PatternPreviewListScreen extends AbstractScrollerScreen<PatternPrev
         });
         this.cancel = widgets.addButton("cancel", Component.translatable("gui.mae2a.cancel"), this::onClose);
 
+        Blitter texture = Blitter.texture(MoreAE2Additions.id("textures/guis/selection_mode.png"), 32, 16);
+        var select = CustomIconButton.Builder.builder(__ -> {
+            mode = !mode;
+            menu.switchSelect();
+        })
+                .texture(texture.copy().src(0, 0, 16, 16))
+                .disableTexture(texture.copy().src(16, 0, 16, 16))
+                .status(() -> mode)
+                .tooltip(Component.translatable("gui.mae2a.pattern_list.normal_mode"),
+                        Component.translatable("gui.mae2a.pattern_list.invert_mode"))
+                .message(Component.translatable("gui.mae2a.pattern_list.select_mode"))
+                .build();
+        this.addToLeftToolbar(select);
+
         scrollbar.setHeight(70);
         scrollbar.setVisible(false);
     }
@@ -87,18 +120,22 @@ public class PatternPreviewListScreen extends AbstractScrollerScreen<PatternPrev
     @Override
     protected void renderTooltip(@NotNull GuiGraphics guiGraphics, int x, int y) {
         if (hoveredSlot != null) {
-            ItemStack item = hoveredSlot.getItem();
-            if (item.is(Items.BARRIER)) {
-                guiGraphics.renderTooltip(font, List.of(
-                        Component.translatable("gui.mae2a.pattern_list.disable"),
-                        Component.translatable("gui.mae2a.pattern_list.info"),
-                        Component.translatable("gui.mae2a.pattern_list.enable_helper")), Optional.empty(), x, y);
-                return;
-            } else if (item.is(AEItems.BLANK_PATTERN.asItem())) {
-                guiGraphics.renderTooltip(font, List.of(
-                        Component.translatable("gui.mae2a.pattern_list.cant"),
-                        Component.translatable("gui.mae2a.pattern_list.cant_info")), Optional.empty(), x, y);
-                return;
+            if (hoveredSlot instanceof PreviewSlot slot) {
+                ItemStack item = hoveredSlot.getItem();
+                if (item.is(AEItems.BLANK_PATTERN.asItem())) {
+                    guiGraphics.renderTooltip(font, List.of(
+                            Component.translatable("gui.mae2a.pattern_list.cant"),
+                            Component.translatable("gui.mae2a.pattern_list.cant_info")), Optional.empty(), x, y);
+                    return;
+                }
+
+                if (!item.isEmpty() && mode != slot.isEnable()) {
+                    guiGraphics.renderTooltip(font, List.of(
+                            Component.translatable("gui.mae2a.pattern_list.disable"),
+                            Component.translatable("gui.mae2a.pattern_list.info"),
+                            Component.translatable("gui.mae2a.pattern_list.enable_helper")), Optional.empty(), x, y);
+                    return;
+                }
             }
         }
         super.renderTooltip(guiGraphics, x, y);
@@ -132,7 +169,6 @@ public class PatternPreviewListScreen extends AbstractScrollerScreen<PatternPrev
         if (rows > 4) {
             drawScrollbar(guiGraphics, offsetX, offsetY);
         }
-
     }
 
     private void drawScrollbar(GuiGraphics guiGraphics, int offsetX, int offsetY) {
@@ -142,17 +178,104 @@ public class PatternPreviewListScreen extends AbstractScrollerScreen<PatternPrev
                 GUI_SCROLLBAR_HEIGHT);
     }
 
+    @Nullable
+    public GenericStack getShow(ItemStack item) {
+        var show = SHOW_CACHE.get(item);
+
+        if (show != null) {
+            return show;
+        }
+
+        IPatternDetails details = PatternDetailsHelper.decodePattern(item, Minecraft.getInstance().level, false);
+        if (details == null) {
+            return null;
+        }
+
+        show = details.getPrimaryOutput();
+        SHOW_CACHE.put(item, show);
+        return show;
+    }
+
     @Override
-    protected OnlyShowSlot createViewSlot(InternalInventory inventory, int index) {
-        OnlyShowSlot slot = new OnlyShowSlot(inventory, index);
-        slot.x = 8 + (index % 9) * 18;
-        slot.y = GUI_HEADER_HEIGHT + 1 + (index / 9) * 18;
+    public void renderSlot(GuiGraphics guiGraphics, Slot slot) {
+        if (validSlot(slot)) {
+            var scroll = scrollbar.getCurrentScroll();
+            int current = slot.getSlotIndex() - scroll * 9;
+            if (current < 0 || current >= VIEW_SIZE) {
+                return;
+            }
+            renderValidSlot(guiGraphics, current);
+            return;
+        }
+        super.renderSlot(guiGraphics, slot);
+    }
+
+    protected void renderValidSlot(GuiGraphics guiGraphics, int current) {
+        PreviewSlot now = getMenuSlot(current);
+        PreviewSlot view = views.get(current);
+        ItemStack item = now.getItem();
+        view.set(item);
+        view.setStatus(now.getStatus());
+
+        renderCountSlot(guiGraphics, view);
+    }
+
+    protected void renderCountSlot(GuiGraphics guiGraphics, PreviewSlot s) {
+        var is = s.getItem();
+
+        if ((s.renderIconWithItem() || is.isEmpty()) && s.isSlotEnabled() && s.getIcon() != null) {
+            s.getIcon().getBlitter()
+                    .dest(s.x, s.y)
+                    .opacity(s.getOpacityOfIcon())
+                    .blit(guiGraphics);
+        }
+
+        ItemStack display;
+
+        if (s.isEnable()) {
+            display = s.getDisplayStack();
+        } else {
+            if (mode) {
+                display = Items.BARRIER.getDefaultInstance();
+            } else {
+                display = s.getDisplayStack();
+            }
+        }
+
+        if (!is.isEmpty()) {
+            int color = s.isEnable() ? 0x88ff6666 : 0x8866ff66;
+            if (!mode) {
+                guiGraphics.fill(s.x, s.y, 16 + s.x, 16 + s.y, color);
+            }
+        }
+
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().translate(0.0F, 0.0F, 100.0F);
+
+        guiGraphics.renderItem(display, s.x, s.y, s.x + s.y * this.imageWidth);
+
+        if (mode == s.isEnable() && is.getItem() instanceof EncodedPatternItem) {
+            var output = getShow(is);
+            if (output != null) {
+                String amount = output.what().formatAmount(output.amount(), AmountFormat.SLOT);
+                StackSizeRenderer.renderSizeLabel(guiGraphics, this.font, s.x, s.y, amount, false);
+            }
+        }
+
+        guiGraphics.pose().popPose();
+    }
+
+    @Override
+    protected PreviewSlot createViewSlot(InternalInventory inventory, int i) {
+        PreviewSlot slot = new PreviewSlot(inventory, i);
+        slot.x = 8 + (i % 9) * 18;
+        slot.y = GUI_HEADER_HEIGHT + 1 + (i / 9) * 18;
         return slot;
     }
 
     @Override
     protected boolean validSlot(Slot slot) {
-        return slot instanceof OnlyShowSlot;
+        return slot instanceof PreviewSlot;
     }
 
     @Override

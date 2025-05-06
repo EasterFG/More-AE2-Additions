@@ -145,7 +145,7 @@ public class NetworkHandler {
         var buf = new FriendlyByteBuf(Unpooled.buffer(1024));
         var id = this.packetIDMap.getOrDefault(message.getPacketClass(), -1);
         if (id == -1) {
-            MoreAE2Additions.LOGGER.error(String.format("Unregistered Packet: %s", message.getPacketClass()));
+            MoreAE2Additions.LOGGER.error("Unregistered Packet: {}", message.getPacketClass());
         }
         buf.writeVarInt(id);
         message.toBytes(buf);

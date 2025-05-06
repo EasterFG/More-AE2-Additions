@@ -9,6 +9,8 @@ import java.util.regex.Pattern;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import appeng.client.gui.AEBaseScreen;
 import appeng.client.gui.style.Blitter;
@@ -27,6 +29,7 @@ import com.easterfg.mae2a.common.settings.PatternModifySetting.ModifyMode;
 /**
  * @author EasterFG on 2024/10/1
  */
+@OnlyIn(Dist.CLIENT)
 public class PatternModifyScreen extends AEBaseScreen<PatternModifyMenu> {
 
     private final AETextField itemInput;
@@ -45,25 +48,28 @@ public class PatternModifyScreen extends AEBaseScreen<PatternModifyMenu> {
         super(menu, playerInventory, title, style);
         setting = menu.getHost().getPatternModifySetting();
 
-        var switchAction = new CustomIconButton(__ -> setActionMode(!menu.isLimitMode()),
-                MoreAE2Additions.id("textures/guis/modify_action.png"),
-                Component.translatable("gui.mae2a.action_limit"),
-                Component.translatable("gui.mae2a.action_rate"));
-        switchAction.setStatusSupplier(menu::isLimitMode);
-        switchAction.setMessage(Component.translatable("gui.mae2a.action_switch_tip"));
+        var switchAction = CustomIconButton.Builder.builder(__ -> setActionMode(!menu.isLimitMode()))
+                .location(MoreAE2Additions.id("textures/guis/modify_action.png"))
+                .status(menu::isLimitMode)
+                .message(Component.translatable("gui.mae2a.action_switch_tip"))
+                .tooltip(Component.translatable("gui.mae2a.action_limit"),
+                        Component.translatable("gui.mae2a.action_rate"))
+                .build();
         this.addToLeftToolbar(switchAction);
 
         var TARGET_TEXTURE = Blitter.texture(MoreAE2Additions.id("textures/guis/modify_target.png"), 32, 16);
-        switchTarget = new CustomIconButton(__ -> {
+        switchTarget = CustomIconButton.Builder.builder(__ -> {
             setting.setProduct(!setting.isProduct());
             menu.saveSetting(setting);
-        },
-                TARGET_TEXTURE.copy().src(0, 0, 16, 16),
-                TARGET_TEXTURE.copy().src(16, 0, 16, 16),
-                Component.translatable("gui.mae2a.target_material"),
-                Component.translatable("gui.mae2a.target_product"));
-        switchTarget.setMessage(Component.translatable("gui.mae2a.target_tip"));
-        switchTarget.setStatusSupplier(setting::isProduct);
+        })
+                .texture(TARGET_TEXTURE.copy().src(0, 0, 16, 16))
+                .disableTexture(TARGET_TEXTURE.copy().src(16, 0, 16, 16))
+                .status(setting::isProduct)
+                .message(Component.translatable("gui.mae2a.target_tip"))
+                .tooltip(Component.translatable("gui.mae2a.target_material"),
+                        Component.translatable("gui.mae2a.target_product"))
+                .build();
+
         this.addToLeftToolbar(switchTarget);
 
         itemInput = addInput("item_input", INTEGER_REGEX, 15, 0);
@@ -144,7 +150,7 @@ public class PatternModifyScreen extends AEBaseScreen<PatternModifyMenu> {
                 tooltipKey = "gui.mae2a.min_input_tip";
             }
             default -> {
-                MoreAE2Additions.LOGGER.warn("Unknown ModifyMode: " + mode);
+                MoreAE2Additions.LOGGER.warn("Unknown ModifyMode: {}", mode);
                 return;
             }
         }

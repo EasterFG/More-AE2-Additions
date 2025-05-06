@@ -12,22 +12,20 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import appeng.client.gui.Icon;
 import appeng.client.gui.style.Blitter;
 import appeng.client.gui.widgets.ITooltip;
 
-import lombok.Getter;
 import lombok.Setter;
 
 /**
  * @author EasterFG on 2025/3/28
  */
-@Getter
-@Setter
+@OnlyIn(Dist.CLIENT)
 public class CustomIconButton extends Button implements ITooltip {
-
-    private static final ResourceLocation AE_STATUS_TEXTURE = new ResourceLocation("ae2", "textures/guis/states.png");
 
     private final Blitter texture;
     private final Blitter disableTexture;
@@ -36,23 +34,7 @@ public class CustomIconButton extends Button implements ITooltip {
     private final Component offTooltip;
 
     @Setter
-    @NotNull
-    private Supplier<Boolean> statusSupplier = () -> true;
-
-    public CustomIconButton(Button.OnPress onPress, ResourceLocation texture, Component onTooltip,
-            Component offTooltip) {
-        this(16, 16, onPress, Blitter.texture(texture, 16, 16).src(0, 0, 16, 16), onTooltip, offTooltip);
-    }
-
-    public CustomIconButton(Button.OnPress onPress, Blitter texture, Blitter disableTexture, Component onTooltip,
-            Component offTooltip) {
-        this(16, 16, onPress, texture, disableTexture, onTooltip, offTooltip);
-    }
-
-    public CustomIconButton(int width, int height, Button.OnPress onPress, Blitter texture,
-            Component onTooltip, Component offTooltip) {
-        this(width, height, onPress, texture, null, onTooltip, offTooltip);
-    }
+    private Supplier<Boolean> statusSupplier;
 
     public CustomIconButton(int width, int height, Button.OnPress onPress, Blitter texture,
             Blitter disableTexture, Component onTooltip, Component offTooltip) {
@@ -113,5 +95,81 @@ public class CustomIconButton extends Button implements ITooltip {
     @Override
     public boolean isTooltipAreaVisible() {
         return this.visible;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static class Builder {
+
+        private int widget = 16;
+        private int height = 16;
+
+        private Blitter texture;
+        private Blitter disableTexture;
+
+        private Component onTooltip;
+        private Component offTooltip;
+        private Component message;
+
+        private Supplier<Boolean> status = () -> true;
+        private OnPress press;
+
+        public static Builder builder(OnPress press) {
+            Builder builder = new Builder();
+            builder.press = press;
+            return builder;
+        }
+
+        public Builder widget(int widget) {
+            this.widget = widget;
+            return this;
+        }
+
+        public Builder height(int height) {
+            this.height = height;
+            return this;
+        }
+
+        public Builder location(ResourceLocation location) {
+            this.texture = Blitter.texture(location, 16, 16).src(0, 0, 16, 16);
+            return this;
+        }
+
+        public Builder texture(Blitter texture) {
+            this.texture = texture;
+            return this;
+        }
+
+        public Builder disableTexture(Blitter disableTexture) {
+            this.disableTexture = disableTexture;
+            return this;
+        }
+
+        public Builder status(@NotNull Supplier<Boolean> status) {
+            this.status = status;
+            return this;
+        }
+
+        public Builder tooltip(Component onTooltip, Component offTooltip) {
+            this.onTooltip = onTooltip;
+            this.offTooltip = offTooltip;
+            return this;
+        }
+
+        public Builder message(Component message) {
+            this.message = message;
+            return this;
+        }
+
+        public CustomIconButton build() {
+            var button = new CustomIconButton(this.widget, this.height, press, texture, disableTexture, onTooltip,
+                    offTooltip);
+            button.setStatusSupplier(status);
+
+            if (message != null) {
+                button.setMessage(message);
+            }
+
+            return button;
+        }
     }
 }

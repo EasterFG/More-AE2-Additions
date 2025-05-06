@@ -3,6 +3,8 @@ package com.easterfg.mae2a.client.screen;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.gui.widget.ForgeSlider;
 
 import appeng.api.util.AEColor;
@@ -18,6 +20,7 @@ import com.easterfg.mae2a.common.menu.CablePlaceToolMenu;
 /**
  * @author EasterFG on 2025/4/10
  */
+@OnlyIn(Dist.CLIENT)
 public class CablePlaceToolScreen extends AEBaseScreen<CablePlaceToolMenu> {
 
     private final CablePickerWidget cablePicker;
@@ -40,16 +43,16 @@ public class CablePlaceToolScreen extends AEBaseScreen<CablePlaceToolMenu> {
                 Component.translatable("gui.mae2a.picker.unit"),
                 1, 64, this.getMenu().getHost().getPicker(), true);
         widgets.add("pick_distance", pickBlock);
-        var switchReplace = new CustomIconButton(
-                (__) -> {
-                    replace = !replace;
-                    menu.changeReplaceMode(replace);
-                },
-                MoreAE2Additions.id("textures/guis/replace.png"),
-                Component.translatable("gui.mae2a.mode.on"),
-                Component.translatable("gui.mae2a.mode.off"));
-        switchReplace.setStatusSupplier(() -> replace);
-        switchReplace.setMessage(Component.translatable("gui.mae2a.picker.replace"));
+        var switchReplace = CustomIconButton.Builder.builder(__ -> {
+            replace = !replace;
+            menu.changeReplaceMode(replace);
+        })
+                .location(MoreAE2Additions.id("textures/guis/replace.png"))
+                .status(() -> replace)
+                .tooltip(Component.translatable("gui.mae2a.mode.on"),
+                        Component.translatable("gui.mae2a.mode.off"))
+                .message(Component.translatable("gui.mae2a.picker.replace"))
+                .build();
         addToLeftToolbar(switchReplace);
     }
 
