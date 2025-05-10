@@ -10,7 +10,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 
 import appeng.core.definitions.AEItems;
 import appeng.crafting.pattern.AEProcessingPattern;
@@ -88,7 +87,11 @@ public class PatternPreviewListMenu extends AEBaseMenu {
                 if (slot instanceof PreviewSlot previewSlot) {
                     if (!slot.hasItem() || select != previewSlot.isEnable())
                         continue;
-                    patternInv.setItemDirect(slot.getSlotIndex(), previewSlot.getItem());
+                    ItemStack slotItem = previewSlot.getItem();
+                    if (slotItem.getItem() != AEItems.PROCESSING_PATTERN.asItem()) {
+                        continue;
+                    }
+                    patternInv.setItemDirect(slot.getSlotIndex(), slotItem);
                     count++;
                 }
             }
@@ -120,7 +123,7 @@ public class PatternPreviewListMenu extends AEBaseMenu {
     @Nullable
     private ItemStack processingSlot(PreviewSlot slot, int times, boolean multiplyMode) {
         var stack = slot.getItem();
-        if (stack.isEmpty() || stack.is(Items.BARRIER) || stack.is(AEItems.BLANK_PATTERN.asItem()))
+        if (stack.isEmpty() || stack.is(AEItems.BLANK_PATTERN.asItem()))
             return null;
         if (stack.getItem() instanceof ProcessingPatternItem ppi) {
             AEProcessingPattern details = ppi.decode(stack, getPlayer().level(), false);
