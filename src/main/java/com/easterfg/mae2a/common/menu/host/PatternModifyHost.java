@@ -48,7 +48,7 @@ public class PatternModifyHost extends ItemMenuHost {
             Level level = player.getCommandSenderWorld();
             providerLogic = PatternModifyToolItem.findPatternProvide(level, clickPos, hitPos);
             if (providerLogic != null) {
-                patterns = PatternUtils.getProcessingPatterns(level, providerLogic, setting);
+                patterns = PatternUtils.getProcessingPatterns(level, providerLogic, setting, player.isShiftKeyDown());
             }
         }
     }

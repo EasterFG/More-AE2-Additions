@@ -1,5 +1,6 @@
 {
   "block.mae2a.pattern_provider_plus": "样板供应器 Plus",
+  "config.mae2a.allow_other_show_amount": "供应器显示样板主输出数量",
   "config.mae2a.button_tip": "样板预览界面按钮倍率",
   "config.mae2a.preview_color": "线缆放置工具预览颜色",
   "config.mae2a.slot": "样板供应器Plus最大槽位",
@@ -82,7 +83,7 @@
   "tooltip.mae2a.fast_place_tool.undo_select_tip": "§6Shift右键空气§7撤销最近一次添加",
   "tooltip.mae2a.infinite_dyes_cell": "这是一个无限染料元件",
   "tooltip.mae2a.pattern_modify_tool.1": "§7一个快捷修改样板的工具，§e右键空气§7打开设置菜单",
-  "tooltip.mae2a.pattern_modify_tool.block": "§a方块模式§7: 翻倍供应器中的全部样板 (§6Shift右键§7样板供应器)",
+  "tooltip.mae2a.pattern_modify_tool.block": "§a直接模式§7: 直接打开预览界面, 跳过预处理操作 (§6Shift右键§7样板供应器)",
   "tooltip.mae2a.pattern_modify_tool.limit": "§b限制模式§r: §6将产物/原料调整至目标数量§r，§a自动平衡材料配比",
   "tooltip.mae2a.pattern_modify_tool.many_result": "本次操作了§6%s§r台机器的§6%s§r个样板",
   "tooltip.mae2a.pattern_modify_tool.network": "§a网络模式§7: 翻倍网络中的全部样板 (§6Shift右键§7样板编码终端)",

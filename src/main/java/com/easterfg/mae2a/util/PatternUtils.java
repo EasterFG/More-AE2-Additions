@@ -120,7 +120,7 @@ public final class PatternUtils {
     }
 
     public static List<ItemStack> getProcessingPatterns(Level level, PatternProviderLogic logic,
-            PatternModifySetting setting) {
+            PatternModifySetting setting, boolean direct) {
         InternalInventory inventory = logic.getPatternInv();
         List<ItemStack> result = new ArrayList<>(inventory.size());
         for (int slot = 0; slot < inventory.size(); slot++) {
@@ -130,6 +130,12 @@ public final class PatternUtils {
                     result.add(ItemStack.EMPTY);
                     continue;
                 }
+
+                if (direct) {
+                    result.add(stack.copy());
+                    continue;
+                }
+
                 var pattern = PatternUtils.processingPattern(level, stack, setting);
                 if (pattern != null) {
                     result.add(pattern);

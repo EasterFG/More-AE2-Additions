@@ -1,5 +1,6 @@
 {
   "block.mae2a.pattern_provider_plus": "Pattern Provider Plus",
+  "config.mae2a.allow_other_show_amount": "Provider display amount of pattern primary outputs",
   "config.mae2a.button_tip": "Pattern Preview Button Rate",
   "config.mae2a.preview_color": "Cable Place Tool Preview Color",
   "config.mae2a.slot": "Pattern Provider Plus Max Slot",
@@ -82,7 +83,7 @@
   "tooltip.mae2a.fast_place_tool.undo_select_tip": "§6Shift+Right-click air§7 to undo the last addition",
   "tooltip.mae2a.infinite_dyes_cell": "This is an infinite dyes cell",
   "tooltip.mae2a.pattern_modify_tool.1": "§7A tool for quick pattern modification. §eRight-click air§7 to open settings",
-  "tooltip.mae2a.pattern_modify_tool.block": "§aBlock Mode§7: Double all patterns in provider (§6Shift + Right-click§7 Pattern Provider)",
+  "tooltip.mae2a.pattern_modify_tool.block": "§Direct Mode§7: Opens the preview screen directly, skipping the pre-processing operation. (§6Shift + Right-click§7 Pattern Provider)",
   "tooltip.mae2a.pattern_modify_tool.limit": "§bLimit Mode§r: §6Adjusts Inputs/Outputs to target quantity§r, §aauto-balances materials",
   "tooltip.mae2a.pattern_modify_tool.many_result": "§7Modified §6%s§r patterns across §6%s§r machines",
   "tooltip.mae2a.pattern_modify_tool.network": "§aNetwork Mode§7: Double all patterns in network (§6Shift + Right-click§7 Pattern Encoding Terminal)",

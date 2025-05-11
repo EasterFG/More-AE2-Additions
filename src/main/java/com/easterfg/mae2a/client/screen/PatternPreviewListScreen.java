@@ -1,14 +1,10 @@
 package com.easterfg.mae2a.client.screen;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.WeakHashMap;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
@@ -21,11 +17,8 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import appeng.api.crafting.IPatternDetails;
-import appeng.api.crafting.PatternDetailsHelper;
 import appeng.api.inventories.InternalInventory;
 import appeng.api.stacks.AmountFormat;
-import appeng.api.stacks.GenericStack;
 import appeng.client.gui.me.common.StackSizeRenderer;
 import appeng.client.gui.style.Blitter;
 import appeng.client.gui.style.ScreenStyle;
@@ -39,14 +32,13 @@ import com.easterfg.mae2a.client.gui.AbstractScrollerScreen;
 import com.easterfg.mae2a.client.gui.widget.CustomIconButton;
 import com.easterfg.mae2a.common.menu.PatternPreviewListMenu;
 import com.easterfg.mae2a.config.MAE2AConfig;
+import com.easterfg.mae2a.util.GuiUtil;
 
 /**
  * @author EasterFG on 2025/4/6
  */
 @OnlyIn(Dist.CLIENT)
 public class PatternPreviewListScreen extends AbstractScrollerScreen<PreviewSlot> {
-
-    private final Map<ItemStack, GenericStack> SHOW_CACHE = new WeakHashMap<>();
 
     private int rows;
     private boolean mode = true;
@@ -130,7 +122,9 @@ public class PatternPreviewListScreen extends AbstractScrollerScreen<PreviewSlot
                 }
 
                 if (!item.isEmpty() && mode != slot.isEnable()) {
+                    ItemStack displayStack = slot.getDisplayStack();
                     guiGraphics.renderTooltip(font, List.of(
+                            displayStack.getHoverName(),
                             Component.translatable("gui.mae2a.pattern_list.disable"),
                             Component.translatable("gui.mae2a.pattern_list.info"),
                             Component.translatable("gui.mae2a.pattern_list.enable_helper")), Optional.empty(), x, y);
@@ -176,24 +170,6 @@ public class PatternPreviewListScreen extends AbstractScrollerScreen<PreviewSlot
         scrollbar.setVisible(true);
         guiGraphics.blit(texture, offsetX + GUI_SCROLLBAR_OFFSET, offsetY, 0, 105, GUI_SCROLLBAR_WIDTH,
                 GUI_SCROLLBAR_HEIGHT);
-    }
-
-    @Nullable
-    public GenericStack getShow(ItemStack item) {
-        var show = SHOW_CACHE.get(item);
-
-        if (show != null) {
-            return show;
-        }
-
-        IPatternDetails details = PatternDetailsHelper.decodePattern(item, Minecraft.getInstance().level, false);
-        if (details == null) {
-            return null;
-        }
-
-        show = details.getPrimaryOutput();
-        SHOW_CACHE.put(item, show);
-        return show;
     }
 
     @Override
@@ -255,7 +231,7 @@ public class PatternPreviewListScreen extends AbstractScrollerScreen<PreviewSlot
         guiGraphics.renderItem(display, s.x, s.y, s.x + s.y * this.imageWidth);
 
         if (mode == s.isEnable() && is.getItem() instanceof EncodedPatternItem) {
-            var output = getShow(is);
+            var output = GuiUtil.getShowAmount(is);
             if (output != null) {
                 String amount = output.what().formatAmount(output.amount(), AmountFormat.SLOT);
                 StackSizeRenderer.renderSizeLabel(guiGraphics, this.font, s.x, s.y, amount, false);

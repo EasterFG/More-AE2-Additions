@@ -18,8 +18,8 @@ public final class TooltipLanguage {
                 "§bRatio Mode§r: §6Applies multiplier/divisor directly§r, §crequires exact division§r");
         add("tooltip.mae2a.pattern_modify_tool.preview", "§a预览模式§7: 预览即将处理的全部样板 (§6右键§7样板供应器)",
                 "§aPreview Mode§7: Preview all pending patterns (§6Right-click§7 Pattern Provider)");
-        add("tooltip.mae2a.pattern_modify_tool.block", "§a方块模式§7: 翻倍供应器中的全部样板 (§6Shift右键§7样板供应器)",
-                "§aBlock Mode§7: Double all patterns in provider (§6Shift + Right-click§7 Pattern Provider)");
+        add("tooltip.mae2a.pattern_modify_tool.block", "§a直接模式§7: 直接打开预览界面, 跳过预处理操作 (§6Shift右键§7样板供应器)",
+                "§Direct Mode§7: Opens the preview screen directly, skipping the pre-processing operation. (§6Shift + Right-click§7 Pattern Provider)");
         add("tooltip.mae2a.pattern_modify_tool.network", "§a网络模式§7: 翻倍网络中的全部样板 (§6Shift右键§7样板编码终端)",
                 "§aNetwork Mode§7: Double all patterns in network (§6Shift + Right-click§7 Pattern Encoding Terminal)");
         add("tooltip.mae2a.pattern_modify_tool.warring", "§c注意: 翻倍网络中的全部样板将覆盖全部样板，请谨慎使用",

@@ -141,40 +141,33 @@ public class PatternModifyToolItem extends Item implements IMenuItem {
             MenuOpener.open(PatternModifyMenu.TYPE, p, MenuLocators.forHand(p, useContext.getHand()));
         } else {
             boolean network = false;
-            PatternContainer container;
+            PatternContainer container = null;
             BlockEntity te = level.getBlockEntity(pos);
-            if (te instanceof CableBusBlockEntity cable) {
-                Vec3 hit = useContext.getClickLocation();
-                Vec3 target = new Vec3(hit.x - pos.getX(), hit.y - pos.getY(), hit.z - pos.getZ());
-                IPart part = cable.getCableBus().selectPartLocal(target).part;
-                container = part instanceof PatternContainer ? (PatternContainer) part : null;
-                network = part instanceof PatternEncodingTerminalPart;
+            IPart cable = findPartInCable(level, pos, useContext.getClickLocation());
+            if (cable == null && te instanceof PatternContainer) {
+                container = (PatternContainer) te;
             } else {
-                container = te instanceof PatternContainer ? (PatternContainer) te : null;
+                if (cable instanceof PatternContainer) {
+                    container = (PatternContainer) cable;
+                } else if (cable instanceof PatternEncodingTerminalPart) {
+                    network = true;
+                }
             }
 
             if (container != null) {
                 if (container.getTerminalPatternInventory().isEmpty()) {
                     p.displayClientMessage(Component.translatable("tools.mae2a.no_pattern"), true);
                     return false;
-                } else if (!p.isShiftKeyDown()) {
-                    MenuOpener.open(PatternPreviewListMenu.TYPE, p, MenuLocators.forItemUseContext(useContext));
-                    return true;
                 }
+                MenuOpener.open(PatternPreviewListMenu.TYPE, p, MenuLocators.forItemUseContext(useContext));
+                return true;
             } else if (!network) {
                 return false;
             }
 
             PatternModifySetting setting = new PatternModifySetting();
             setting.readFromNBT(stack.getOrCreateTag());
-            if (container != null) {
-                int count = PatternUtils.processingPattern(level, setting, container);
-                if (count > 0) {
-                    p.displayClientMessage(Component.translatable("tools.mae2a.one_patter_result", count), true);
-                }
-            } else {
-                applyInAll(p, level, nodeHost, setting);
-            }
+            applyInAll(p, level, nodeHost, setting);
         }
         return true;
     }
