@@ -25,15 +25,22 @@ public class MAE2AConfig {
             .translation("config.mae2a.preview_color")
             .define("preview.color", "FF0EBEFF");
 
+    private static final ForgeConfigSpec.BooleanValue ALLOW_OTHER_PROVIDE_SHOW_AMOUNT = BUILDER
+            .comment("Allow other pattern provide to show amount on the screen")
+            .translation("config.mae2a.allow_other_show_amount")
+            .define("allow_other_show_amount", false);
+
     public static Integer[] buttonTimes;
     public static int boxColor;
     public static int plusMaxSlot;
+    public static boolean showAmount;
 
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {
         buttonTimes = PreviewConfig.getValues();
         boxColor = toColor(PREVIEW_BOX_COLOR.get());
         plusMaxSlot = PROVIDER_MAX_SLOT.get();
+        showAmount = ALLOW_OTHER_PROVIDE_SHOW_AMOUNT.get();
         if (plusMaxSlot % 9 != 0) {
             plusMaxSlot -= plusMaxSlot % 9;
         }

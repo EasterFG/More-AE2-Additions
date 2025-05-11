@@ -3,7 +3,6 @@ package com.easterfg.mae2a.client.gui;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
@@ -12,19 +11,15 @@ import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
-import appeng.api.crafting.IPatternDetails;
 import appeng.api.inventories.InternalInventory;
-import appeng.api.stacks.AmountFormat;
-import appeng.api.stacks.GenericStack;
 import appeng.client.gui.implementations.PatternProviderScreen;
-import appeng.client.gui.me.common.StackSizeRenderer;
 import appeng.client.gui.style.ScreenStyle;
 import appeng.client.gui.widgets.Scrollbar;
-import appeng.crafting.pattern.EncodedPatternItem;
 import appeng.menu.slot.AppEngSlot;
 import appeng.util.inv.AppEngInternalInventory;
 
 import com.easterfg.mae2a.common.menu.PatternProviderPlusMenu;
+import com.easterfg.mae2a.util.GuiUtil;
 
 public abstract class AbstractPatternPlusScrollerScreen<T extends PatternProviderPlusMenu, S extends Slot>
         extends PatternProviderScreen<T> {
@@ -73,39 +68,7 @@ public abstract class AbstractPatternPlusScrollerScreen<T extends PatternProvide
         ItemStack item = now.getItem();
         view.set(item);
 
-        renderNeedCountSlot(guiGraphics, (AppEngSlot) view);
-    }
-
-    protected void renderNeedCountSlot(GuiGraphics guiGraphics, AppEngSlot s) {
-        var is = s.getItem();
-
-        if ((s.renderIconWithItem() || is.isEmpty()) && s.isSlotEnabled() && s.getIcon() != null) {
-            s.getIcon().getBlitter()
-                    .dest(s.x, s.y)
-                    .opacity(s.getOpacityOfIcon())
-                    .blit(guiGraphics);
-        }
-
-        if (!s.isValid()) {
-            guiGraphics.fill(s.x, s.y, 16 + s.x, 16 + s.y, 0x66ff6666);
-        }
-
-        var display = s.getDisplayStack();
-
-        guiGraphics.pose().pushPose();
-        guiGraphics.pose().translate(0.0F, 0.0F, 100.0F);
-
-        guiGraphics.renderItem(display, s.x, s.y, s.x + s.y * this.imageWidth);
-
-        if (!is.isEmpty() && is.getItem() instanceof EncodedPatternItem patternItem) {
-            IPatternDetails decode = patternItem.decode(is, Minecraft.getInstance().level, false);
-            if (decode != null) {
-                GenericStack output = decode.getOutputs()[0];
-                String amount = output.what().formatAmount(output.amount(), AmountFormat.SLOT);
-                StackSizeRenderer.renderSizeLabel(guiGraphics, this.font, s.x, s.y, amount, false);
-            }
-        }
-        guiGraphics.pose().popPose();
+        GuiUtil.renderPatternSlot(guiGraphics, (AppEngSlot) view, this.imageWidth);
     }
 
     @Override

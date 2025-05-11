@@ -12,6 +12,7 @@
     "ae.part.PatternEncodingTerminalPartMixin"
   ],
   "client": [
-    "ae.screen.PatternEncodingTermScreenMixin"
+    "ae.screen.PatternEncodingTermScreenMixin",
+    "ae.screen.PatternProviderScreenMixin"
   ]
 }
