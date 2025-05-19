@@ -5,6 +5,7 @@ import java.util.List;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
+import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -79,22 +80,23 @@ public class CableRender {
     }
 
     private static VoxelShape merge(List<Pair<Vec3, Vec3>> segments) {
-        if (segments.isEmpty())
-            return Shapes.empty();
-        VoxelShape shape = Shapes.empty();
-        return segments.stream()
-                .map(pair -> new AABB(pair.getFirst(), pair.getSecond()).inflate(THICKNESS))
-                .map(Shapes::create)
-                .reduce(shape, Shapes::or);
-    }
+    if (segments.isEmpty()) return Shapes.empty();
+
+    return segments.stream()
+            .map(pair -> new AABB(pair.getFirst(), pair.getSecond()).inflate(THICKNESS))
+            .map(Shapes::create)
+            .filter(shape -> shape != null) 
+            .reduce(Shapes.empty(), Shapes::or);
+}
 
     private static VoxelShape merge(Vec3 last, Vec3 end) {
-        return VectorHelper.generateAdjustedSegments(last, end)
-                .stream()
-                .map(pair -> new AABB(pair.getFirst(), pair.getSecond()).inflate(THICKNESS))
-                .map(Shapes::create)
-                .reduce(CACHE, Shapes::or);
-    }
+    return VectorHelper.generateAdjustedSegments(last, end)
+            .stream()
+            .map(pair -> new AABB(pair.getFirst(), pair.getSecond()).inflate(THICKNESS))
+            .map(Shapes::create)
+            .filter(shape -> shape != null) 
+            .reduce(CACHE != null ? CACHE : Shapes.empty(), Shapes::or); // 防止 CACHE 为 null
+}
 
     private static void renderVoxelShape(RenderType type, PoseStack poseStack, MultiBufferSource buffer,
             VoxelShape shape, int color) {
