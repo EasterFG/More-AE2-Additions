@@ -18,6 +18,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import appeng.api.inventories.InternalInventory;
+import appeng.api.stacks.AEKey;
 import appeng.api.stacks.AmountFormat;
 import appeng.client.gui.me.common.StackSizeRenderer;
 import appeng.client.gui.style.Blitter;
@@ -25,6 +26,7 @@ import appeng.client.gui.style.ScreenStyle;
 import appeng.core.AppEng;
 import appeng.core.definitions.AEItems;
 import appeng.crafting.pattern.EncodedPatternItem;
+import appeng.items.misc.WrappedGenericStack;
 
 import com.easterfg.mae2a.MoreAE2Additions;
 import com.easterfg.mae2a.api.slot.PreviewSlot;
@@ -113,18 +115,29 @@ public class PatternPreviewListScreen extends AbstractScrollerScreen<PreviewSlot
     protected void renderTooltip(@NotNull GuiGraphics guiGraphics, int x, int y) {
         if (hoveredSlot != null) {
             if (hoveredSlot instanceof PreviewSlot slot) {
-                ItemStack item = hoveredSlot.getItem();
-                if (item.is(AEItems.BLANK_PATTERN.asItem())) {
+                ItemStack stack = hoveredSlot.getItem();
+                if (stack.is(AEItems.BLANK_PATTERN.asItem())) {
                     guiGraphics.renderTooltip(font, List.of(
                             Component.translatable("gui.mae2a.pattern_list.cant"),
                             Component.translatable("gui.mae2a.pattern_list.cant_info")), Optional.empty(), x, y);
                     return;
                 }
 
-                if (!item.isEmpty() && mode != slot.isEnable()) {
+                if (!stack.isEmpty() && mode != slot.isEnable()) {
                     ItemStack displayStack = slot.getDisplayStack();
+                    Component displayName;
+                    if (displayStack.getItem() instanceof WrappedGenericStack item) {
+                        AEKey key = item.unwrapWhat(displayStack);
+                        if (key == null) {
+                            return;
+                        }
+                        displayName = key.getDisplayName();
+                    } else {
+                        displayName = displayStack.getHoverName();
+                    }
                     guiGraphics.renderTooltip(font, List.of(
-                            displayStack.getHoverName(),
+                            displayName,
+                            Component.empty(),
                             Component.translatable("gui.mae2a.pattern_list.disable"),
                             Component.translatable("gui.mae2a.pattern_list.info"),
                             Component.translatable("gui.mae2a.pattern_list.enable_helper")), Optional.empty(), x, y);
@@ -149,11 +162,11 @@ public class PatternPreviewListScreen extends AbstractScrollerScreen<PreviewSlot
                 GUI_HEADER_HEIGHT);
 
         int currentY = GUI_HEADER_HEIGHT + offsetY;
+        int count = Math.min(4, rows);
 
-        guiGraphics.blit(texture, offsetX, currentY + 4 * GUI_ROW_HEIGHT,
+        guiGraphics.blit(texture, offsetX, currentY + count * GUI_ROW_HEIGHT,
                 0, GUI_FOOTER_OFFSET, GUI_WIDTH, GUI_FOOTER_HEIGHT);
 
-        int count = Math.min(4, rows);
         for (int i = 0; i < count; ++i) {
             guiGraphics.blit(texture, offsetX, currentY, 0, GUI_HEADER_HEIGHT, GUI_WIDTH,
                     GUI_ROW_HEIGHT);
@@ -218,17 +231,21 @@ public class PatternPreviewListScreen extends AbstractScrollerScreen<PreviewSlot
             }
         }
 
-        if (!is.isEmpty()) {
-            int color = s.isEnable() ? 0x88ff6666 : 0x8866ff66;
-            if (!mode) {
-                guiGraphics.fill(s.x, s.y, 16 + s.x, 16 + s.y, color);
-            }
-        }
-
         guiGraphics.pose().pushPose();
         guiGraphics.pose().translate(0.0F, 0.0F, 100.0F);
 
         guiGraphics.renderItem(display, s.x, s.y, s.x + s.y * this.imageWidth);
+
+        if (!is.isEmpty()) {
+            if (!mode && s.isEnable()) {
+                var barrier = guiGraphics.pose();
+                barrier.pushPose();
+                barrier.translate(0, 0, 200.0F);
+                barrier.scale(0.5F, 0.5F, 0.5F);
+                guiGraphics.renderItem(Items.BARRIER.getDefaultInstance(), (s.x + 8) * 2, (s.y + 8) * 2);
+                barrier.popPose();
+            }
+        }
 
         if (mode == s.isEnable() && is.getItem() instanceof EncodedPatternItem) {
             var output = GuiUtil.getShowAmount(is);
