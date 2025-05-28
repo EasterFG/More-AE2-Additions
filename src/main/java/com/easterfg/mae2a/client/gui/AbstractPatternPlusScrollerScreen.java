@@ -83,15 +83,17 @@ public abstract class AbstractPatternPlusScrollerScreen<T extends PatternProvide
     @Override
     protected void renderTooltip(@NotNull GuiGraphics guiGraphics, int pX, int pY) {
         if (hoveredSlot != null) {
-            if (!validSlot(hoveredSlot))
+            if (validSlot(hoveredSlot)) {
+                Slot view = views.get(hoveredSlot.getSlotIndex());
+                if (view.hasItem()) {
+                    ItemStack itemstack = view.getItem();
+                    guiGraphics.renderTooltip(this.font, this.getTooltipFromContainerItem(itemstack),
+                            itemstack.getTooltipImage(), itemstack, pX, pY);
+                }
                 return;
-            Slot view = views.get(hoveredSlot.getSlotIndex());
-            if (view.hasItem()) {
-                ItemStack itemstack = view.getItem();
-                guiGraphics.renderTooltip(this.font, this.getTooltipFromContainerItem(itemstack),
-                        itemstack.getTooltipImage(), itemstack, pX, pY);
             }
         }
+        super.renderTooltip(guiGraphics, pX, pY);
     }
 
     @Override

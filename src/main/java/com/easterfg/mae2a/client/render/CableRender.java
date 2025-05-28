@@ -93,7 +93,7 @@ public class CableRender {
                 .stream()
                 .map(pair -> new AABB(pair.getFirst(), pair.getSecond()).inflate(THICKNESS))
                 .map(Shapes::create)
-                .reduce(CACHE, Shapes::or);
+                .reduce(CACHE == null ? Shapes.empty() : CACHE, Shapes::or);
     }
 
     private static void renderVoxelShape(RenderType type, PoseStack poseStack, MultiBufferSource buffer,
