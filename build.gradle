@@ -136,6 +136,9 @@ dependencies {
     // eae
     implementation fg.deobf("curse.maven:ex-pattern-provider-892005:5847745")
 
+    // applied flux
+    implementation fg.deobf("curse.maven:applied-flux-965012:6600323")
+
     runtimeOnly fg.deobf("curse.maven:glodium-957920:5226922")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}+${minecraft_version}")
     runtimeOnly fg.deobf("dev.architectury:architectury-forge:${architectury_version}")

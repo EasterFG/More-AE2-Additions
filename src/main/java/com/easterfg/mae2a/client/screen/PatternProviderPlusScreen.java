@@ -20,6 +20,7 @@ import appeng.menu.slot.RestrictedInputSlot;
 
 import com.easterfg.mae2a.client.gui.AbstractPatternPlusScrollerScreen;
 import com.easterfg.mae2a.common.menu.PatternProviderPlusMenu;
+import com.easterfg.mae2a.util.Platform;
 
 /**
  * @author EasterFG on 2025/4/3
@@ -31,9 +32,11 @@ public class PatternProviderPlusScreen
     public PatternProviderPlusScreen(PatternProviderPlusMenu menu, Inventory playerInventory, Component title,
             ScreenStyle style) {
         super(menu, playerInventory, title, style);
-        this.widgets.add("upgrades", new UpgradesPanel(
-                menu.getSlots(SlotSemantics.UPGRADE),
-                this::getCompatibleUpgrades));
+        if (!Platform.isModLoaded("appflux")) {
+            this.widgets.add("upgrades", new UpgradesPanel(
+                    menu.getSlots(SlotSemantics.UPGRADE),
+                    this::getCompatibleUpgrades));
+        }
 
         scrollbar.setHeight(70);
         scrollbar.setRange(0, getScrollableRows(), 1);
