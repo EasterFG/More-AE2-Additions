@@ -2,6 +2,7 @@
   "block.mae2a.pattern_provider_plus": "样板供应器 Plus",
   "config.mae2a.allow_other_show_amount": "供应器显示样板主输出数量",
   "config.mae2a.button_tip": "样板预览界面按钮倍率",
+  "config.mae2a.pattern_upgrade_white_list": "样板供应器升级白名单",
   "config.mae2a.preview_color": "线缆放置工具预览颜色",
   "config.mae2a.slot": "样板供应器Plus最大槽位",
   "gui.mae2a.action_limit": "限制模式",

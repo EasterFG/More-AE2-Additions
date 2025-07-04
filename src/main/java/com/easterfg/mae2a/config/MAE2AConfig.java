@@ -30,10 +30,21 @@ public class MAE2AConfig {
             .translation("config.mae2a.allow_other_show_amount")
             .define("allow_other_show_amount", false);
 
+    private static final ForgeConfigSpec.ConfigValue<List<String>> UPGRADE_WHITE_LIST = BUILDER
+            .comment("Set the white list of upgrade provider")
+            .translation("config.mae2a.pattern_upgrade_white_list")
+            .defineInList("upgrade_white_list", List.of(
+                    "ae2:pattern_provider",
+                    "ae2:cable_pattern_provider",
+                    "expatternprovider:ex_pattern_provider",
+                    "expatternprovider:ex_pattern_provider_part"), new ArrayList<>());
+
     public static Integer[] buttonTimes;
     public static int boxColor;
     public static int plusMaxSlot;
     public static boolean showAmount;
+
+    public static List<String> upgradeWhiteList;
 
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {
@@ -41,6 +52,7 @@ public class MAE2AConfig {
         boxColor = toColor(PREVIEW_BOX_COLOR.get());
         plusMaxSlot = PROVIDER_MAX_SLOT.get();
         showAmount = ALLOW_OTHER_PROVIDE_SHOW_AMOUNT.get();
+        upgradeWhiteList = UPGRADE_WHITE_LIST.get();
         if (plusMaxSlot % 9 != 0) {
             plusMaxSlot -= plusMaxSlot % 9;
         }

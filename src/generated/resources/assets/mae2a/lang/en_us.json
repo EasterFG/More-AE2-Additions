@@ -2,6 +2,7 @@
   "block.mae2a.pattern_provider_plus": "Pattern Provider Plus",
   "config.mae2a.allow_other_show_amount": "Provider display amount of pattern primary outputs",
   "config.mae2a.button_tip": "Pattern Preview Button Rate",
+  "config.mae2a.pattern_upgrade_white_list": "Pattern Provide Upgrade White List",
   "config.mae2a.preview_color": "Cable Place Tool Preview Color",
   "config.mae2a.slot": "Pattern Provider Plus Max Slot",
   "gui.mae2a.action_limit": "Limit Mode",
